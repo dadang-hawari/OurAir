@@ -1,0 +1,52 @@
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Poppins Regular"), local("Poppins-Regular"),
+    url("../../public/fonts/poppins-regular-webfont.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Poppins Bold"), local("Poppins-Bold"),
+    url("../../public/fonts/poppins-bold-webfont.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  src: local("Poppins Medium"), local("Poppins-Medium"),
+    url("../../public/fonts/poppins-medium-webfont.woff2") format("woff2");
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  @apply appearance-none m-0;
+  -moz-appearance: none;
+}
+
+div.otp div {
+  gap: 15px;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+div.otp div input {
+  @apply h-[42px] min-w-[42px] border border-[#d0d0d0] rounded-2xl outline-none text-base font-medium;
+}
+div.otp div input:focus {
+  border: 1px solid #1177cb;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+button,
+input,
+textarea {
+  font-family: inherit;
+}

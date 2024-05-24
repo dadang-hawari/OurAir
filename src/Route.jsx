@@ -1,5 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import OTP from "./pages/OTP";
 import Beranda from "./pages/Beranda";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -10,6 +11,10 @@ export default function Route() {
     {
       path: "/",
       element: <Beranda />,
+    },
+       {
+      path: `/otp`,
+      element: <OTP />,
     },
     {
       path: "/Login",
