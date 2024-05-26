@@ -9,7 +9,7 @@ import { decrementTimerOtp, resetTimerOtp } from "../redux/reducers/otpReducers"
 export default function OTP() {
   const email = "J***@gmail.com";
   const dispatch = useDispatch();
-  const timer = useSelector((state) => state.otp.timerOtp);
+  const timer = useSelector((state) => state?.otp?.timerOtp);
   const [otp, setOtp] = useState("");
   const [isTimerActive, setIsTimerActive] = useState(true);
 

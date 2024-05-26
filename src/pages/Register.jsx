@@ -2,6 +2,9 @@ import { useState } from "react";
 import Image from "../../public/assets/images/cloud_ourair.webp";
 import iconEyeSolid from "../../public/assets/icons/eye-solid.svg";
 import iconEyeSolidSlash from "../../public/assets/icons/eye-slash-solid.svg";
+import iconChevronLeft from "../../public/assets/icons/chevron-left.svg";
+import { Link } from "react-router-dom";
+
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -21,11 +24,16 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full h-screen flex items-start">
-      <div className="relative w-1/2 h-full">
+    <div className="w-full h-screen md:flex justify-center">
+      <Link to="/login" className="absolute -top-12 left-0 md:-left-12 p-2 flex items-center gap-2">
+        <img src={iconChevronLeft} alt="Kembali" className="w-2 h-auto" />
+        <p className="text-base text-accent font-medium">Kembali</p>
+      </Link>
+
+      <div className="relative w-1/2 h-full hidden md:block">
         <img src={Image} alt="Register visual" className="w-full h-full object-cover" />
       </div>
-      <div className="flex items-center justify-center w-1/2 h-full bg-white p-4">
+      <div className="flex items-center justify-center md:w-1/2 h-full bg-blue-500 ">
         <div className="w-full max-w-sm">
           <h1 className="mb-5 text-black text-xl font-bold text-left">Daftar</h1>
           <form onSubmit={handleSubmit}>
@@ -37,7 +45,7 @@ const Register = () => {
                 id="username"
                 type="text"
                 placeholder="Nama Lengkap"
-                className="w-full px-4 py-2 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
+                className="w-full px-4 py-4 mb-1 border rounded-xl focus:outline-none focus:border-secondary"
                 aria-label="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -51,7 +59,7 @@ const Register = () => {
                 id="email"
                 type="email"
                 placeholder="Contoh: johndee@gmail.com"
-                className="w-full px-4 py-2 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
+                className="w-full px-4 py-4 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
                 aria-label="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -65,7 +73,7 @@ const Register = () => {
                 id="phone-number"
                 type="tel"
                 placeholder="+62"
-                className="w-full px-4 py-2 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
+                className="w-full px-4 py-4 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
                 aria-label="Phone Number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
@@ -80,7 +88,7 @@ const Register = () => {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Buat Password"
-                  className="w-full px-4 py-2 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
+                  className="w-full px-4 py-4 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
                   aria-label="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -100,7 +108,7 @@ const Register = () => {
             <div>
               <button
                 type="submit"
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg focus:outline-none hover:bg-blue-600"
+                className="w-full px-4 py-4 bg-blue-500 text-white rounded-lg focus:outline-none hover:bg-blue-600"
                 aria-label="Register"
               >
                 Daftar
