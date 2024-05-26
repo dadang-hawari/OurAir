@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Image from "../../public/fonts/iimage.png";
+import Image from "../../public/assets/images/cloud_ourair.webp";
 
 const Login = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
@@ -46,9 +46,7 @@ const Login = () => {
         navigate("/");
       } else {
         if (response.message.includes("email")) {
-          setEmailOrPhoneError(
-            "Alamat email atau nomor telepon tidak terdaftar!"
-          );
+          setEmailOrPhoneError("Alamat email atau nomor telepon tidak terdaftar!");
         } else if (response.message.includes("password")) {
           setPasswordError("Maaf, kata sandi anda salah");
         }
@@ -67,11 +65,7 @@ const Login = () => {
   return (
     <div className="flex h-screen">
       <div className="w-1/2">
-        <img
-          src={Image}
-          alt="Login visual"
-          className="w-full h-full object-cover"
-        />
+        <img src={Image} alt="Login visual" className="w-full h-full object-cover" />
       </div>
       <div className="flex items-center justify-center w-1/2 bg-white p-4">
         <div className="w-full max-w-sm">
@@ -86,27 +80,20 @@ const Login = () => {
                 type="text"
                 placeholder="Contoh: Jhondoe@gmail.com "
                 className={`w-full px-4 py-2 mb-1 border rounded-lg focus:outline-none focus:ring ${
-                  emailOrPhoneError
-                    ? "border-red-500 focus:ring-red-500"
-                    : "focus:ring-blue-500"
+                  emailOrPhoneError ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
                 }`}
                 value={emailOrPhone}
                 onChange={(e) => setEmailOrPhone(e.target.value)}
                 onKeyPress={handleKeyPress}
               />
-              {emailOrPhoneError && (
-                <div className="text-red-500 text-sm">{emailOrPhoneError}</div>
-              )}
+              {emailOrPhoneError && <div className="text-red-500 text-sm">{emailOrPhoneError}</div>}
             </div>
             <div className="mb-2">
               <div className="flex justify-between items-center mb-1">
                 <label htmlFor="password" className="text-sm">
                   Password
                 </label>
-                <Link
-                  to="/ForgotPassword"
-                  className="text-blue-500 hover:text-blue-600 text-sm"
-                >
+                <Link to="/ForgotPassword" className="text-blue-500 hover:text-blue-600 text-sm">
                   Lupa kata sandi
                 </Link>
               </div>
@@ -115,17 +102,13 @@ const Login = () => {
                 type="password"
                 placeholder="Masukkan password"
                 className={`w-full px-4 py-2 mb-1 border rounded-lg focus:outline-none focus:ring ${
-                  passwordError
-                    ? "border-red-500 focus:ring-red-500"
-                    : "focus:ring-blue-500"
+                  passwordError ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
                 }`}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyPress={handleKeyPress}
               />
-              {passwordError && (
-                <div className="text-red-500 text-sm">{passwordError}</div>
-              )}
+              {passwordError && <div className="text-red-500 text-sm">{passwordError}</div>}
             </div>
             <div>
               <input
@@ -137,10 +120,7 @@ const Login = () => {
           </form>
           <div className="text-center mt-4">
             Belum punya akun?
-            <Link
-              to="/register"
-              className="text-blue-500 ml-1 hover:text-blue-600"
-            >
+            <Link to="/register" className="text-blue-500 ml-1 hover:text-blue-600">
               Daftar disini
             </Link>
           </div>

@@ -29,24 +29,23 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 div.otp div {
-  gap: 15px;
-  width: fit-content;
-  margin-inline: auto;
+  @apply gap-4 w-auto mx-auto;
 }
 
 div.otp div input {
-  @apply h-[42px] min-w-[42px] border border-[#d0d0d0] rounded-2xl outline-none text-base font-medium;
+  @apply h-10 min-w-10 border border-gray-300 rounded-2xl outline-none text-base font-medium;
 }
+
 div.otp div input:focus {
-  border: 1px solid #1177cb;
+  @apply border-blue-600;
 }
 
 body {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
+  @apply font-sans font-normal;
 }
+
 button,
 input,
 textarea {
-  font-family: inherit;
+  @apply text-sm font-[inherit];
 }

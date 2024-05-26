@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Image from "../../public/fonts/iimage.png";
+import Image from "../../public/assets/images/cloud_ourair.webp";
 
 const ForgotPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -8,23 +8,14 @@ const ForgotPassword = () => {
   return (
     <div className="w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full">
-        <img
-          src={Image}
-          alt="Reset Password visual"
-          className="w-full h-full object-cover"
-        />
+        <img src={Image} alt="Reset Password visual" className="w-full h-full object-cover" />
       </div>
       <div className="flex items-center justify-center w-1/2 h-full bg-white p-4">
         <div className="w-full max-w-sm">
-          <h1 className="mb-5 text-black text-xl font-bold text-left">
-            Reset Password
-          </h1>
+          <h1 className="mb-5 text-black text-xl font-bold text-left">Reset Password</h1>
           <form>
             <div className="mb-2">
-              <label
-                htmlFor="new-password"
-                className="text-left block mb-1 text-sm"
-              >
+              <label htmlFor="new-password" className="text-left block mb-1 text-sm">
                 Masukkan Password Baru
               </label>
               <input
@@ -38,10 +29,7 @@ const ForgotPassword = () => {
               />
             </div>
             <div className="mb-4">
-              <label
-                htmlFor="confirm-password"
-                className="text-left block mb-1 text-sm"
-              >
+              <label htmlFor="confirm-password" className="text-left block mb-1 text-sm">
                 Ulangi Password Baru
               </label>
               <input
