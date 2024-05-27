@@ -3,23 +3,22 @@
   font-style: normal;
   font-weight: 400;
   src: local("Poppins Regular"), local("Poppins-Regular"),
-    url("../../public/fonts/poppins-regular-webfont.woff2") format("woff2");
+    url("../../public/fonts/Poppins-Regular.woff2") format("woff2");
 }
 
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  src: local("Poppins Medium"), local("Poppins-Medium"),
+    url("../../public/fonts/Poppins-Medium.woff2") format("woff2");
+}
 @font-face {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   src: local("Poppins Bold"), local("Poppins-Bold"),
-    url("../../public/fonts/poppins-bold-webfont.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 500;
-  src: local("Poppins Medium"), local("Poppins-Medium"),
-    url("../../public/fonts/poppins-medium-webfont.woff2") format("woff2");
+    url("../../public/fonts/Poppins-Bold.woff2") format("woff2");
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -41,11 +40,16 @@ div.otp div input:focus {
 }
 
 body {
-  @apply font-sans font-normal;
+  @apply font-normal;
+  font-family: "Poppins", sans-serif;
 }
 
 button,
 input,
 textarea {
   @apply text-sm font-[inherit];
+}
+
+.input-daftar {
+  @apply w-full px-4 py-4 max-h-12 mb-1 border rounded-xl focus:outline-none focus:border-secondary;
 }

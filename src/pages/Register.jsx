@@ -1,8 +1,10 @@
 import { useState } from "react";
-import Image from "../../public/assets/images/cloud_ourair.webp";
-import iconEyeSolid from "../../public/assets/icons/eye-solid.svg";
-import iconEyeSolidSlash from "../../public/assets/icons/eye-slash-solid.svg";
-import iconChevronLeft from "../../public/assets/icons/chevron-left.svg";
+import Image from "/assets/images/cloud_ourair.webp";
+import Logo from "/assets/images/ourair_logo.svg";
+import iconEyeSolid from "/assets/icons/eye-solid.svg";
+import iconEyeSolidSlash from "/assets/icons/eye-slash-solid.svg";
+import iconChevronLeft from "/assets/icons/chevron-left.svg";
+import ButtonPrimary from "../components/ButtonPrimary";
 import { Link } from "react-router-dom";
 
 const Register = () => {
@@ -11,6 +13,7 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,10 +33,17 @@ const Register = () => {
         <p className="text-base text-accent font-medium">Kembali</p>
       </Link>
 
-      <div className="relative w-1/2 h-full hidden md:block">
-        <img src={Image} alt="Register visual" className="w-full h-full object-cover" />
+      <div
+        className="relative w-1/2 h-full hidden xl:block bg-cover bg-right"
+        style={{ backgroundImage: `url(${Image})` }}
+      >
+        <img
+          src={Logo}
+          alt="Ourair"
+          className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-96 w-full h-auto"
+        />
       </div>
-      <div className="flex items-center justify-center md:w-1/2 h-full bg-blue-500 ">
+      <div className="flex items-center justify-center md:w-1/2 h-full">
         <div className="w-full max-w-sm">
           <h1 className="mb-5 text-black text-xl font-bold text-left">Daftar</h1>
           <form onSubmit={handleSubmit}>
@@ -45,7 +55,7 @@ const Register = () => {
                 id="username"
                 type="text"
                 placeholder="Nama Lengkap"
-                className="w-full px-4 py-4 mb-1 border rounded-xl focus:outline-none focus:border-secondary"
+                className="input-daftar"
                 aria-label="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -59,7 +69,7 @@ const Register = () => {
                 id="email"
                 type="email"
                 placeholder="Contoh: johndee@gmail.com"
-                className="w-full px-4 py-4 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
+                className="input-daftar"
                 aria-label="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -73,7 +83,7 @@ const Register = () => {
                 id="phone-number"
                 type="tel"
                 placeholder="+62"
-                className="w-full px-4 py-4 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
+                className="input-daftar"
                 aria-label="Phone Number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
@@ -82,39 +92,51 @@ const Register = () => {
             <div className="mb-2">
               <label htmlFor="password" className="text-left block mb-1 text-sm">
                 Buat Password
+                <span className="text-red-400" title="required">
+                  *
+                </span>
               </label>
               <div className="relative">
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Buat Password"
-                  className="w-full px-4 py-4 mb-1 border rounded-lg focus:outline-none focus:border-secondary"
+                  className="input-daftar"
                   aria-label="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
-                  className="absolute right-0 top-0 p-3"
+                  className="absolute right-0 top-1 p-3  w-10 "
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <img src={iconEyeSolidSlash} alt="Show/Hide Password" className="h-4" />
+                    <img src={iconEyeSolidSlash} alt="Show/Hide Password" className="h-4 w-5 " />
                   ) : (
-                    <img src={iconEyeSolid} alt="Show/Hide Password" className="h-4" />
+                    <img
+                      src={iconEyeSolid}
+                      alt="Show/Hide Password"
+                      className="h-4 w-5  ps-[1px]"
+                    />
                   )}
                 </button>
+                <div className="text-xs text-gray-500">
+                  <p>Minimal panjang password 8 karakter </p>
+
+                  <p>Kombinasikan password dengan nomor dan angka </p>
+                </div>
               </div>
             </div>
             <div>
-              <button
-                type="submit"
-                className="w-full px-4 py-4 bg-blue-500 text-white rounded-lg focus:outline-none hover:bg-blue-600"
-                aria-label="Register"
-              >
-                Daftar
-              </button>
+              <ButtonPrimary onClick={handleSubmit} text={"Daftar"} className={"mt-5"} />
             </div>
           </form>
+          <div className="text-sm mt-10 text-center">
+            <p>
+              Sudah punya akun?
+              <Link className=" text-accent"> Masuk di sini</Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

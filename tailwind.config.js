@@ -10,6 +10,11 @@ export default {
         "soft-blue": "#B7D5E6",
         "softer-blue": "#D4E2F0",
       },
+      borderRadius: {
+        "16px": "16px",
+        "24px": "24px",
+        "32px": "32px",
+      },
     },
   },
   plugins: [],
