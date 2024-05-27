@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Image from "../../public/assets/images/cloud_ourair.webp";
+import Image from "/assets/images/cloud_ourair.webp";
 
 const Login = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
