@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import OTPInput from "react-otp-input";
 import ButtonPrimary from "../components/ButtonPrimary";
-import iconChevronLeft from "../../public/assets/icons/chevron-left.svg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { decrementTimerOtp, resetTimerOtp } from "../redux/reducers/otpReducers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function OTP() {
   const email = "J***@gmail.com";
@@ -60,9 +61,12 @@ export default function OTP() {
   return (
     <div className="mx-auto mt-28 md:mt-4 p-5">
       <div className="max-w-md mx-auto text-center md:text-left relative">
-        <Link to="/" className="absolute -top-12 left-0 md:-left-12 p-2 flex items-center gap-2">
-          <img src={iconChevronLeft} alt="Back" className="w-2 h-auto" />
-          <p className="text-base text-accent font-medium">Kembali</p>
+        <Link
+          to="/"
+          className="absolute -top-12 left-0 md:-left-12 p-2 text-accent flex items-center gap-2"
+        >
+          <FontAwesomeIcon icon={faChevronLeft} className="w-2 h-auto " />
+          <p className="text-base  font-medium">Kembali</p>
         </Link>
 
         <h2 className="text-2xl font-bold mt-10">Masukkan OTP</h2>

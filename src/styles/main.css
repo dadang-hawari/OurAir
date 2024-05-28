@@ -1,9 +1,12 @@
+:root {
+  --toastify-icon-color-success: #0000;
+}
 @font-face {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 400;
   src: local("Poppins Regular"), local("Poppins-Regular"),
-    url("../../public/fonts/Poppins-Regular.woff2") format("woff2");
+    url("/fonts/Poppins-Regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -11,14 +14,14 @@
   font-style: normal;
   font-weight: 600;
   src: local("Poppins Medium"), local("Poppins-Medium"),
-    url("../../public/fonts/Poppins-Medium.woff2") format("woff2");
+    url("/fonts/Poppins-Medium.woff2") format("woff2");
 }
 @font-face {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   src: local("Poppins Bold"), local("Poppins-Bold"),
-    url("../../public/fonts/Poppins-Bold.woff2") format("woff2");
+    url("/fonts/Poppins-Bold.woff2") format("woff2");
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -52,4 +55,11 @@ textarea {
 
 .input-daftar {
   @apply w-full px-4 py-4 max-h-12 mb-1 border rounded-xl focus:outline-none focus:border-secondary;
+}
+
+div.Toastify__toast {
+  @apply font-[inherit];
+}
+div.success-toast {
+  @apply text-white bg-green-400 rounded-xl px-5;
 }

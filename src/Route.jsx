@@ -12,21 +12,21 @@ export default function Route() {
       path: "/",
       element: <Beranda />,
     },
-       {
+    {
       path: `/otp`,
       element: <OTP />,
     },
     {
-      path: "/Login",
+      path: "/login",
       element: <Login />,
     },
 
     {
-      path: "/ForgotPassword",
+      path: "/forgot-password",
       element: <ForgotPassword />,
     },
     {
-      path: "/Register",
+      path: "/register",
       element: <Register />,
     },
   ]);

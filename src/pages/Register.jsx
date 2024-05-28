@@ -1,11 +1,14 @@
 import { useState } from "react";
 import Image from "/assets/images/cloud_ourair.webp";
 import Logo from "/assets/images/ourair_logo.svg";
-import iconEyeSolid from "/assets/icons/eye-solid.svg";
-import iconEyeSolidSlash from "/assets/icons/eye-slash-solid.svg";
 import iconChevronLeft from "/assets/icons/chevron-left.svg";
 import ButtonPrimary from "../components/ButtonPrimary";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { passWithNumAndLetter, isMinPassLengthEight } from "../utils/passRegex";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import Toast from "../components/common/Toast";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -13,11 +16,13 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    toast("Tautan Verifikasi telah dikirim!", { className: "success-toast" });
+    setTimeout(() => {
+      // buat navigate ke otp
+    }, 2000);
     console.log("Registering:", {
       username,
       email,
@@ -40,16 +45,19 @@ const Register = () => {
         <img
           src={Logo}
           alt="Ourair"
-          className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-96 w-full h-auto"
+          className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-96   w-full h-auto"
         />
       </div>
-      <div className="flex items-center justify-center md:w-1/2 h-full">
+      <div className="flex items-center justify-center md:w-1/2 h-full px-5 md:px-0">
         <div className="w-full max-w-sm">
           <h1 className="mb-5 text-black text-xl font-bold text-left">Daftar</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-2">
               <label htmlFor="username" className="text-left block mb-1 text-sm">
                 Nama
+                <span className="text-red-500" title="required">
+                  *
+                </span>
               </label>
               <input
                 id="username"
@@ -64,6 +72,9 @@ const Register = () => {
             <div className="mb-2">
               <label htmlFor="email" className="text-left block mb-1 text-sm">
                 Email
+                <span className="text-red-500" title="required">
+                  *
+                </span>
               </label>
               <input
                 id="email"
@@ -78,6 +89,9 @@ const Register = () => {
             <div className="mb-2">
               <label htmlFor="phone-number" className="text-left block mb-1 text-sm">
                 Nomor Telepon
+                <span className="text-red-500" title="required">
+                  *
+                </span>
               </label>
               <input
                 id="phone-number"
@@ -92,7 +106,7 @@ const Register = () => {
             <div className="mb-2">
               <label htmlFor="password" className="text-left block mb-1 text-sm">
                 Buat Password
-                <span className="text-red-400" title="required">
+                <span className="text-red-500" title="required">
                   *
                 </span>
               </label>
@@ -107,23 +121,26 @@ const Register = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
-                  className="absolute right-0 top-1 p-3  w-10 "
+                  className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? (
-                    <img src={iconEyeSolidSlash} alt="Show/Hide Password" className="h-4 w-5 " />
-                  ) : (
-                    <img
-                      src={iconEyeSolid}
-                      alt="Show/Hide Password"
-                      className="h-4 w-5  ps-[1px]"
-                    />
-                  )}
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className="text-gray-400 h-[13px]"
+                    width="32"
+                    height="32"
+                  />
                 </button>
-                <div className="text-xs text-gray-500">
-                  <p>Minimal panjang password 8 karakter </p>
+                <div className="text-xs mt-1">
+                  <p className={isMinPassLengthEight("style", password)}>
+                    <FontAwesomeIcon icon={isMinPassLengthEight("icon", password)} /> Minimal
+                    panjang password 8 karakter
+                  </p>
 
-                  <p>Kombinasikan password dengan nomor dan angka </p>
+                  <p className={passWithNumAndLetter("style", password)}>
+                    <FontAwesomeIcon icon={passWithNumAndLetter("icon", password)} /> Kombinasikan
+                    password dengan huruf dan angka
+                  </p>
                 </div>
               </div>
             </div>
@@ -131,14 +148,18 @@ const Register = () => {
               <ButtonPrimary onClick={handleSubmit} text={"Daftar"} className={"mt-5"} />
             </div>
           </form>
-          <div className="text-sm mt-10 text-center">
+          <div className="text-sm mt-5 text-center">
             <p>
               Sudah punya akun?
-              <Link className=" text-accent"> Masuk di sini</Link>
+              <Link to="/login" className="text-accent">
+                {" "}
+                Masuk di sini
+              </Link>
             </p>
           </div>
         </div>
       </div>
+      <Toast />
     </div>
   );
 };
