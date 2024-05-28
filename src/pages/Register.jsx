@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "/assets/images/cloud_ourair.webp";
 import Logo from "/assets/images/ourair_logo.svg";
 import iconChevronLeft from "/assets/icons/chevron-left.svg";
@@ -16,9 +16,29 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isEmailEmpty, setIsEmailEmpty] = useState(false)
+  const [isUsernameEmpty, setIsUsernameEmpty] = useState(false)
+  const [isPhoneNumEmpty, setIsPhoneNumEmpty] = useState(false)
+  const [isPassEmpty, setIsPassEmpty] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const checkEmptyFields = () => {
+    setIsUsernameEmpty(username.trim().length === 0)
+    setIsEmailEmpty(email.trim().length === 0);
+    setIsPassEmpty(password.trim().length === 0);
+    setIsPhoneNumEmpty(phoneNumber.trim().length === 0);
+  }
+
+  useEffect(() => {
+    // Eksekusi checkEmptyFields() jika submitted bernilai true
+    isSubmitted && checkEmptyFields()
+  }, [username, password, email, phoneNumber])
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSubmitted(true)
+    checkEmptyFields();
     toast("Tautan Verifikasi telah dikirim!", { className: "success-toast" });
     setTimeout(() => {
       // buat navigate ke otp
@@ -33,11 +53,6 @@ const Register = () => {
 
   return (
     <div className="w-full h-screen md:flex justify-center">
-      <Link to="/login" className="absolute -top-12 left-0 md:-left-12 p-2 flex items-center gap-2">
-        <img src={iconChevronLeft} alt="Kembali" className="w-2 h-auto" />
-        <p className="text-base text-accent font-medium">Kembali</p>
-      </Link>
-
       <div
         className="relative w-1/2 h-full hidden xl:block bg-cover bg-right"
         style={{ backgroundImage: `url(${Image})` }}
@@ -51,7 +66,7 @@ const Register = () => {
       <div className="flex items-center justify-center md:w-1/2 h-full px-5 md:px-0">
         <div className="w-full max-w-sm">
           <h1 className="mb-5 text-black text-xl font-bold text-left">Daftar</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={() => handleSubmit()}>
             <div className="mb-2">
               <label htmlFor="username" className="text-left block mb-1 text-sm">
                 Nama
@@ -63,11 +78,12 @@ const Register = () => {
                 id="username"
                 type="text"
                 placeholder="Nama Lengkap"
-                className="input-daftar"
+                className={`input-daftar ${isUsernameEmpty ?'border-red-500 focus:border-500' : 'focus:border-accent'}'}`}
                 aria-label="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
+              <p className={`${isUsernameEmpty?'block' : 'hidden'}  text-xs  text-red-500`}>Mohon inputkan nama lengkap</p>
             </div>
             <div className="mb-2">
               <label htmlFor="email" className="text-left block mb-1 text-sm">
@@ -80,11 +96,13 @@ const Register = () => {
                 id="email"
                 type="email"
                 placeholder="Contoh: johndee@gmail.com"
-                className="input-daftar"
+                className={`input-daftar ${isEmailEmpty ?'border-red-500 focus:border-500' : 'focus:border-accent'}`}
                 aria-label="Email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              <p className={`${isEmailEmpty?'block' : 'hidden'}  text-xs text-red-500`}>Mohon inputkan alamat email Anda</p>
             </div>
             <div className="mb-2">
               <label htmlFor="phone-number" className="text-left block mb-1 text-sm">
@@ -97,11 +115,15 @@ const Register = () => {
                 id="phone-number"
                 type="tel"
                 placeholder="+62"
-                className="input-daftar"
+                className={`input-daftar ${isPhoneNumEmpty
+                   ?'border-red-500 focus:border-500' : 'focus:border-accent'}`}
                 aria-label="Phone Number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
+
+<p className={`${isPhoneNumEmpty?'block' : 'hidden'}  text-xs text-red-500`}>Mohon inputkan nomor telepon</p>
+              
             </div>
             <div className="mb-2">
               <label htmlFor="password" className="text-left block mb-1 text-sm">
@@ -115,7 +137,7 @@ const Register = () => {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Buat Password"
-                  className="input-daftar"
+                  className={`input-daftar ${isPassEmpty ?'border-red-500 focus:border-500' : 'focus:border-accent'}`}
                   aria-label="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -123,6 +145,7 @@ const Register = () => {
                 <button
                   className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl"
                   onClick={() => setShowPassword(!showPassword)}
+                  type="button"
                 >
                   <FontAwesomeIcon
                     icon={showPassword ? faEyeSlash : faEye}
@@ -131,16 +154,21 @@ const Register = () => {
                     height="32"
                   />
                 </button>
-                <div className="text-xs mt-1">
-                  <p className={isMinPassLengthEight("style", password)}>
-                    <FontAwesomeIcon icon={isMinPassLengthEight("icon", password)} /> Minimal
-                    panjang password 8 karakter
-                  </p>
-
-                  <p className={passWithNumAndLetter("style", password)}>
+              <p className={`${isPassEmpty?'block' : 'hidden'}  text-xs text-red-500`}>Mohon inputkan password</p>
+                <div className="pass-check mt-1">
+                  <div className={isMinPassLengthEight("style", password)}>
+                    <span className="text-xs">
+                    <FontAwesomeIcon icon={isMinPassLengthEight("icon", password)} />  {" "}
+                    Minimal panjang password 8 karakter
+                    </span>
+                  </div>
+                  <div className={passWithNumAndLetter("style", password)}>
+                    <div className="text-xs">
                     <FontAwesomeIcon icon={passWithNumAndLetter("icon", password)} /> Kombinasikan
                     password dengan huruf dan angka
-                  </p>
+
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -151,7 +179,7 @@ const Register = () => {
           <div className="text-sm mt-5 text-center">
             <p>
               Sudah punya akun?
-              <Link to="/login" className="text-accent">
+              <Link to="/login" className="text-accent font-[600]">
                 {" "}
                 Masuk di sini
               </Link>

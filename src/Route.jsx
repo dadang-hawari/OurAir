@@ -3,9 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import OTP from "./pages/OTP";
 import Beranda from "./pages/Beranda";
 import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
+import LupaPassword from "./pages/LupaPassword";
 import Register from "./pages/Register";
-
 export default function Route() {
   const router = createBrowserRouter([
     {
@@ -18,15 +17,15 @@ export default function Route() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <Login />
     },
 
     {
-      path: "/forgot-password",
-      element: <ForgotPassword />,
+      path: "/lupa-password",
+      element: <LupaPassword />,
     },
     {
-      path: "/register",
+      path: "/daftar",
       element: <Register />,
     },
   ]);

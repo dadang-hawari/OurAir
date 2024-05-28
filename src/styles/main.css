@@ -53,13 +53,15 @@ textarea {
   @apply text-sm font-[inherit];
 }
 
-.input-daftar {
-  @apply w-full px-4 py-4 max-h-12 mb-1 border rounded-xl focus:outline-none focus:border-secondary;
+p{
+  @apply text-sm
 }
 
-div.Toastify__toast {
-  @apply font-[inherit];
+
+.input-daftar {
+  @apply w-full px-4 py-4 max-h-12 mb-1 border rounded-xl focus:outline-none ;
 }
-div.success-toast {
-  @apply text-white bg-green-400 rounded-xl px-5;
+
+div.pass-check {
+  @apply text-[2px] !important;
 }

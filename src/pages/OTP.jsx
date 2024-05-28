@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { decrementTimerOtp, resetTimerOtp } from "../redux/reducers/otpReducers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import Toast from "../components/common/Toast";
+import { toast } from "react-toastify";
 
 export default function OTP() {
   const email = "J***@gmail.com";
@@ -17,14 +19,14 @@ export default function OTP() {
   // Memulai timer pengiriman ulang OTP
   const startTimer = () => {
     setIsTimerActive(true);
-    dispatch(resetTimerOtp(10));
+    dispatch(resetTimerOtp(60));
   };
 
   // Memperbarui timer pengiriman ulang OTP
   const updateTimer = () => {
     if (timer <= 1) {
       setIsTimerActive(false);
-      dispatch(resetTimerOtp(10));
+      dispatch(resetTimerOtp(60));
     } else {
       dispatch(decrementTimerOtp());
     }
@@ -52,7 +54,7 @@ export default function OTP() {
   // Handle OTP
   const handleSubmit = () => {
     if (otp.length < 6) {
-      alert("Mohon untuk mengisi seluruh OTP");
+      toast("Mohon untuk mengisi seluruh OTP", {className:'toast-error'});
       return;
     }
     console.log("OTP yang dimasukkan:", otp);
@@ -93,6 +95,7 @@ export default function OTP() {
           </div>
           <ButtonPrimary onClick={handleSubmit} text="Simpan" />
         </div>
+        <Toast />
       </div>
     </div>
   );

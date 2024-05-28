@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import Image from "../../public/assets/images/cloud_ourair.webp";
 import iconEyeSolid from "../../public/assets/icons/eye-solid.svg";
 import iconEyeSolidSlash from "../../public/assets/icons/eye-slash-solid.svg";
+import Logo from "/assets/images/ourair_logo.svg";
+import ButtonPrimary from "../components/ButtonPrimary";
 
-const ForgotPassword = () => {
+const LupaPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
@@ -46,16 +48,19 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="w-full h-screen flex items-start">
-      <div className="relative w-1/2 h-full">
-        <img
-          src={Image}
-          alt="Reset Password visual"
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <div className="flex items-center justify-center w-1/2 h-full bg-white p-4">
-        <div className="w-full max-w-sm">
+    <div className="w-full md:flex h-screen justify-center">
+    <div
+     className="relative w-1/2 h-full hidden xl:block bg-cover bg-center"
+     style={{ backgroundImage: `url(${Image})` }}
+   >
+     <img
+       src={Logo}
+       alt="Ourair"
+       className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-96   w-full h-auto"
+     />
+   </div>
+   <div className="flex items-center justify-center md:w-1/2 h-full px-5 md:px-0">
+     <div className="w-full max-w-sm"> 
           <h1 className="mb-6 text-black text-xl font-bold text-left">
             Reset Password
           </h1>
@@ -200,4 +205,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default LupaPassword;
