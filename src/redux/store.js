@@ -4,13 +4,18 @@ import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
 import storage from "redux-persist/lib/storage";
 import { thunk } from "redux-thunk";
+import authReducer from "./reducers/authReducer";
+import otpReducer from "./reducers/otpReducers";
 
-const rootReducers = combineReducers({});
+const rootReducers = combineReducers({
+  auth: authReducer,
+  otp: otpReducer,
+});
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth"],
+  whitelist: ["otp"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducers);

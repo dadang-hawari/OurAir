@@ -1,21 +1,47 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Image from "../../public/fonts/iimage.png";
+import Logo from "/assets/images/ourair_logo.svg";
+import Image from "/assets/images/cloud_ourair.webp";
+import ButtonPrimary from "../components/ButtonPrimary";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
-  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailOrPhoneError, setEmailOrPhoneError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
+
+  const checkEmptyFields = () => {
+    if (email.length > 0) {
+      setEmailError("");
+    }
+    if (password.length > 0) {
+      setPasswordError("");
+    }
+  };
+
+  useEffect(() => {
+    isSubmitted && checkEmptyFields();
+  }, [email, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setEmailOrPhoneError("");
+    setIsSubmitted(true);
+    setEmailError("");
     setPasswordError("");
 
-    if (!emailOrPhone) {
-      setEmailOrPhoneError("Masukkan Email atau No telepon");
+    if (!email && !password) {
+      setPasswordError("Masukkan Password");
+      setEmailError("Masukkan Email Anda");
+      return;
+    }
+
+    if (!email) {
+      setEmailError("Masukkan Email Anda");
       return;
     }
 
@@ -34,113 +60,108 @@ const Login = () => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{10,12}$/;
-    if (!emailRegex.test(emailOrPhone) && !phoneRegex.test(emailOrPhone)) {
-      setEmailOrPhoneError("Masukkan Email atau No telepon yang valid");
+    if (!emailRegex.test(email) && !phoneRegex.test(email)) {
+      setEmailError("Masukkan Email atau No telepon yang valid");
       return;
     }
 
     try {
-      const response = { emailOrPhone, password };
+      const response = { email, password };
 
       if (response.success) {
         navigate("/");
       } else {
         if (response.message.includes("email")) {
-          setEmailOrPhoneError(
-            "Alamat email atau nomor telepon tidak terdaftar!"
-          );
+          setEmailError("Alamat email atau nomor telepon tidak terdaftar!");
         } else if (response.message.includes("password")) {
           setPasswordError("Maaf, kata sandi anda salah");
         }
       }
     } catch (err) {
-      setEmailOrPhoneError("Email atau nomor telepon tidak terdaftar");
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSubmit(e);
+      setEmailError("Email atau nomor telepon tidak terdaftar");
     }
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/2">
+    <div className="w-full md:flex h-screen justify-center ">
+      <div
+        className="relative w-1/2 h-full hidden xl:block bg-cover bg-center"
+        style={{ backgroundImage: `url(${Image})` }}
+      >
         <img
-          src={Image}
-          alt="Login visual"
-          className="w-full h-full object-cover"
+          src={Logo}
+          alt="Ourair"
+          className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-96   w-full h-auto"
         />
       </div>
-      <div className="flex items-center justify-center w-1/2 bg-white p-4">
-        <div className="w-full max-w-sm">
+      <div className="flex items-center justify-center md:w-1/2 h-full px-5 md:px-0">
+        <div className="w-full max-w-sm relative">
+          <Link
+            to="/"
+            className="absolute -top-12 left-0 py-2  text-accent flex items-center gap-2"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} className="w-2 h-auto " />
+            <p className="text-sm">Beranda</p>
+          </Link>
           <h1 className="mb-5 text-xl font-bold">Masuk</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-2">
-              <label htmlFor="emailOrPhone" className="block text-sm mb-1">
-                Email/No telepon
+              <label htmlFor="email" className="block text-sm mb-1">
+                Email
               </label>
               <input
-                id="emailOrPhone"
+                id="email"
                 type="text"
                 placeholder="Contoh: Jhondoe@gmail.com "
-                className={`w-full px-4 py-2 mb-1 border rounded-lg focus:outline-none focus:ring ${
-                  emailOrPhoneError
-                    ? "border-red-500 focus:ring-red-500"
-                    : "focus:ring-blue-500"
+                className={`w-full input-primary outline-none  ${
+                  emailError ? "border-red-500 " : "focus:border-blue-500"
                 }`}
-                value={emailOrPhone}
-                onChange={(e) => setEmailOrPhone(e.target.value)}
-                onKeyPress={handleKeyPress}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-              {emailOrPhoneError && (
-                <div className="text-red-500 text-sm">{emailOrPhoneError}</div>
-              )}
+              {emailError && <div className="text-red-500 text-xs">{emailError}</div>}
             </div>
-            <div className="mb-2">
+            <div className="mb-6">
               <div className="flex justify-between items-center mb-1">
                 <label htmlFor="password" className="text-sm">
                   Password
                 </label>
-                <Link
-                  to="/ForgotPassword"
-                  className="text-blue-500 hover:text-blue-600 text-sm"
-                >
+                <Link to="/lupa-password" className="text-accent text-sm my-2">
                   Lupa kata sandi
                 </Link>
               </div>
-              <input
-                id="password"
-                type="password"
-                placeholder="Masukkan password"
-                className={`w-full px-4 py-2 mb-1 border rounded-lg focus:outline-none focus:ring ${
-                  passwordError
-                    ? "border-red-500 focus:ring-red-500"
-                    : "focus:ring-blue-500"
-                }`}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyPress={handleKeyPress}
-              />
-              {passwordError && (
-                <div className="text-red-500 text-sm">{passwordError}</div>
-              )}
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Masukkan password"
+                  className={`w-full input-primary outline-none ${
+                    passwordError ? "border-red-500" : "focus:border-blue-500"
+                  }`}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl"
+                  onClick={() => setShowPassword(!showPassword)}
+                  type="button"
+                >
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className="text-gray-400 h-[13px]"
+                    width="32"
+                    height="32"
+                  />
+                </button>
+              </div>
+              {passwordError && <div className="text-red-500 text-xs">{passwordError}</div>}
             </div>
-            <div>
-              <input
-                type="submit"
-                value="Masuk"
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg focus:outline-none hover:bg-blue-600"
-              />
-            </div>
+
+            <ButtonPrimary text={"Masuk"} />
           </form>
-          <div className="text-center mt-4">
+          <div className="text-center mt-4 text-sm">
             Belum punya akun?
-            <Link
-              to="/register"
-              className="text-blue-500 ml-1 hover:text-blue-600"
-            >
+            <Link to="/daftar" className="text-accent ml-1 font-[600]">
               Daftar disini
             </Link>
           </div>

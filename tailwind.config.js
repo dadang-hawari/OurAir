@@ -4,7 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#1177CB",
+        primary: "#005BFC",
+        secondary: "#1177CB",
+        accent: "#42A5F5",
+        "soft-blue": "#B7D5E6",
+        "softer-blue": "#D4E2F0",
+      },
+      borderRadius: {
+        "16px": "16px",
+        "24px": "24px",
+        "32px": "32px",
       },
     },
   },

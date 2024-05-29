@@ -1,25 +1,27 @@
+:root {
+  --toastify-icon-color-success: #0000;
+}
 @font-face {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 400;
   src: local("Poppins Regular"), local("Poppins-Regular"),
-    url("../../public/fonts/poppins-regular-webfont.woff2") format("woff2");
+    url("/fonts/Poppins-Regular.woff2") format("woff2");
 }
 
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  src: local("Poppins Medium"), local("Poppins-Medium"),
+    url("/fonts/Poppins-Medium.woff2") format("woff2");
+}
 @font-face {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   src: local("Poppins Bold"), local("Poppins-Bold"),
-    url("../../public/fonts/poppins-bold-webfont.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 500;
-  src: local("Poppins Medium"), local("Poppins-Medium"),
-    url("../../public/fonts/poppins-medium-webfont.woff2") format("woff2");
+    url("/fonts/Poppins-Bold.woff2") format("woff2");
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -29,24 +31,36 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 div.otp div {
-  gap: 15px;
-  width: fit-content;
-  margin-inline: auto;
+  @apply gap-4 w-auto mx-auto;
 }
 
 div.otp div input {
-  @apply h-[42px] min-w-[42px] border border-[#d0d0d0] rounded-2xl outline-none text-base font-medium;
+  @apply h-10 min-w-10 border border-gray-300 rounded-2xl outline-none text-base font-medium;
 }
+
 div.otp div input:focus {
-  border: 1px solid #1177cb;
+  @apply border-blue-600;
 }
 
 body {
+  @apply font-normal;
   font-family: "Poppins", sans-serif;
-  font-weight: 400;
 }
+
 button,
 input,
 textarea {
-  font-family: inherit;
+  @apply text-sm font-[inherit];
+}
+
+p {
+  @apply text-sm;
+}
+
+.input-primary {
+  @apply w-full px-4 py-4 max-h-12 mb-1 border rounded-xl focus:outline-none;
+}
+
+div.pass-check {
+  @apply text-[2px] !important;
 }

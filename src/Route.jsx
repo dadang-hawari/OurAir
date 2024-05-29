@@ -3,31 +3,34 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import OTP from "./pages/OTP";
 import Beranda from "./pages/Beranda";
 import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import Register from "./pages/Register";
-
+import LupaPassword from "./pages/LupaPassword";
+import GantiPassword from "./pages/GantiPassword";
+import Daftar from "./pages/Daftar";
 export default function Route() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Beranda />,
     },
-       {
+    {
       path: `/otp`,
       element: <OTP />,
     },
     {
-      path: "/Login",
+      path: "/login",
       element: <Login />,
     },
-
     {
-      path: "/ForgotPassword",
-      element: <ForgotPassword />,
+      path: "/lupa-password",
+      element: <LupaPassword />,
     },
     {
-      path: "/Register",
-      element: <Register />,
+      path: "/ganti-password",
+      element: <GantiPassword />,
+    },
+    {
+      path: "/daftar",
+      element: <Daftar />,
     },
   ]);
 
