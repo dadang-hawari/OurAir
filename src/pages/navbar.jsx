@@ -29,12 +29,12 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
+        {/*ini Logo nya */}
         <div className="text-black text-lg font-bold">
           <img src={Logo} alt="" className="h-12" />
         </div>
 
-        {/* Search Input (Centered) */}
+        {/* ini untuk Search */}
         <div className="flex-1 flex items-center justify-center">
           <div className="max-w-lg w-full relative">
             <label htmlFor="search" className="sr-only">
@@ -56,7 +56,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Login Button */}
+        {/* button untuk masuk*/}
         <ul className="flex space-x-4">
           <Link
             to="/login"
