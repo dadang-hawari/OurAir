@@ -43,14 +43,14 @@ const Navbar = () => {
             <input
               id="search"
               name="search"
-              className="block w-full pl-6 pr-3 py-2 border rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-full pl-6 pr-3 py-3 border rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               placeholder="Cari di sini ..."
               type="text"
             />
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+            <div className="absolute inset-y-0 right-2 flex items-center pr-3">
               <FontAwesomeIcon
                 icon={faSearch}
-                className="h-5 w-5 text-gray-400"
+                className="h-5 w-5 pl-full text-gray-400"
               />
             </div>
           </div>
