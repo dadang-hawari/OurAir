@@ -1,49 +1,91 @@
 import { useEffect, useState } from "react";
 import Image from "/assets/images/cloud_ourair.webp";
 import Logo from "/assets/images/ourair_logo.svg";
-import iconChevronLeft from "/assets/icons/chevron-left.svg";
 import ButtonPrimary from "../components/ButtonPrimary";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { passWithNumAndLetter, isMinPassLengthEight } from "../utils/passRegex";
+import {
+  passWithNumAndLetter,
+  isMinPassLengthEight,
+  passwordMedium,
+  passwordStrong,
+} from "../utils/passRegex";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Toast from "../components/common/Toast";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { registUser } from "../redux/actions/authAction";
 
-const Register = () => {
+const Daftar = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isEmailEmpty, setIsEmailEmpty] = useState(false)
-  const [isUsernameEmpty, setIsUsernameEmpty] = useState(false)
-  const [isPhoneNumEmpty, setIsPhoneNumEmpty] = useState(false)
-  const [isPassEmpty, setIsPassEmpty] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-
+  const [isUsernameEmpty, setIsUsernameEmpty] = useState(false);
+  const [isEmailEmpty, setIsEmailEmpty] = useState(false);
+  const [isPassEmpty, setIsPassEmpty] = useState(false);
+  const [isPhoneNumEmpty, setIsPhoneNumEmpty] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isPasswordMedium, setIsPasswordMedium] = useState(false);
+  const [isPasswordStrong, setIsPasswordStrong] = useState(false);
+  const [passMeter, setPassMeter] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // Check inputan kosong
   const checkEmptyFields = () => {
-    setIsUsernameEmpty(username.trim().length === 0)
+    setIsUsernameEmpty(username.trim().length === 0);
     setIsEmailEmpty(email.trim().length === 0);
     setIsPassEmpty(password.trim().length === 0);
     setIsPhoneNumEmpty(phoneNumber.trim().length === 0);
-  }
+  };
 
+  console.log("import.meta.env.VITE_DOMAIN_API :>> ", import.meta.env.VITE_DOMAIN_API);
   useEffect(() => {
     // Eksekusi checkEmptyFields() jika submitted bernilai true
-    isSubmitted && checkEmptyFields()
-  }, [username, password, email, phoneNumber])
-  
+    isSubmitted && checkEmptyFields();
+  }, [username, password, email, phoneNumber]);
+
+  useEffect(() => {
+    setIsPasswordMedium(passwordMedium(password));
+    setIsPasswordStrong(passwordStrong(password));
+  }, [password]);
+
+  const showPassMeter = () => {
+    setPassMeter(true);
+    isPassMeterStrong();
+  };
+
+  const hidePassMeter = () => {
+    if (password.length > 0) {
+      setPassMeter(true);
+      isPassMeterStrong();
+    } else setPassMeter(false);
+  };
+
+  const isPassMeterStrong = () => {
+    if (isPasswordMedium && isPasswordStrong) {
+      return <span className="text-green-500">Password kuat</span>;
+    } else if (isPasswordMedium) {
+      return (
+        <span className="text-orange-500 text-[10px] sm:text-xs">
+          Password sedang, gunakan simbol untuk password yang kuat
+        </span>
+      );
+    } else {
+      return <span className={passMeter ? "text-red-500" : "hidden"}>Password lemah</span>;
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitted(true)
+    setIsSubmitted(true);
     checkEmptyFields();
-    toast("Tautan Verifikasi telah dikirim!", { className: "success-toast" });
-    setTimeout(() => {
-      // buat navigate ke otp
-    }, 2000);
-    console.log("Registering:", {
+    // toast("Tautan Verifikasi telah dikirim!", { className: "success-toast" });
+
+    dispatch(registUser(phoneNumber, username, email, password));
+
+    console.log("DaftarRegistering:", {
       username,
       email,
       phoneNumber,
@@ -54,7 +96,7 @@ const Register = () => {
   return (
     <div className="w-full h-screen md:flex justify-center">
       <div
-        className="relative w-1/2 h-full hidden xl:block bg-cover bg-right"
+        className="relative w-1/2 h-full hidden xl:block bg-cover bg-center"
         style={{ backgroundImage: `url(${Image})` }}
       >
         <img
@@ -65,7 +107,7 @@ const Register = () => {
       </div>
       <div className="flex items-center justify-center md:w-1/2 h-full px-5 md:px-0">
         <div className="w-full max-w-sm">
-          <h1 className="mb-5 text-black text-xl font-bold text-left">Daftar</h1>
+          <h1 className="mb-2 text-black text-xl font-bold text-left">Daftar</h1>
           <form onSubmit={() => handleSubmit()}>
             <div className="mb-2">
               <label htmlFor="username" className="text-left block mb-1 text-sm">
@@ -78,12 +120,16 @@ const Register = () => {
                 id="username"
                 type="text"
                 placeholder="Nama Lengkap"
-                className={`input-daftar ${isUsernameEmpty ?'border-red-500 focus:border-500' : 'focus:border-accent'}'}`}
+                className={`input-primary ${
+                  isUsernameEmpty ? "border-red-500 focus:border-500" : "focus:border-accent"
+                }'}`}
                 aria-label="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
-              <p className={`${isUsernameEmpty?'block' : 'hidden'}  text-xs  text-red-500`}>Mohon inputkan nama lengkap</p>
+              <p className={`${isUsernameEmpty ? "block" : "hidden"}  text-xs  text-red-500`}>
+                Mohon inputkan nama lengkap
+              </p>
             </div>
             <div className="mb-2">
               <label htmlFor="email" className="text-left block mb-1 text-sm">
@@ -96,13 +142,17 @@ const Register = () => {
                 id="email"
                 type="email"
                 placeholder="Contoh: johndee@gmail.com"
-                className={`input-daftar ${isEmailEmpty ?'border-red-500 focus:border-500' : 'focus:border-accent'}`}
+                className={`input-primary ${
+                  isEmailEmpty ? "border-red-500 focus:border-500" : "focus:border-accent"
+                }`}
                 aria-label="Email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <p className={`${isEmailEmpty?'block' : 'hidden'}  text-xs text-red-500`}>Mohon inputkan alamat email Anda</p>
+              <p className={`${isEmailEmpty ? "block" : "hidden"}  text-xs text-red-500`}>
+                Mohon inputkan alamat email Anda
+              </p>
             </div>
             <div className="mb-2">
               <label htmlFor="phone-number" className="text-left block mb-1 text-sm">
@@ -115,15 +165,17 @@ const Register = () => {
                 id="phone-number"
                 type="tel"
                 placeholder="+62"
-                className={`input-daftar ${isPhoneNumEmpty
-                   ?'border-red-500 focus:border-500' : 'focus:border-accent'}`}
+                className={`input-primary ${
+                  isPhoneNumEmpty ? "border-red-500 focus:border-500" : "focus:border-accent"
+                }`}
                 aria-label="Phone Number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
 
-<p className={`${isPhoneNumEmpty?'block' : 'hidden'}  text-xs text-red-500`}>Mohon inputkan nomor telepon</p>
-              
+              <p className={`${isPhoneNumEmpty ? "block" : "hidden"}  text-xs text-red-500`}>
+                Mohon inputkan nomor telepon
+              </p>
             </div>
             <div className="mb-2">
               <label htmlFor="password" className="text-left block mb-1 text-sm">
@@ -136,8 +188,12 @@ const Register = () => {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  onFocus={showPassMeter}
+                  onBlur={hidePassMeter}
                   placeholder="Buat Password"
-                  className={`input-daftar ${isPassEmpty ?'border-red-500 focus:border-500' : 'focus:border-accent'}`}
+                  className={`input-primary ${
+                    isPassEmpty ? "border-red-500 focus:border-500" : "focus:border-accent"
+                  }`}
                   aria-label="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -154,19 +210,34 @@ const Register = () => {
                     height="32"
                   />
                 </button>
-              <p className={`${isPassEmpty?'block' : 'hidden'}  text-xs text-red-500`}>Mohon inputkan password</p>
-                <div className="pass-check mt-1">
+                <p className={`${isPassEmpty ? "block" : "hidden"}  text-xs text-red-500`}>
+                  Mohon inputkan password
+                </p>
+                <div
+                  className={`text-xs transition-[height] duration-400 rounded-md ${
+                    passMeter ? "h-2 mt-2 mb-5" : "h-0"
+                  }`}
+                >
+                  <div className="w-full flex justify-between h-full">
+                    <div className="bg-red-500 w-full rounded-s-md"></div>
+                    <div className={`${isPasswordMedium && "bg-orange-500"} w-full`}></div>
+                    <div
+                      className={`${isPasswordStrong && "bg-green-500"} w-full rounded-e-md`}
+                    ></div>
+                  </div>
+                  <div className="block">{isPassMeterStrong()}</div>
+                </div>
+                <div className="pass-check mt-2">
                   <div className={isMinPassLengthEight("style", password)}>
                     <span className="text-xs">
-                    <FontAwesomeIcon icon={isMinPassLengthEight("icon", password)} />  {" "}
-                    Minimal panjang password 8 karakter
+                      <FontAwesomeIcon icon={isMinPassLengthEight("icon", password)} /> Minimal
+                      panjang password 8 karakter
                     </span>
                   </div>
                   <div className={passWithNumAndLetter("style", password)}>
                     <div className="text-xs">
-                    <FontAwesomeIcon icon={passWithNumAndLetter("icon", password)} /> Kombinasikan
-                    password dengan huruf dan angka
-
+                      <FontAwesomeIcon icon={passWithNumAndLetter("icon", password)} /> Kombinasikan
+                      password dengan huruf dan angka
                     </div>
                   </div>
                 </div>
@@ -192,4 +263,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Daftar;

@@ -4,7 +4,8 @@ import OTP from "./pages/OTP";
 import Beranda from "./pages/Beranda";
 import Login from "./pages/Login";
 import LupaPassword from "./pages/LupaPassword";
-import Register from "./pages/Register";
+import GantiPassword from "./pages/GantiPassword";
+import Daftar from "./pages/Daftar";
 export default function Route() {
   const router = createBrowserRouter([
     {
@@ -17,16 +18,19 @@ export default function Route() {
     },
     {
       path: "/login",
-      element: <Login />
+      element: <Login />,
     },
-
     {
       path: "/lupa-password",
       element: <LupaPassword />,
     },
     {
+      path: "/ganti-password",
+      element: <GantiPassword />,
+    },
+    {
       path: "/daftar",
-      element: <Register />,
+      element: <Daftar />,
     },
   ]);
 

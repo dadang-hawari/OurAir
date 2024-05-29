@@ -53,13 +53,12 @@ textarea {
   @apply text-sm font-[inherit];
 }
 
-p{
-  @apply text-sm
+p {
+  @apply text-sm;
 }
 
-
-.input-daftar {
-  @apply w-full px-4 py-4 max-h-12 mb-1 border rounded-xl focus:outline-none ;
+.input-primary {
+  @apply w-full px-4 py-4 max-h-12 mb-1 border rounded-xl focus:outline-none;
 }
 
 div.pass-check {

@@ -1,20 +1,44 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "/assets/images/ourair_logo.svg";
 import Image from "/assets/images/cloud_ourair.webp";
 import ButtonPrimary from "../components/ButtonPrimary";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
+
+  const checkEmptyFields = () => {
+    if (email.length > 0) {
+      setEmailError("");
+    }
+    if (password.length > 0) {
+      setPasswordError("");
+    }
+  };
+
+  useEffect(() => {
+    isSubmitted && checkEmptyFields();
+  }, [email, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitted(true);
     setEmailError("");
     setPasswordError("");
+
+    if (!email && !password) {
+      setPasswordError("Masukkan Password");
+      setEmailError("Masukkan Email Anda");
+      return;
+    }
 
     if (!email) {
       setEmailError("Masukkan Email Anda");
@@ -22,7 +46,7 @@ const Login = () => {
     }
 
     if (!password) {
-      setPasswordError("Masukkan Password Password");
+      setPasswordError("Masukkan Password");
       return;
     }
 
@@ -58,15 +82,9 @@ const Login = () => {
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSubmit(e);
-    }
-  };
-
   return (
-    <div className="w-full md:flex h-screen justify-center">
-       <div
+    <div className="w-full md:flex h-screen justify-center ">
+      <div
         className="relative w-1/2 h-full hidden xl:block bg-cover bg-center"
         style={{ backgroundImage: `url(${Image})` }}
       >
@@ -77,7 +95,15 @@ const Login = () => {
         />
       </div>
       <div className="flex items-center justify-center md:w-1/2 h-full px-5 md:px-0">
-        <div className="w-full max-w-sm"> <h1 className="mb-5 text-xl font-bold">Masuk</h1>
+        <div className="w-full max-w-sm relative">
+          <Link
+            to="/"
+            className="absolute -top-12 left-0 py-2  text-accent flex items-center gap-2"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} className="w-2 h-auto " />
+            <p className="text-sm">Beranda</p>
+          </Link>
+          <h1 className="mb-5 text-xl font-bold">Masuk</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-2">
               <label htmlFor="email" className="block text-sm mb-1">
@@ -87,43 +113,55 @@ const Login = () => {
                 id="email"
                 type="text"
                 placeholder="Contoh: Jhondoe@gmail.com "
-                className={`w-full input-daftar outline-none  ${
+                className={`w-full input-primary outline-none  ${
                   emailError ? "border-red-500 " : "focus:border-blue-500"
                 }`}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onKeyPress={handleKeyPress}
               />
-              {emailError && <div className="text-red-500 text-sm">{emailError}</div>}
+              {emailError && <div className="text-red-500 text-xs">{emailError}</div>}
             </div>
-            <div className="mb-2">
+            <div className="mb-6">
               <div className="flex justify-between items-center mb-1">
                 <label htmlFor="password" className="text-sm">
                   Password
                 </label>
-                <Link to="/lupa-password" className="text-blue-500 hover:text-blue-600 text-sm my-2">
+                <Link to="/lupa-password" className="text-accent text-sm my-2">
                   Lupa kata sandi
                 </Link>
               </div>
-              <input
-                id="password"
-                type="password"
-                placeholder="Masukkan password"
-                className={`w-full input-daftar outline-none ${
-                  passwordError ? "border-red-500" : "focus:border-blue-500"
-                }`}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {passwordError && <div className="text-red-500 text-sm">{passwordError}</div>}
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Masukkan password"
+                  className={`w-full input-primary outline-none ${
+                    passwordError ? "border-red-500" : "focus:border-blue-500"
+                  }`}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl"
+                  onClick={() => setShowPassword(!showPassword)}
+                  type="button"
+                >
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className="text-gray-400 h-[13px]"
+                    width="32"
+                    height="32"
+                  />
+                </button>
+              </div>
+              {passwordError && <div className="text-red-500 text-xs">{passwordError}</div>}
             </div>
 
-            <ButtonPrimary text={"Masuk"}/>
-
+            <ButtonPrimary text={"Masuk"} />
           </form>
           <div className="text-center mt-4 text-sm">
             Belum punya akun?
-            <Link to="/daftar" className="text-blue-500 ml-1 font-[600] hover:text-blue-600">
+            <Link to="/daftar" className="text-accent ml-1 font-[600]">
               Daftar disini
             </Link>
           </div>

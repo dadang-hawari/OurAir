@@ -10,7 +10,8 @@ import Toast from "../components/common/Toast";
 import { toast } from "react-toastify";
 
 export default function OTP() {
-  const email = "J***@gmail.com";
+  const email = useSelector((state) => state);
+  console.log("email :>> ", email);
   const dispatch = useDispatch();
   const timer = useSelector((state) => state?.otp?.timerOtp);
   const [otp, setOtp] = useState("");
@@ -54,7 +55,7 @@ export default function OTP() {
   // Handle OTP
   const handleSubmit = () => {
     if (otp.length < 6) {
-      toast("Mohon untuk mengisi seluruh OTP", {className:'toast-error'});
+      toast("Mohon untuk mengisi seluruh OTP", { className: "toast-error" });
       return;
     }
     console.log("OTP yang dimasukkan:", otp);
@@ -64,7 +65,7 @@ export default function OTP() {
     <div className="mx-auto mt-28 md:mt-4 p-5">
       <div className="max-w-md mx-auto text-center md:text-left relative">
         <Link
-          to="/"
+          to="/daftar"
           className="absolute -top-12 left-0 md:-left-12 p-2 text-accent flex items-center gap-2"
         >
           <FontAwesomeIcon icon={faChevronLeft} className="w-2 h-auto " />
@@ -75,7 +76,7 @@ export default function OTP() {
 
         <div className="otp grid gap-4 mt-10 justify-items-center w-full text-sm">
           <p className="mb-5">
-            Ketik 6 digit kode yang dikirimkan ke <b>{email}</b>
+            Ketik 6 digit kode yang dikirimkan ke <b>email</b>
           </p>
           <OTPInput
             value={otp}
