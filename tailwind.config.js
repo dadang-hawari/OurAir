@@ -15,6 +15,12 @@ export default {
         "24px": "24px",
         "32px": "32px",
       },
+      height: {
+        86: "362px",
+      },
+      backgroundImage: {
+        header: "url('/assets/images/header_background.png')",
+      },
     },
   },
   plugins: [],

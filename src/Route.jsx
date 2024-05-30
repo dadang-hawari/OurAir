@@ -25,7 +25,7 @@ export default function Route() {
       element: <LupaPassword />,
     },
     {
-      path: "/ganti-password",
+      path: "/ganti-password/:token",
       element: <GantiPassword />,
     },
     {

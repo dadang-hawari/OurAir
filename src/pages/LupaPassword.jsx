@@ -4,11 +4,14 @@ import ButtonPrimary from "../components/ButtonPrimary";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { forgotPassword } from "../redux/actions/authAction";
 
 const LupaPassword = () => {
   const [email, setEmail] = useState("");
   const [isEmailEmpty, setIsEmailEmpty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const dispatch = useDispatch();
 
   const checkEmail = () => {
     setIsEmailEmpty(email.trim().length === 0);
@@ -21,6 +24,7 @@ const LupaPassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(forgotPassword(email));
     setIsSubmitted(true);
     checkEmail();
   };

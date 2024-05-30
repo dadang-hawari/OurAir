@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
 import OTPInput from "react-otp-input";
 import ButtonPrimary from "../components/ButtonPrimary";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { decrementTimerOtp, resetTimerOtp } from "../redux/reducers/otpReducers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Toast from "../components/common/Toast";
 import { toast } from "react-toastify";
+import { verifyToken } from "../redux/actions/authAction";
+import { checkLocationState } from "../utils/checkLocationState";
 
 export default function OTP() {
-  const email = useSelector((state) => state);
+  const email = useSelector((state) => state?.otp?.email);
   console.log("email :>> ", email);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = useParams();
   const timer = useSelector((state) => state?.otp?.timerOtp);
   const [otp, setOtp] = useState("");
   const [isTimerActive, setIsTimerActive] = useState(true);
@@ -34,6 +39,7 @@ export default function OTP() {
   };
 
   useEffect(() => {
+    checkLocationState();
     // Atur pemanggilan function setiap 1 detik
     const activateTimer = () => {
       const intervalId = setInterval(updateTimer, 1000);
@@ -58,6 +64,7 @@ export default function OTP() {
       toast("Mohon untuk mengisi seluruh OTP", { className: "toast-error" });
       return;
     }
+    dispatch(verifyToken(email, otp));
     console.log("OTP yang dimasukkan:", otp);
   };
 
@@ -75,8 +82,8 @@ export default function OTP() {
         <h2 className="text-2xl font-bold mt-10">Masukkan OTP</h2>
 
         <div className="otp grid gap-4 mt-10 justify-items-center w-full text-sm">
-          <p className="mb-5">
-            Ketik 6 digit kode yang dikirimkan ke <b>email</b>
+          <p className="mb-5 tracking-wide leading-5">
+            Ketik 6 digit kode yang telah dikirimkan ke email <b>{email}</b>
           </p>
           <OTPInput
             value={otp}

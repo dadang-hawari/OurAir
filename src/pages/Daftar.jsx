@@ -40,7 +40,6 @@ const Daftar = () => {
     setIsPhoneNumEmpty(phoneNumber.trim().length === 0);
   };
 
-  console.log("import.meta.env.VITE_DOMAIN_API :>> ", import.meta.env.VITE_DOMAIN_API);
   useEffect(() => {
     // Eksekusi checkEmptyFields() jika submitted bernilai true
     isSubmitted && checkEmptyFields();
@@ -81,9 +80,8 @@ const Daftar = () => {
     e.preventDefault();
     setIsSubmitted(true);
     checkEmptyFields();
-    // toast("Tautan Verifikasi telah dikirim!", { className: "success-toast" });
 
-    dispatch(registUser(phoneNumber, username, email, password));
+    dispatch(registUser(phoneNumber, username, email, password, navigate));
 
     console.log("DaftarRegistering:", {
       username,
@@ -120,6 +118,7 @@ const Daftar = () => {
                 id="username"
                 type="text"
                 placeholder="Nama Lengkap"
+                autoComplete="email"
                 className={`input-primary ${
                   isUsernameEmpty ? "border-red-500 focus:border-500" : "focus:border-accent"
                 }'}`}
@@ -190,6 +189,7 @@ const Daftar = () => {
                   type={showPassword ? "text" : "password"}
                   onFocus={showPassMeter}
                   onBlur={hidePassMeter}
+                  autoComplete="current-password"
                   placeholder="Buat Password"
                   className={`input-primary ${
                     isPassEmpty ? "border-red-500 focus:border-500" : "focus:border-accent"

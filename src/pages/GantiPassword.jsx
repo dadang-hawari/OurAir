@@ -4,6 +4,8 @@ import ButtonPrimary from "../components/ButtonPrimary";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faEye, faEyeSlash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { isMinPassLengthEight, passWithNumAndLetter } from "../utils/passRegex";
+import { useDispatch } from "react-redux";
+import { resetPassword } from "../redux/actions/authAction";
 
 const GantiPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -14,6 +16,8 @@ const GantiPassword = () => {
   const [isConfirmPassEmpty, setIsConfirmPassEmpty] = useState(false);
   const [checkIsPassSame, setCheckIsPassSame] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const urlPathToken = window.location.pathname.split("/")[2];
+  const dispatch = useDispatch();
 
   const checkConfirmPassword = () => {
     setCheckIsPassSame(newPassword === confirmPassword);
@@ -33,6 +37,7 @@ const GantiPassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(resetPassword(urlPathToken, newPassword));
     setIsSubmitted(true);
     checkEmptyFields();
   };
@@ -53,6 +58,7 @@ const GantiPassword = () => {
                   id="new-password"
                   type={showNewPassword ? "text" : "password"}
                   placeholder="Masukkan Password Baru"
+                  autoComplete=""
                   className={`input-primary text-xs  ${
                     isNewPassEmpty ? "border-red-500 focus:border-red-500" : "focus:border-blue-500"
                   }`}

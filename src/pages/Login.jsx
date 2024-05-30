@@ -5,6 +5,9 @@ import Image from "/assets/images/cloud_ourair.webp";
 import ButtonPrimary from "../components/ButtonPrimary";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { loginUser } from "../redux/actions/authAction";
+import { useDispatch } from "react-redux";
+import Toast from "../components/common/Toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +17,7 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const checkEmptyFields = () => {
     if (email.length > 0) {
@@ -50,13 +54,13 @@ const Login = () => {
       return;
     }
 
-    const passwordRegex = /^[A-Z].{7,}$/;
-    if (!passwordRegex.test(password)) {
-      setPasswordError(
-        "Password harus terdiri dari minimal 8 karakter dan diawali dengan huruf besar."
-      );
-      return;
-    }
+    // const passwordRegex = /^[A-Z].{7,}$/;
+    // if (!passwordRegex.test(password)) {
+    //   setPasswordError(
+    //     "Password harus terdiri dari minimal 8 karakter dan diawali dengan huruf besar."
+    //   );
+    //   return;
+    // }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{10,12}$/;
@@ -65,21 +69,23 @@ const Login = () => {
       return;
     }
 
-    try {
-      const response = { email, password };
+    dispatch(loginUser({ email, password }, navigate));
 
-      if (response.success) {
-        navigate("/");
-      } else {
-        if (response.message.includes("email")) {
-          setEmailError("Alamat email atau nomor telepon tidak terdaftar!");
-        } else if (response.message.includes("password")) {
-          setPasswordError("Maaf, kata sandi anda salah");
-        }
-      }
-    } catch (err) {
-      setEmailError("Email atau nomor telepon tidak terdaftar");
-    }
+    // try {
+    //   const response = { email, password };
+
+    //   if (response.success) {
+    //     navigate("/");
+    //   } else {
+    //     if (response.message.includes("email")) {
+    //       setEmailError("Alamat email atau nomor telepon tidak terdaftar!");
+    //     } else if (response.message.includes("password")) {
+    //       setPasswordError("Maaf, kata sandi anda salah");
+    //     }
+    //   }
+    // } catch (err) {
+    //   setEmailError("Email atau nomor telepon tidak terdaftar");
+    // }
   };
 
   return (
@@ -167,6 +173,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Toast />
     </div>
   );
 };
