@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import Navbar from "./Navbar";
+import Navbar from "./navbar";
 import Header from "../components/Header";
+import Footer from "./Footer";
 
 export default function Beranda() {
   return (
@@ -16,6 +17,8 @@ export default function Beranda() {
           </button>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
