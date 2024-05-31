@@ -7,7 +7,7 @@ export const checkLocationState = (location, navigate) => {
         toastId: "toastInfo",
       });
     } else if (location.state.success) {
-      toast.success(location.state.success);
+      toast(location.state.success, { className: "success-toast" });
     }
     navigate(".", { state: false });
   }

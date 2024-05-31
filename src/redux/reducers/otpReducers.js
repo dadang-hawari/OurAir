@@ -1,7 +1,8 @@
+// reducers/otpReducers.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  timerOtp: 60,
+  timerOtp: 10,
   email: null,
 };
 
@@ -9,9 +10,6 @@ const otpSlice = createSlice({
   name: "otp",
   initialState,
   reducers: {
-    setTimerOtp: (state, action) => {
-      state.timerOtp = action.payload;
-    },
     decrementTimerOtp: (state) => {
       state.timerOtp -= 1;
     },
@@ -24,6 +22,6 @@ const otpSlice = createSlice({
   },
 });
 
-export const { setTimerOtp, decrementTimerOtp, resetTimerOtp, setEmail } = otpSlice.actions;
+export const { decrementTimerOtp, resetTimerOtp, setEmail } = otpSlice.actions;
 
 export default otpSlice.reducer;

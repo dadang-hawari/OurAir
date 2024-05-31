@@ -3,9 +3,11 @@ import Logo from "/assets/images/ourair_logo.svg";
 import ButtonPrimary from "../components/ButtonPrimary";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faEye, faEyeSlash, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { isMinPassLengthEight, passWithNumAndLetter } from "../utils/passRegex";
+import { combineWithNumAndLetter, isMinPassLengthEight, minPassLengthEight, passWithNumAndLetter } from "../utils/passRegex";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../redux/actions/authAction";
+import { useNavigate, useParams } from "react-router-dom";
+import Toast from "../components/common/Toast";
 
 const GantiPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -16,11 +18,13 @@ const GantiPassword = () => {
   const [isConfirmPassEmpty, setIsConfirmPassEmpty] = useState(false);
   const [checkIsPassSame, setCheckIsPassSame] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const urlPathToken = window.location.pathname.split("/")[2];
+  const { token } = useParams();
+  const navigate = useNavigate();
+  console.log("token :>> ", token);
   const dispatch = useDispatch();
 
   const checkConfirmPassword = () => {
-    setCheckIsPassSame(newPassword === confirmPassword);
+    setCheckIsPassSame(newPassword.trim() === confirmPassword.trim());
   };
 
   const checkEmptyFields = () => {
@@ -31,15 +35,18 @@ const GantiPassword = () => {
   useEffect(() => {
     if (isSubmitted) {
       checkEmptyFields();
-      checkConfirmPassword();
     }
+    checkConfirmPassword();
   }, [newPassword, confirmPassword]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(resetPassword(urlPathToken, newPassword));
-    setIsSubmitted(true);
     checkEmptyFields();
+    if (minPassLengthEight(newPassword) && combineWithNumAndLetter(newPassword)) {
+      alert("execute");
+      dispatch(resetPassword(token, newPassword, navigate));
+    }
+    setIsSubmitted(true);
   };
 
   return (
@@ -54,44 +61,20 @@ const GantiPassword = () => {
                 Masukkan Password Baru
               </label>
               <div className="relative">
-                <input
-                  id="new-password"
-                  type={showNewPassword ? "text" : "password"}
-                  placeholder="Masukkan Password Baru"
-                  autoComplete=""
-                  className={`input-primary text-xs  ${
-                    isNewPassEmpty ? "border-red-500 focus:border-red-500" : "focus:border-blue-500"
-                  }`}
-                  aria-label="New password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-                <button
-                  className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  type="button"
-                >
-                  <FontAwesomeIcon
-                    icon={showNewPassword ? faEyeSlash : faEye}
-                    className="text-gray-400 h-[13px]"
-                    width="32"
-                    height="32"
-                  />
+                <input id="new-password" type={showNewPassword ? "text" : "password"} placeholder="Masukkan Password Baru" className={`input-primary text-xs  ${isNewPassEmpty ? "border-red-500 focus:border-red-500" : "focus:border-blue-500"}`} aria-label="New password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                <button className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl" onClick={() => setShowNewPassword(!showNewPassword)} type="button">
+                  <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} className="text-gray-400 h-[13px]" width="32" height="32" />
                 </button>
-                <p className={`${isConfirmPassEmpty ? "block" : "hidden"}  text-xs  text-red-500`}>
-                  Mohon inputkan password baru
-                </p>
+                <p className={`${isNewPassEmpty ? "block" : "hidden"}  text-xs  text-red-500`}>Mohon inputkan password baru</p>
                 <div className="pass-check mt-1">
                   <div className={isMinPassLengthEight("style", newPassword)}>
                     <span className="text-xs">
-                      <FontAwesomeIcon icon={isMinPassLengthEight("icon", newPassword)} /> Minimal
-                      panjang password 8 karakter
+                      <FontAwesomeIcon icon={isMinPassLengthEight("icon", newPassword)} /> Minimal panjang password 8 karakter
                     </span>
                   </div>
                   <div className={passWithNumAndLetter("style", newPassword)}>
                     <div className="text-xs">
-                      <FontAwesomeIcon icon={passWithNumAndLetter("icon", newPassword)} />{" "}
-                      Kombinasikan password dengan huruf dan angka
+                      <FontAwesomeIcon icon={passWithNumAndLetter("icon", newPassword)} /> Kombinasikan password dengan huruf dan angka
                     </div>
                   </div>
                 </div>
@@ -102,38 +85,15 @@ const GantiPassword = () => {
                 Ulangi Password Baru
               </label>
               <div className="relative">
-                <input
-                  id="confirm-password"
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Ulangi Password"
-                  className={`outline-none input-primary text-xs ${
-                    isConfirmPassEmpty
-                      ? "border-red-500 focus:border-red-500"
-                      : "focus:border-blue-500"
-                  }`}
-                  aria-label="Confirm new password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+                <input id="confirm-password" type={showConfirmPassword ? "text" : "password"} placeholder="Ulangi Password" className={`outline-none input-primary text-xs ${isConfirmPassEmpty ? "border-red-500 focus:border-red-500" : "focus:border-blue-500"}`} aria-label="Confirm new password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
 
-                <button
-                  className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  type="button"
-                >
-                  <FontAwesomeIcon
-                    icon={showConfirmPassword ? faEyeSlash : faEye}
-                    className="text-gray-400 h-[13px]"
-                    width="32"
-                    height="32"
-                  />
+                <button className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl" onClick={() => setShowConfirmPassword(!showConfirmPassword)} type="button">
+                  <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} className="text-gray-400 h-[13px]" width="32" height="32" />
                 </button>
-                <p className={`${isConfirmPassEmpty ? "block" : "hidden"}  text-xs  text-red-500`}>
-                  Mohon inputkan ulang password
-                </p>
+                <p className={`${isConfirmPassEmpty ? "block" : "hidden"}  text-xs  text-red-500`}>Mohon inputkan ulang password</p>
                 <div>
                   <span className="text-xs text-gray-500">
-                    {checkIsPassSame && !isConfirmPassEmpty ? (
+                    {checkIsPassSame && confirmPassword ? (
                       <div className="text-green-500">
                         <FontAwesomeIcon icon={faCheck} /> Password sudah sesuai
                       </div>
@@ -151,6 +111,7 @@ const GantiPassword = () => {
             </div>
           </form>
         </div>
+        <Toast />
       </div>
     </div>
   );
