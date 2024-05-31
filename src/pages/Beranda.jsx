@@ -5,6 +5,7 @@ import Toast from "../components/common/Toast";
 import { useEffect } from "react";
 import { checkLocationState } from "../utils/checkLocationState";
 import { Bounce } from "react-toastify";
+import Footer from "./Footer";
 
 export default function Beranda() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function Beranda() {
         </div>
       </div>
       <Toast autoClose={2000} position="bottom-center" transition={Bounce} margin="mt-0" />
+      <Footer />
     </div>
   );
 }
