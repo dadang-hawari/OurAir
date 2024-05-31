@@ -14,9 +14,8 @@ import { sendVerifyOtp, verifyOTP } from "../redux/actions/authAction";
 
 export default function OTP() {
   const dispatch = useDispatch();
-  const email = useSelector((state) => state.otp.email);
-  console.log("email :>> ", email);
-  const timer = useSelector((state) => state.otp.timerOtp);
+  const email = useSelector((state) => state?.otp?.email);
+  const timer = useSelector((state) => state?.otp?.timerOtp);
   const location = useLocation();
   const navigate = useNavigate();
   const [otp, setOtp] = useState("");
@@ -36,7 +35,7 @@ export default function OTP() {
   const updateTimer = () => {
     if (timer <= 1) {
       setIsTimerActive(false);
-      dispatch(resetTimerOtp(0));
+      dispatch(resetTimerOtp(10));
     } else {
       dispatch(decrementTimerOtp());
     }

@@ -4,7 +4,7 @@ import Logo from "/assets/images/ourair_logo.svg";
 import ButtonPrimary from "../components/ButtonPrimary";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { passWithNumAndLetter, isMinPassLengthEight, passwordMedium, passwordStrong } from "../utils/passRegex";
+import { passWithNumAndLetter, isMinPassLengthEight, passwordMedium, passwordStrong, combineWithNumAndLetter, minPassLengthEight } from "../utils/passRegex";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Toast from "../components/common/Toast";
 import { useDispatch } from "react-redux";
@@ -80,7 +80,7 @@ const Daftar = () => {
     setEmptyFields();
     setIsSubmitted(true);
 
-    if (checkEmptyFields() && isEmailValid(email)) {
+    if (checkEmptyFields() && isEmailValid(email) && combineWithNumAndLetter(password) && minPassLengthEight(password)) {
       dispatch(registUser(phoneNumber, username, email, password, navigate));
     }
 
@@ -128,7 +128,7 @@ const Daftar = () => {
                   *
                 </span>
               </label>
-              <input id="phone-number" type="tel" placeholder="+62" className={`input-primary ${isPhoneNumEmpty ? "border-red-500 focus:border-500" : "focus:border-accent"}`} aria-label="Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+              <input id="phone-number" type="number" placeholder="+62" className={`input-primary ${isPhoneNumEmpty ? "border-red-500 focus:border-500" : "focus:border-accent"}`} aria-label="Phone Number" value={phoneNumber} autoComplete="off" onChange={(e) => setPhoneNumber(e.target.value)} />
 
               <p className={`${isPhoneNumEmpty ? "block" : "hidden"}  text-xs text-red-500`}>Mohon inputkan nomor telepon</p>
             </div>
@@ -168,10 +168,10 @@ const Daftar = () => {
               </div>
             </div>
             <div>
-              <ButtonPrimary onClick={handleSubmit} text={"Daftar"} className={"mt-5"} />
+              <ButtonPrimary onClick={handleSubmit} text={"Daftar"} className={"mt-1"} />
             </div>
           </form>
-          <div className="text-sm mt-5 text-center">
+          <div className="text-sm mt-3 text-center">
             <p>
               Sudah punya akun?
               <Link to="/login" className="text-accent font-[600]">

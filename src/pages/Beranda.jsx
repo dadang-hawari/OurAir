@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
 import Header from "../components/Header";
 import Toast from "../components/common/Toast";
+import Navbar from "../components/Navbar";
 import { useEffect } from "react";
 import { checkLocationState } from "../utils/checkLocationState";
 import { Bounce } from "react-toastify";
@@ -28,7 +28,7 @@ export default function Beranda() {
           </button>
         </div>
       </div>
-      <Toast autoClose={2000} position="bottom-center" transition={Bounce} margin="mt-0" />
+      <Toast autoClose={3000} position="bottom-center" transition={Bounce} margin="mt-0" />
       <Footer />
     </div>
   );
