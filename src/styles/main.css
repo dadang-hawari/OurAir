@@ -72,6 +72,9 @@ div.pass-check {
 .ReactModal__Overlay {
   @apply opacity-0 transition-opacity ease-in-out duration-200 z-20;
 }
+div.ReactModal__Content.ReactModal__Content--after-open {
+  @apply w-fit border-none;
+}
 
 .ReactModal__Overlay--after-open {
   @apply opacity-100;
@@ -82,5 +85,5 @@ div.pass-check {
 }
 
 .ReactModal__Content {
-  @apply max-w-[400px] w-[90%] h-fit;
+  @apply w-fit border-none;
 }

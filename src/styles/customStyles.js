@@ -6,6 +6,7 @@ export const customStyles = {
     backgroundColor: 'rgba(0, 0, 0, 0.45)',
   },
   content: {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
     top: '46%',
     left: '50%',
     transform: 'translate(-50%, -50%)',

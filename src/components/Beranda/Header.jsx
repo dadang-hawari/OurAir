@@ -18,6 +18,8 @@ import { useState } from 'react'
 import { Calendar } from 'react-multi-date-picker'
 import { toast } from 'react-toastify'
 import { Passengers } from './Passenger'
+import ReactModal from 'react-modal'
+import { customStyles } from '../../styles/customStyles'
 
 const Destination = () => {
   const [departureCity, setDepartureCity] = useState('Keberangkatan')
@@ -63,6 +65,16 @@ const Destination = () => {
 const DepartureReturn = () => {
   const [isReturn, setIsReturn] = useState(true)
   const [values, setValues] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const openModal = () => {
+    setIsModalOpen(true)
+    document.body.style.overflowY = 'hidden'
+  }
+  const closeModal = () => {
+    setIsModalOpen(false)
+    document.body.style.overflowY = 'auto'
+  }
 
   const setReturn = () => {
     setIsReturn(!isReturn)
@@ -74,14 +86,6 @@ const DepartureReturn = () => {
         <FontAwesomeIcon icon={faCalendarDays} className="h-5" width="20" />{' '}
         Date
       </div>
-      <Calendar
-        className={isReturn ? 'hidden' : 'block' + ' absolute'}
-        value={values}
-        onChange={setValues}
-        range
-        numberOfMonths={2}
-        showOtherDays
-      />
       <div className="flex gap-x-4 w-full">
         <div>
           <h4>Departure</h4>
@@ -106,10 +110,32 @@ const DepartureReturn = () => {
               ></div>
             </button>
           </div>
-          <button className="text-left my-2 text-18px font-[600]">
-            Pilih Tanggal
-          </button>
-          <hr className="mt-1" />
+          <div className="relative">
+            <button
+              onClick={openModal}
+              className="text-left my-2 text-18px font-[600]"
+            >
+              Pilih Tanggal
+            </button>
+            <hr className="mt-1" />
+
+            <ReactModal
+              isOpen={isModalOpen}
+              onRequestClose={closeModal}
+              style={customStyles}
+              className="border-none absolute top-7 overflow-hidden"
+            >
+              <Calendar
+                className={isReturn ? 'block' : 'hidden'}
+                value={values}
+                onChange={setValues}
+                range
+                numberOfMonths={2}
+                showOtherDays
+                weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
+              />
+            </ReactModal>
+          </div>
         </div>
       </div>
     </div>
