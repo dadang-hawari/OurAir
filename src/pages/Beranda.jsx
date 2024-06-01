@@ -1,19 +1,19 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Toast from "../components/common/Toast";
-import Navbar from "../components/Navbar";
-import { useEffect } from "react";
-import { checkLocationState } from "../utils/checkLocationState";
-import { Bounce } from "react-toastify";
-import Footer from "./Footer";
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import Header from '../components/Beranda/Header'
+import Toast from '../components/common/Toast'
+import Navbar from '../components/Navbar'
+import { useEffect } from 'react'
+import { checkLocationState } from '../utils/checkLocationState'
+import { Bounce } from 'react-toastify'
+import Footer from './Footer'
 
 export default function Beranda() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
-    checkLocationState(location, navigate);
-  }, []);
+    checkLocationState(location, navigate)
+  }, [])
 
   return (
     <div>
@@ -28,8 +28,13 @@ export default function Beranda() {
           </button>
         </div>
       </div>
-      <Toast autoClose={3000} position="bottom-center" transition={Bounce} margin="mt-0" />
+      <Toast
+        autoClose={3000}
+        position="bottom-center"
+        transition={Bounce}
+        margin="mt-0"
+      />
       <Footer />
     </div>
-  );
+  )
 }

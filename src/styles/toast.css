@@ -8,3 +8,6 @@ div.success-toast {
 div.toast-error {
   @apply text-white bg-red-400 rounded-xl h-fit  px-5 flex items-center min-w-36;
 }
+div.toast-info {
+  @apply text-white bg-accent rounded-xl h-fit  px-5 flex items-center min-w-36;
+}
