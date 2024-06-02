@@ -88,8 +88,15 @@ div.ReactModal__Content.ReactModal__Content--after-open {
   @apply w-fit border-none;
 }
 
+div.rmdp-day.rmdp-today span {
+  @apply bg-secondary;
+}
+div.rmdp-day.rmdp-today {
+  @apply bg-secondary rounded-sm;
+}
+
 .rmdp-day {
-  @apply h-[58px] w-[40.57px] hover:bg-accent hover:text-black;
+  @apply h-[58px] w-[40.57px];
 }
 
 .rmdp-day.rmdp-range {
@@ -108,32 +115,17 @@ div.ReactModal__Content.ReactModal__Content--after-open {
 }
 
 .rmdp-day.rmdp-range.start::after {
-  content: 'Tanggal Keberangkatan';
-  position: absolute;
-  z-index: 99999;
-  font-size: 10px;
-  width: 130px;
-  padding-block: 5px;
-  background-color: rgb(0, 0, 0);
-  border-radius: 4px;
-  font-weight: normal;
-  top: -30px;
-  left: 0;
-  color: white;
+  @apply content-['Tanggal_Keberangkatan'] absolute z-40 bg-black py-1 w-[130px] text-[10px] rounded-[4px] font-normal left-0 -top-[30px] text-white;
 }
+
 .rmdp-day.rmdp-range.start::before {
-  content: '';
-  height: 10px;
-  position: absolute;
-  top: -10px;
-  left: 15px;
-  width: 10px;
-  background-color: black;
-  color: black;
+  @apply content-[''] h-['10px'] absolute -top-[-10px]
+ left-[15px] w-[10px] bg-black text-black;
 }
 .rmdp-day.rmdp-range.end::after {
   content: 'Tanggal Kembali';
   position: absolute;
+  z-index: 9999;
   font-size: 10px;
   width: 100px;
   padding-block: 5px;
@@ -158,6 +150,32 @@ div.ReactModal__Content.ReactModal__Content--after-open {
   @apply rounded-e-md;
 }
 
-.rmdp-day-picker > div {
-  @apply flex flex-col gap-y-5;
+.rmpd-week .rmdp-day span:hover {
+  @apply rounded-sm hover:text-black  border-none;
+}
+.rmdp-day span {
+  @apply rounded-sm hover:text-black border-none;
+}
+.rmdp-day:hover {
+  @apply bg-secondary;
+}
+.rmdp-day:active {
+  border-radius: 0px !important;
+  @apply bg-secondary;
+}
+
+.rmdp-arrow-container.rmdp-left {
+  @apply rounded-full;
+}
+
+button.rmdp-arrow-container.rmdp-left,
+button.rmdp-arrow-container.rmdp-arrow-container.rmdp-right {
+  @apply h-6 w-6 pt-1;
+}
+.rmdp-arrow-container.rmdp-right {
+  @apply rounded-full;
+}
+
+button.rmdp-arrow-container.rmdp-right {
+  @apply pt-[2px] ps-[1px];
 }
