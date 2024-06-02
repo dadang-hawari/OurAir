@@ -1,4 +1,3 @@
-import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import OTP from "./pages/OTP";
 import Beranda from "./pages/Beranda";
@@ -25,7 +24,7 @@ export default function Route() {
       element: <LupaPassword />,
     },
     {
-      path: "/ganti-password",
+      path: "/ganti-password/:token",
       element: <GantiPassword />,
     },
     {

@@ -1,13 +1,13 @@
-
 div.Toastify__toast {
-    @apply font-[inherit] text-sm max-h-1 mx-auto sm:max-w-fit right-0 text-center;
-  }
-  div.success-toast {
-    @apply text-white bg-green-400 rounded-xl min-h-12  px-5 py-0;
-  }
-  
-  div.toast-error {
-    
-    @apply text-white bg-red-400 rounded-xl min-h-12  px-5 py-0;
-  }
-  
+  @apply font-[inherit] text-sm max-h-1 mx-auto sm:max-w-fit right-0 text-center;
+}
+div.success-toast {
+  @apply text-white bg-green-400 rounded-xl h-fit  px-5 flex items-center min-w-36;
+}
+
+div.toast-error {
+  @apply text-white bg-red-400 rounded-xl h-fit  px-5 flex items-center min-w-36;
+}
+div.toast-info {
+  @apply text-white bg-accent rounded-xl h-fit  px-5 flex items-center min-w-36;
+}

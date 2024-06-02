@@ -6,8 +6,19 @@ export const passwordMedium = (password) => {
 };
 
 export const passwordStrong = (password) => {
-  const strongRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[.,~/<>?;:"'`!@#$%^&*()\[\]{}_+=|\\-])/;
+  const strongRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[.,~/<>?;:"'`!@#$%^&*()[\]{}_+=|\\-])/;
   if (strongRegex.test(password) && password.length >= 8) return true;
+  else return false;
+};
+
+export const combineWithNumAndLetter = (password) => {
+  const passNumAndLetter = /[0-9]/.test(password) && /[a-zA-Z]/.test(password);
+  if (passNumAndLetter) return true;
+  else return false;
+};
+
+export const minPassLengthEight = (password) => {
+  if (password.length >= 8) return true;
   else return false;
 };
 
@@ -21,11 +32,7 @@ export const passWithNumAndLetter = (type, password) => {
 
 export const isMinPassLengthEight = (type, password) => {
   if (type === "style") {
-    return password
-      ? password.trim().length >= 8
-        ? "text-green-500"
-        : "text-gray-500"
-      : "text-gray-500";
+    return password ? (password.trim().length >= 8 ? "text-green-500" : "text-gray-500 ") : "text-gray-500";
   } else {
     return password ? (password.trim().length >= 8 ? faCheck : faXmark) : faXmark;
   }

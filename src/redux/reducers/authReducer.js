@@ -4,6 +4,7 @@ const initialState = {
   token: null,
   userData: null,
   loginWith: null,
+  isLoggedin: false,
 };
 
 const primaryLogin = createSlice({
@@ -19,8 +20,11 @@ const primaryLogin = createSlice({
     setLoginWith: (state, action) => {
       state.loginWith = action.payload;
     },
+    setIsLoggedIn: (state, action) => {
+      state.isLoggedin = action.payload;
+    },
   },
 });
 
-export const { setToken, setUserData, setLoginWith } = primaryLogin.actions;
+export const { setToken, setUserData, setLoginWith, setIsLoggedIn } = primaryLogin.actions;
 export default primaryLogin.reducer;
