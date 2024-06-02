@@ -1,18 +1,10 @@
 import {
-  faArrowRightArrowLeft,
-  faArrowsLeftRight,
-  faArrowsLeftRightToLine,
+  // faArrowRightArrowLeft,
   faArrowsRotate,
-  faArrowsSpin,
-  faBusinessTime,
   faCalendarDays,
-  faChair,
   faPlaneArrival,
   faPlaneDeparture,
-  faPlayCircle,
-  faSpinner,
 } from '@fortawesome/free-solid-svg-icons'
-import { faRecycle } from '@fortawesome/free-solid-svg-icons/faRecycle'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { Calendar } from 'react-multi-date-picker'
@@ -126,11 +118,12 @@ const DepartureReturn = () => {
               className="border-none absolute top-7 overflow-hidden"
             >
               <Calendar
-                className={isReturn ? 'block' : 'hidden'}
+                className={isReturn ? 'rounded-xl p-4 font-[600] ' : 'hidden'}
                 value={values}
                 onChange={setValues}
                 range
                 numberOfMonths={2}
+                monthYearSeparator="-"
                 showOtherDays
                 weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
               />

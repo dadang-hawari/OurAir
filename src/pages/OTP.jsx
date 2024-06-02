@@ -1,78 +1,106 @@
-import { useEffect, useState } from "react";
-import OTPInput from "react-otp-input";
-import ButtonPrimary from "../components/ButtonPrimary";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { decrementTimerOtp, resetTimerOtp } from "../redux/reducers/otpReducers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import Toast from "../components/common/Toast";
-import { toast } from "react-toastify";
+import { useEffect, useState } from 'react'
+import OTPInput from 'react-otp-input'
+import ButtonPrimary from '../components/ButtonPrimary'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  decrementTimerOtp,
+  resetTimerOtp,
+  setOtpSentTime,
+} from '../redux/reducers/otpReducers'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import Toast from '../components/common/Toast'
+import { toast } from 'react-toastify'
 
-import { checkLocationState } from "../utils/checkLocationState";
-import { sendVerifyOtp, verifyOTP } from "../redux/actions/authAction";
+import { checkLocationState } from '../utils/checkLocationState'
+import { sendVerifyOtp, verifyOTP } from '../redux/actions/authAction'
 
 export default function OTP() {
-  const dispatch = useDispatch();
-  const email = useSelector((state) => state?.otp?.email);
-  const timer = useSelector((state) => state?.otp?.timerOtp);
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [otp, setOtp] = useState("");
-  const [isTimerActive, setIsTimerActive] = useState(timer > 0);
+  const dispatch = useDispatch()
+  const email = useSelector((state) => state?.otp?.email)
+  const timer = useSelector((state) => state?.otp?.timerOtp)
+  const otpSentTime = useSelector((state) => state?.otp?.otpSentTime)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [otp, setOtp] = useState('')
+  const [isTimerActive, setIsTimerActive] = useState(timer > 0)
 
   const checkEmail = () => {
-    if (!email) navigate("/");
-  };
+    // if (!email) navigate('/')
+  }
 
   // Memulai timer pengiriman ulang OTP
   const startTimer = () => {
-    setIsTimerActive(true);
-    dispatch(resetTimerOtp(10));
-  };
+    setIsTimerActive(true)
+    const now = new Date().toISOString()
+    dispatch(setOtpSentTime(now))
+    dispatch(resetTimerOtp(60))
+  }
 
   // Memperbarui timer pengiriman ulang OTP
   const updateTimer = () => {
     if (timer <= 1) {
-      setIsTimerActive(false);
-      dispatch(resetTimerOtp(10));
+      setIsTimerActive(false)
+      dispatch(resetTimerOtp(60))
     } else {
-      dispatch(decrementTimerOtp());
+      dispatch(decrementTimerOtp())
     }
-  };
+  }
+
+  const setTimer = () => {
+    const sentTime = new Date(otpSentTime)
+    const currentTime = new Date()
+    const timeDiff = Math.floor((currentTime - sentTime) / 1000)
+
+    if (timeDiff < 60) {
+      dispatch(resetTimerOtp(60 - timeDiff))
+      setIsTimerActive(true)
+    } else {
+      dispatch(resetTimerOtp(0))
+      setIsTimerActive(false)
+    }
+  }
 
   useEffect(() => {
-    checkLocationState(location, navigate);
-    checkEmail();
-  }, []);
+    checkLocationState(location, navigate)
+    checkEmail()
+    setTimer()
+  }, [dispatch, location, navigate, otpSentTime])
 
   useEffect(() => {
     if (isTimerActive) {
-      const intervalId = setInterval(updateTimer, 1000);
-      return () => clearInterval(intervalId);
+      const intervalId = setInterval(updateTimer, 1000)
+      return () => clearInterval(intervalId)
     }
-  }, [isTimerActive, timer]);
+  }, [isTimerActive, timer])
 
   // Kirim ulang OTP
   const handleResendOTP = () => {
-    startTimer();
-    dispatch(sendVerifyOtp(email));
-  };
+    startTimer()
+    dispatch(sendVerifyOtp(email))
+  }
 
   // Handle OTP
   const handleSubmit = () => {
     if (otp.length < 6) {
-      toast("Mohon untuk mengisi seluruh OTP", { className: "toast-error", toastId: "toastError" });
-      return;
+      toast('Mohon untuk mengisi seluruh OTP', {
+        className: 'toast-error',
+        toastId: 'toastError',
+      })
+      return
     }
-    dispatch(verifyOTP(email, otp, navigate));
-    console.log("OTP yang dimasukkan:", otp);
-  };
+    dispatch(verifyOTP(email, otp, navigate))
+    console.log('OTP yang dimasukkan:', otp)
+  }
 
   return (
     <div className="mx-auto mt-28 md:mt-4 p-5">
       <div className="max-w-md mx-auto text-center relative">
-        <Link to="/daftar" className="absolute -top-12 left-0 md:-left-12 p-2 text-accent flex items-center gap-2">
+        <Link
+          to="/daftar"
+          className="absolute -top-12 left-0 md:-left-12 p-2 text-accent flex items-center gap-2"
+        >
           <FontAwesomeIcon icon={faChevronLeft} className="w-2 h-auto " />
           <p className="text-base  font-medium">Kembali</p>
         </Link>
@@ -83,20 +111,29 @@ export default function OTP() {
           <p className="mb-5 tracking-wide leading-5">
             Ketik 6 digit kode yang telah dikirimkan ke email <b>{email}</b>
           </p>
-          <OTPInput value={otp} onChange={setOtp} numInputs={6} inputType="number" renderInput={(props) => <input {...props} />} />
+          <OTPInput
+            value={otp}
+            onChange={setOtp}
+            numInputs={6}
+            inputType="number"
+            renderInput={(props) => <input {...props} />}
+          />
           <div className="mt-6 mb-20 font-medium">
             {isTimerActive ? (
-              <p className="text-gray-600 cursor-default">Kirim Ulang OTP dalam {timer} detik</p>
+              <p className="text-gray-600 cursor-default">
+                Kirim Ulang OTP dalam {timer} detik
+              </p>
             ) : (
               <button onClick={handleResendOTP} className="text-red-600">
                 Kirim Ulang OTP
               </button>
             )}
           </div>
+
           <ButtonPrimary onClick={handleSubmit} text="Simpan" />
         </div>
         <Toast />
       </div>
     </div>
-  );
+  )
 }

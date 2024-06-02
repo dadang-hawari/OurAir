@@ -10,7 +10,7 @@
   height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-accent;
+  @apply bg-gray-300;
 
   border: 0px none #ffffff;
   border-radius: 50px;

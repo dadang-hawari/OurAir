@@ -1,27 +1,32 @@
 // reducers/otpReducers.js
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  timerOtp: 10,
+  timerOtp: 60,
   email: null,
-};
+  otpSentTime: null, // Tambahkan ini untuk menyimpan waktu pengiriman OTP
+}
 
 const otpSlice = createSlice({
-  name: "otp",
+  name: 'otp',
   initialState,
   reducers: {
+    setOtpSentTime: (state, action) => {
+      state.otpSentTime = action.payload
+    },
     decrementTimerOtp: (state) => {
-      state.timerOtp -= 1;
+      state.timerOtp -= 1
     },
     resetTimerOtp: (state, action) => {
-      state.timerOtp = action.payload;
+      state.timerOtp = action.payload
     },
     setEmail: (state, action) => {
-      state.email = action.payload;
+      state.email = action.payload
     },
   },
-});
+})
 
-export const { decrementTimerOtp, resetTimerOtp, setEmail } = otpSlice.actions;
+export const { setOtpSentTime, decrementTimerOtp, resetTimerOtp, setEmail } =
+  otpSlice.actions
 
-export default otpSlice.reducer;
+export default otpSlice.reducer

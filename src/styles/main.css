@@ -87,3 +87,77 @@ div.ReactModal__Content.ReactModal__Content--after-open {
 .ReactModal__Content {
   @apply w-fit border-none;
 }
+
+.rmdp-day {
+  @apply h-[58px] w-[40.57px] hover:bg-accent hover:text-black;
+}
+
+.rmdp-day.rmdp-range {
+  @apply hover:text-black;
+}
+
+.rmdp-day.rmdp-range {
+  @apply bg-[#B7D5E6] shadow-none text-black;
+}
+.rmdp-day.rmdp-range.start,
+.rmdp-day.rmdp-range.end {
+  @apply bg-secondary text-white;
+}
+.rmdp-day.rmdp-range.start {
+  @apply rounded-s-md;
+}
+
+.rmdp-day.rmdp-range.start::after {
+  content: 'Tanggal Keberangkatan';
+  position: absolute;
+  z-index: 99999;
+  font-size: 10px;
+  width: 130px;
+  padding-block: 5px;
+  background-color: rgb(0, 0, 0);
+  border-radius: 4px;
+  font-weight: normal;
+  top: -30px;
+  left: 0;
+  color: white;
+}
+.rmdp-day.rmdp-range.start::before {
+  content: '';
+  height: 10px;
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  width: 10px;
+  background-color: black;
+  color: black;
+}
+.rmdp-day.rmdp-range.end::after {
+  content: 'Tanggal Kembali';
+  position: absolute;
+  font-size: 10px;
+  width: 100px;
+  padding-block: 5px;
+  background-color: rgb(0, 0, 0);
+  border-radius: 4px;
+  font-weight: normal;
+  bottom: -30px;
+  left: 0;
+  color: white;
+}
+.rmdp-day.rmdp-range.end::before {
+  content: '';
+  height: 10px;
+  position: absolute;
+  bottom: -10px;
+  left: 15px;
+  width: 10px;
+  background-color: black;
+  color: black;
+}
+.rmdp-day.rmdp-range.end {
+  @apply rounded-e-md;
+}
+
+.rmdp-day-picker > div {
+  @apply flex flex-col gap-y-5;
+}
