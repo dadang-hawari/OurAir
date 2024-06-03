@@ -43,7 +43,7 @@ export const Passengers = () => {
           <h4>Passenger</h4>
           <button
             onClick={openModalPassengger}
-            className="text-left my-2 text-18px font-[600]"
+            className="text-left my-2 font-[600]"
           >
             2 Penumpang
           </button>
@@ -53,9 +53,7 @@ export const Passengers = () => {
           <div className="flex gap-x-5">
             <h4>Seat Class</h4>
           </div>
-          <button className="text-left my-2 text-18px font-[600]">
-            Business
-          </button>
+          <button className="text-left my-2 font-[600]">Business</button>
           <hr className="mt-1" />
         </div>
       </div>

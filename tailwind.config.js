@@ -9,6 +9,7 @@ export default {
         accent: '#42A5F5',
         'soft-blue': '#B7D5E6',
         'softer-blue': '#D4E2F0',
+        'gray-primary': '#757576',
       },
       borderRadius: {
         '16px': '16px',

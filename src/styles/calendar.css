@@ -1,0 +1,100 @@
+div.rmdp-day.rmdp-today span {
+  @apply bg-secondary;
+}
+div.rmdp-day.rmdp-today {
+  @apply bg-secondary rounded-sm;
+}
+
+.rmdp-day {
+  @apply h-[58px] w-[40.57px];
+}
+.rmdp-day:not(.rmdp-range):focus {
+  @apply rounded-sm;
+}
+.rmdp-day.rmdp-range {
+  @apply bg-[#b7d5e6aa]  shadow-none text-black;
+}
+
+.rmdp-day span {
+  @apply rounded-sm;
+}
+
+div.rmdp-week .rmdp-day:active {
+  @apply bg-black;
+}
+.rmdp-day.rmdp-range.start,
+.rmdp-day.rmdp-range.end {
+  @apply bg-secondary text-white;
+}
+.rmdp-day.rmdp-range.start {
+  @apply rounded-s-md;
+}
+
+.rmdp-day.rmdp-selected::before {
+  @apply content-['Keberangkatan'] absolute z-50 bg-black py-[5px] w-[100px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
+}
+.rmdp-day.rmdp-selected {
+  @apply bg-secondary rounded-sm;
+}
+
+.rmdp-day.rmdp-selected span:not(.highlight) {
+  @apply shadow-none;
+}
+.rmdp-day.rmdp-range.start::before {
+  @apply content-['Keberangkatan'] absolute z-50 bg-black py-[5px] w-[100px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
+}
+
+.rmdp-day.rmdp-range.end::after {
+  content: 'Kembali';
+  position: absolute;
+  z-index: 9;
+  font-size: 10px;
+  width: fit-content;
+  padding-block: 5px;
+  padding-inline: 10px;
+  background-color: rgb(0, 0, 0);
+  border-radius: 4px;
+  font-weight: normal;
+  top: 58px;
+  left: 0;
+  height: fit-content;
+  color: white;
+}
+
+.rmdp-day.rmdp-range.end {
+  @apply rounded-e-md;
+}
+
+.rmpd-week .rmdp-day span:hover {
+  @apply rounded-sm text-black  border-none;
+}
+
+.rmdp-day span.sd:hover {
+  @apply bg-transparent border-none;
+}
+.rmdp-day:hover {
+  @apply bg-secondary rounded-sm text-white;
+}
+.rmdp-day:active {
+  @apply bg-secondary rounded-sm !important;
+}
+
+.rmdp-arrow-container.rmdp-left {
+  @apply rounded-full;
+}
+
+button.rmdp-arrow-container.rmdp-left,
+button.rmdp-arrow-container.rmdp-arrow-container.rmdp-right {
+  @apply h-6 w-6 pt-1;
+}
+.rmdp-arrow-container.rmdp-right {
+  @apply rounded-full;
+}
+
+button.rmdp-arrow-container.rmdp-right {
+  @apply pt-[2px] ps-[1px];
+}
+
+.rmdp-header-values {
+  @apply font-[600];
+}
