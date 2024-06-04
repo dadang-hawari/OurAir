@@ -13,3 +13,20 @@ export const customStyles = {
     padding: '30px',
   },
 }
+export const customStylesDestination = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+  },
+  content: {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    top: '46%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    padding: '30px',
+    width: '100%',
+    maxWidth: '800px',
+  },
+}

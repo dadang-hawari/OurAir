@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   timerOtp: 60,
   email: null,
-  otpSentTime: null, // Tambahkan ini untuk menyimpan waktu pengiriman OTP
+  otpSentTime: null,
 }
 
 const otpSlice = createSlice({

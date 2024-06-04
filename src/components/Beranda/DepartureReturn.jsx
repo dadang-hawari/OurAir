@@ -50,11 +50,15 @@ export const DepartureReturn = () => {
   //   Pekerjaan Nanti bagian penyebab kemmungkinan saat jadwal kepulangan false, kemudian pilih keberangkatan harus klik 2x biar bisa terpilih
   const handleDateChange = (value) => {
     if (isReturn && value.length === 2) {
+      console.log('satu')
       setDepartureReturn(value.map((date) => date.format('DD MMMM YYYY')))
     } else if (value.length === 1) {
+      console.log('dua')
+      console.log('value :>> ', [value[0].format('DD MMMM YYYY')])
       setDepartureReturn([value[0].format('DD MMMM YYYY'), 'Jadwal Kembali'])
     } else {
-      console.log('value :>> ', value)
+      console.log('tiga')
+      console.log('value tiga:>> ', [value[0].format('DD MMMM YYYY')])
       setDepartureReturn(['Tanggal Berangkat', 'Jadwal Kembali'])
     }
   }
@@ -78,7 +82,7 @@ export const DepartureReturn = () => {
       </div>
       <div className="flex gap-x-4 w-full">
         <div>
-          <h4 className="text-gray-primary font-[600]">Keberangkatan</h4>
+          <b className="text-gray-primary font-[600]">Keberangkatan</b>
           <button
             onClick={openModal}
             className="text-left my-2 text-16px font-[600]"
@@ -89,9 +93,11 @@ export const DepartureReturn = () => {
         </div>
         <div>
           <div className="flex gap-x-5">
-            <h4 className="text-gray-primary font-[600]">Kepulangan</h4>
+            <b className="text-gray-primary font-[600]">Kepulangan</b>
             <button
               onClick={setReturn}
+              id="returnBtn"
+              aria-label="Tombol kepulangan"
               className={`w-10 h-5 flex items-center rounded-full transition-colors duration-300 cursor-pointer ${
                 isReturn ? 'bg-accent' : 'bg-gray-300'
               }`}

@@ -1,9 +1,18 @@
 import { Passengers } from './Passenger'
 import { Destination } from './Destination'
 import { DepartureReturn } from './DepartureReturn'
-import { BtnCariPenerbangan } from './ButtonCari'
+import { ButtonSearch } from './ButtonSearch'
+import { useNavigate } from 'react-router-dom'
 
 export default function Header() {
+  const navigate = useNavigate()
+  const handleSearch = () => {
+    navigate('/pilih-penerbangan', {
+      state: {
+        searchValue: 'JKT > MLB - 2 Penumpang - Economy',
+      },
+    })
+  }
   return (
     <div className="h-86 relative">
       <img
@@ -22,7 +31,7 @@ export default function Header() {
           <DepartureReturn />
           <Passengers />
         </div>
-        <BtnCariPenerbangan />
+        <ButtonSearch onClick={handleSearch} />
       </div>
     </div>
   )
