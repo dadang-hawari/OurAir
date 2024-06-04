@@ -18,8 +18,10 @@ export default function Header() {
         </h2>
         <Destination />
 
-        <DepartureReturn />
-        <Passengers />
+        <div className="flex">
+          <DepartureReturn />
+          <Passengers />
+        </div>
         <BtnCariPenerbangan />
       </div>
     </div>

@@ -11,6 +11,8 @@ import { customStyles } from '../../styles/customStyles'
 import '../../styles/toast.css'
 
 export const DepartureReturn = () => {
+  ReactModal.setAppElement('#modal')
+
   const [isReturn, setIsReturn] = useState(true)
   const [departureReturn, setDepartureReturn] = useState([
     'Tanggal Berangkat',
@@ -20,6 +22,10 @@ export const DepartureReturn = () => {
   const openModal = () => {
     setIsModalOpen(true)
     // document.body.style.overflowY = 'hidden'
+  }
+  const closeModal = () => {
+    setIsModalOpen(false)
+    // document.body.style.overflowY = 'auto'
   }
   const renderButton = (type, onClick) => {
     const chevron =
@@ -35,25 +41,17 @@ export const DepartureReturn = () => {
     )
   }
 
-  const closeModal = () => {
-    setIsModalOpen(false)
-    // document.body.style.overflowY = 'auto'
-  }
-
   const setReturn = () => {
     setIsReturn(!isReturn)
     if (isReturn === true)
       setDepartureReturn([departureReturn[0], 'Jadwal Kembali'])
   }
 
+  //   Pekerjaan Nanti bagian penyebab kemmungkinan saat jadwal kepulangan false, kemudian pilih keberangkatan harus klik 2x biar bisa terpilih
   const handleDateChange = (value) => {
-    if (value.length === 2 && isReturn) {
-      console.log('value 1:>> ', value)
-
+    if (isReturn && value.length === 2) {
       setDepartureReturn(value.map((date) => date.format('DD MMMM YYYY')))
     } else if (value.length === 1) {
-      console.log('value2 :>> ', value)
-
       setDepartureReturn([value[0].format('DD MMMM YYYY'), 'Jadwal Kembali'])
     } else {
       console.log('value :>> ', value)
@@ -61,26 +59,26 @@ export const DepartureReturn = () => {
     }
   }
 
-  const Close = () => {
-    return (
-      <div
-        className="absolute top-8 cursor-pointer p-2 right-9 text-xs text-secondary"
-        onClick={closeModal}
-      >
-        Tutup
-      </div>
-    )
-  }
+  //   const Close = () => {
+  //     return (
+  //       <div
+  //         className="absolute top-8 cursor-pointer p-2 right-9 text-xs text-secondary"
+  //         onClick={closeModal}
+  //       >
+  //         Tutup
+  //       </div>
+  //     )
+  //   }
 
   return (
     <div className="flex gap-x-8 w-full justify-between ">
-      <div className="text-gray-400 flex gap-x-4 items-center">
+      <div className="text-gray-primary flex gap-x-4 text-sm font-[600] items-center">
         <FontAwesomeIcon icon={faCalendarDays} className="h-5" width="20" />{' '}
-        Jadwal
+        Date
       </div>
-      <div className="flex gap-x-4 w-full bg-red-500">
-        <div className="bg-red-500">
-          <h4>Keberangkatan</h4>
+      <div className="flex gap-x-4 w-full">
+        <div>
+          <h4 className="text-gray-primary font-[600]">Keberangkatan</h4>
           <button
             onClick={openModal}
             className="text-left my-2 text-16px font-[600]"
@@ -89,9 +87,9 @@ export const DepartureReturn = () => {
           </button>
           <hr className="mt-1" />
         </div>
-        <div className="bg-blue-500">
+        <div>
           <div className="flex gap-x-5">
-            <h4>Kepulangan</h4>
+            <h4 className="text-gray-primary font-[600]">Kepulangan</h4>
             <button
               onClick={setReturn}
               className={`w-10 h-5 flex items-center rounded-full transition-colors duration-300 cursor-pointer ${
@@ -121,7 +119,6 @@ export const DepartureReturn = () => {
               isOpen={isModalOpen}
               onRequestClose={closeModal}
               style={customStyles}
-              appElement={document.getElementById('modal')}
               className="border-none absolute top-7 overflow-hidden"
             >
               <Calendar
