@@ -3,6 +3,7 @@ import { Destination } from './Destination'
 import { DepartureReturn } from './DepartureReturn'
 import { ButtonSearch } from './ButtonSearch'
 import { useNavigate } from 'react-router-dom'
+import { SeatClass } from './SeatClass'
 
 export default function Header() {
   const navigate = useNavigate()
@@ -30,6 +31,7 @@ export default function Header() {
         <div className="flex">
           <DepartureReturn />
           <Passengers />
+          <SeatClass />
         </div>
         <ButtonSearch onClick={handleSearch} />
       </div>
