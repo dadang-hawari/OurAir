@@ -86,7 +86,7 @@ export const DepartureReturn = () => {
           <b className="text-gray-primary font-[600]">Keberangkatan</b>
           <button
             onClick={openModal}
-            className="text-left my-2 text-16px font-[600]"
+            className="text-left my-2 text-16px font-[600] w-max"
           >
             {departureReturn[0]}
           </button>

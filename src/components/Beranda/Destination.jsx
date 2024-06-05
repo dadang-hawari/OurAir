@@ -84,8 +84,8 @@ export const Destination = () => {
       })
       return
     }
-    setDepartureCity(arrivalCity)
-    setArrivalCity(departureCity)
+    dispatch(setDepartureCity(arrivalCity))
+    dispatch(setArrivalCity(departureCity))
   }
 
   const filteredCities = cities.filter(
