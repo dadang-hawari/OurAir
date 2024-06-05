@@ -34,6 +34,7 @@ export default function Beranda() {
           <div>
             <img
               src="https://ik.imagekit.io/5zwoz8nkr/ourair/User/jakarta.webp?updateat=1717051701593"
+              alt='Jakarta'
               className="max-w-[232.5px] mb-2 h-auto object-cover rounded-md"
             />
             <h2 className="font-[600]">Jakarta - Manila</h2>
@@ -46,6 +47,7 @@ export default function Beranda() {
           <div>
             <img
               src="https://ik.imagekit.io/5zwoz8nkr/ourair/User/jakarta.webp?updateat=1717051701593"
+              alt='Jakarta'
               className="max-w-[232.5px] mb-2 h-auto object-cover rounded-md"
             />
             <h2 className="font-[600]">Jakarta - Manila</h2>
@@ -58,6 +60,7 @@ export default function Beranda() {
           <div>
             <img
               src="https://ik.imagekit.io/5zwoz8nkr/ourair/User/jakarta.webp?updateat=1717051701593"
+              alt='Jakarta'
               className="max-w-[232.5px] mb-2 h-auto object-cover rounded-md"
             />
             <h2 className="font-[600]">Jakarta - Manila</h2>
@@ -70,6 +73,7 @@ export default function Beranda() {
           <div>
             <img
               src="https://ik.imagekit.io/5zwoz8nkr/ourair/User/jakarta.webp?updateat=1717051701593"
+              alt='Jakarta'
               className="max-w-[232.5px] mb-2 h-auto object-cover rounded-md"
             />
             <h2 className="font-[600]">Jakarta ❯ Manila</h2>
