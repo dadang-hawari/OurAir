@@ -6,6 +6,7 @@ import LupaPassword from './pages/LupaPassword'
 import GantiPassword from './pages/GantiPassword'
 import Daftar from './pages/Daftar'
 import PilihPenerbangan from './pages/PilihPenerbangan'
+import Profile from './pages/Profile'
 export default function Route() {
   const router = createBrowserRouter([
     {
@@ -35,6 +36,10 @@ export default function Route() {
     {
       path: '/pilih-penerbangan',
       element: <PilihPenerbangan />,
+    },
+    {
+      path: '/profile',
+      element: <Profile />,
     },
   ])
 
