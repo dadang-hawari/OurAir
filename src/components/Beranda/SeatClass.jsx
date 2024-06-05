@@ -104,7 +104,7 @@ export const SeatClass = () => {
           <h4 className="text-sm">Seat Class</h4>{' '}
           <button
             onClick={openModalSeatClass}
-            className="text-left my-2 text-18px font-[600] bg-white p-2 rounded-md"
+            className="text-left my-2 text-sm font-[600] bg-white rounded-md"
           >
             {selectedSeatClass
               ? `${selectedSeatClass.name}`

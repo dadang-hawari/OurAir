@@ -86,7 +86,7 @@ export const DepartureReturn = () => {
           <b className="text-gray-primary font-[600]">Keberangkatan</b>
           <button
             onClick={openModal}
-            className="text-left my-2 text-16px font-[600] w-max"
+            className="text-left my-2  font-[600] w-max"
           >
             {departureReturn[0]}
           </button>
@@ -113,7 +113,7 @@ export const DepartureReturn = () => {
           <div className="relative">
             <button
               onClick={openModal}
-              className={`text-left my-2 text-16px font-[600] ${
+              className={`text-left my-2 font-[600] ${
                 !isReturn ? 'text-gray-primary cursor-not-allowed' : ''
               }`}
               disabled={!isReturn}

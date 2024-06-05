@@ -163,7 +163,7 @@ export const Passengers = () => {
 
             <div className="flex justify-end w-full">
               <button
-                className="bg-blue-600 text-white p-2  text-lg rounded-md"
+                className="bg-blue-600 text-white p-2 text-lg rounded-md"
                 onClick={confirmPassenger}
               >
                 Simpan
@@ -179,15 +179,15 @@ export const Passengers = () => {
           alt="Passenger"
           className="w-4 select-none none"
         />
-        To
+        Seat
       </div>
 
       <div className="flex gap-x-4 w-full">
         <div>
-          <h4>Passenger</h4>
+          <h4 className="text-sm">Passenger</h4>
           <button
             onClick={openModalPassenger}
-            className="text-left my-2 text-18px font-[600] bg-white p-2 rounded-md"
+            className="text-left my-2 text-sm font-[600] bg-white w-max  rounded-md"
           >
             {adults + children + infants} Penumpang
           </button>

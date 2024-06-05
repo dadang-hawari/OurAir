@@ -27,11 +27,12 @@ export default function Header() {
           <span className="text-accent">OurAir!</span>
         </h2>
         <Destination />
-
-        <div className="flex">
+        <div className="flex gap-x-10">
           <DepartureReturn />
-          <Passengers />
-          <SeatClass />
+          <div className="flex w-full items-center">
+            <Passengers />
+            <SeatClass />
+          </div>
         </div>
         <ButtonSearch onClick={handleSearch} />
       </div>

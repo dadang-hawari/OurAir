@@ -1,9 +1,9 @@
 // src/components/Footer.js
-import Image from "../../public/assets/images/logoFooter.webp";
+import Image from '../../public/assets/images/logoFooter.webp'
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-400 p-16">
+    <footer className="bg-blue-400 p-16 mt-20">
       <div className="flex flex-col md:flex-row justify-between">
         <div className=" items-center text-black text-lg font-bold">
           <img src={Image} alt="Logo Footer" className="h-14" />
@@ -25,7 +25,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
