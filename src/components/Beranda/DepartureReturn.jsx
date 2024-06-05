@@ -2,6 +2,7 @@ import {
   faCalendarDays,
   faChevronLeft,
   faChevronRight,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
@@ -63,16 +64,16 @@ export const DepartureReturn = () => {
     }
   }
 
-  //   const Close = () => {
-  //     return (
-  //       <div
-  //         className="absolute top-8 cursor-pointer p-2 right-9 text-xs text-secondary"
-  //         onClick={closeModal}
-  //       >
-  //         Tutup
-  //       </div>
-  //     )
-  //   }
+  const Close = () => {
+    return (
+      <div
+        className="absolute top-8 cursor-pointer py-[10px] px-3 right-8 text-xs text-gray-500"
+        onClick={() => closeModal()}
+      >
+        <FontAwesomeIcon icon={faXmark} />
+      </div>
+    )
+  }
 
   return (
     <div className="flex gap-x-8 w-full justify-between ">
@@ -128,7 +129,7 @@ export const DepartureReturn = () => {
               className="border-none absolute top-7 overflow-hidden"
             >
               <Calendar
-                className="rounded-xl px-5"
+                className="rounded-xl px-5 pb-3 py-4"
                 value={departureReturn}
                 onChange={handleDateChange}
                 numberOfMonths={2}
@@ -140,7 +141,7 @@ export const DepartureReturn = () => {
                 weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
                 renderButton={renderButton}
               >
-                {/* <Close /> */}
+                <Close />
               </Calendar>
             </ReactModal>
           </div>

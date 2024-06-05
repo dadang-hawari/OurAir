@@ -22,6 +22,9 @@ export default {
       height: {
         86: '362px',
       },
+      boxShadow: {
+        'shadow-c-primary': '0px 0px 10px 0px rgba(0, 0, 0, 0.15)',
+      },
       backgroundImage: {
         header: "url('/assets/images/header_background.png')",
       },
