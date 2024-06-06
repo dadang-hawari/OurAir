@@ -5,6 +5,7 @@ import { Calendar } from 'react-multi-date-picker'
 import ReactModal from 'react-modal'
 import { customStyles } from '../../styles/customStyles'
 import '../../styles/toast.css'
+import '../../styles/calendar.css'
 
 export const DepartureReturn = () => {
   ReactModal.setAppElement('#modal')

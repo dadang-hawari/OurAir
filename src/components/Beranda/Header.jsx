@@ -19,10 +19,15 @@ export default function Header() {
     <>
       <Navbar />
       <div className="h-86 relative">
-        <img src="/assets/images/header_background.webp" alt="Pantai" className="w-full h-86 absolute" />
+        <img
+          src="/assets/images/header_background.webp"
+          alt="Pantai"
+          className="w-full h-86 absolute"
+        />
         <div className="absolute top-72 max-w-5xl w-11/12 h-fit p-4 md:p-6 xl:p-8 rounded-xl border bg-white left-1/2 -translate-x-1/2">
           <h2 className="font-bold text-xl">
-            Pilih Jadwal Penerbangan spesial di <span className="text-accent">OurAir!</span>
+            Pilih Jadwal Penerbangan spesial di{' '}
+            <span className="text-accent">OurAir!</span>
           </h2>
           <Destination />
           <div className="flex xl:gap-x-12 md:gap-x-14 sm:gap-x-4">

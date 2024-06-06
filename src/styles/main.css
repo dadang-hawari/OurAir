@@ -5,23 +5,20 @@
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
-  src: local('Poppins Regular'), local('Poppins-Regular'),
-    url('/fonts/Poppins-Regular.woff2') format('woff2');
+  src: local('Poppins Regular'), local('Poppins-Regular'), url('/fonts/Poppins-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
-  src: local('Poppins Medium'), local('Poppins-Medium'),
-    url('/fonts/Poppins-Medium.woff2') format('woff2');
+  src: local('Poppins Medium'), local('Poppins-Medium'), url('/fonts/Poppins-Medium.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
-  src: local('Poppins Bold'), local('Poppins-Bold'),
-    url('/fonts/Poppins-Bold.woff2') format('woff2');
+  src: local('Poppins Bold'), local('Poppins-Bold'), url('/fonts/Poppins-Bold.woff2') format('woff2');
 }
 
 input[type='number']::-webkit-inner-spin-button,
