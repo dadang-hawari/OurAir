@@ -1,14 +1,14 @@
-import { faArrowRightArrowLeft, faLocationDot, faPlaneArrival, faPlaneDeparture, faSearch } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState } from 'react'
-import { toast } from 'react-toastify'
-import ReactModal from 'react-modal'
-import { customStylesDestination } from '../../styles/customStyles'
-import { useDispatch, useSelector } from 'react-redux'
-import { setDepartureCity, setArrivalCity } from '../../redux/reducers/jadwalPenerbanganReducer'
+import { faArrowRightArrowLeft, faLocationDot, faPlaneArrival, faPlaneDeparture, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import ReactModal from 'react-modal';
+import { customStylesDestination } from '../../styles/customStyles';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDepartureCity, setArrivalCity } from '../../redux/reducers/jadwalPenerbanganReducer';
 
 const CityList = ({ cities, onCitySelect }) => {
-  const sortedCities = cities.sort((a, b) => a.negara.localeCompare(b.negara))
+  const sortedCities = cities.sort((a, b) => a.negara.localeCompare(b.negara));
 
   return sortedCities.map((city, index) => (
     <div key={index} onClick={() => onCitySelect(city)} className="flex items-center py-2 px-4 cursor-pointer hover:bg-gray-100">
@@ -18,82 +18,81 @@ const CityList = ({ cities, onCitySelect }) => {
         <div className="text-gray-400 text-sm">{city.city}</div>
       </div>
     </div>
-  ))
-}
+  ));
+};
 
 export const Destination = () => {
-  const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
-  const departureCity = jadwalPenerbangan?.departureCity
-  const arrivalCity = jadwalPenerbangan?.arrivalCity
-  const dispatch = useDispatch()
-  // const [departureCity, setDepartureCity] = useState('Tempat Keberangkatan')
-
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCityType, setSelectedCityType] = useState('departure')
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan);
+  const departureCity = jadwalPenerbangan?.departureCity;
+  const arrivalCity = jadwalPenerbangan?.arrivalCity;
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCityType, setSelectedCityType] = useState('departure');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const cities = [
     { negara: 'Malaysia', city: 'Kuala Lumpur (KL)' },
     { negara: 'Indonesia', city: 'Jakarta (JKT)' },
     { negara: 'Brunei', city: 'Bandar Seri Begawan (BSB)' },
-  ]
+  ];
 
   const handleCitySelect = (city) => {
     if (selectedCityType === 'departure') {
-      dispatch(setDepartureCity(city.negara))
+      dispatch(setDepartureCity(city.negara));
     } else {
-      dispatch(setArrivalCity(city.negara))
+      dispatch(setArrivalCity(city.negara));
     }
-    closeModal()
-  }
+    closeModal();
+  };
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value)
-  }
+    setSearchTerm(e.target.value);
+  };
 
   const openModal = (type) => {
-    setSelectedCityType(type)
-    setIsModalOpen(true)
-  }
+    setSelectedCityType(type);
+    setIsModalOpen(true);
+  };
 
   const closeModal = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   const swapCities = () => {
     if (departureCity === 'Tempat Keberangkatan' || arrivalCity === 'Tempat Tujuan') {
       toast('Mohon untuk memilih kota tujuan atau keberangkatan', {
         className: 'toast-info',
         toastId: 'toast-info',
-      })
-      return
+      });
+      return;
     }
-    dispatch(setDepartureCity(arrivalCity))
-    dispatch(setArrivalCity(departureCity))
-  }
+    dispatch(setDepartureCity(arrivalCity));
+    dispatch(setArrivalCity(departureCity));
+  };
 
-  const filteredCities = cities.filter((city) => city.negara.toLowerCase().includes(searchTerm.toLowerCase()) || (city.city && city.city.toLowerCase().includes(searchTerm.toLowerCase())))
+  const filteredCities = cities.filter((city) =>
+    city.negara.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (city.city && city.city.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   return (
-    <div className="flex my-8 gap-x-8 items-center justify-around">
-      <div className="text-gray-primary flex gap-x-4 items-center">
+    <div className="flex flex-col gap-5 text-center my-8 sm:gap-8 sm:flex-row items-center justify-around">
+      <div className="text-gray-primary flex gap-x-4 items-center w-16">
         <FontAwesomeIcon icon={faPlaneDeparture} width="20" /> From
       </div>
-      <div className="max-w-[300px] w-full cursor-pointer" onClick={() => openModal('departure')}>
-        <button className="text-left text-18px font-[600] w-max">{departureCity}</button>
+      <div className="max-w-[300px] w-full cursor-pointer flex-grow" onClick={() => openModal('departure')} id="keberangkatan">
+        <button className="text-left text-sm font-[600]">{departureCity}</button>
         <hr className="mt-1 w-full" />
       </div>
       <button id="swapBtn" aria-label="tukar kota" title="tukar kota" onClick={swapCities} className="bg-softer-blue p-2 rounded-md">
         <FontAwesomeIcon icon={faArrowRightArrowLeft} className="text-gray-primary h-5" />
       </button>
-      <div className="text-gray-primary flex gap-x-4 items-center" onClick={() => openModal('arrival')}>
+      <div className="text-gray-primary flex gap-x-4 items-center w-16">
         <FontAwesomeIcon icon={faPlaneArrival} width="20" /> To
       </div>
-      <div className="max-w-[300px] w-full cursor-pointer">
-        <button onClick={() => openModal('arrival')} className="text-left text-18px font-[600]">
-          {arrivalCity}
-        </button>
-        <hr className="mt-1" />
+      <div className="max-w-[300px] w-full cursor-pointer flex-grow" onClick={() => openModal('arrival')} id="kepulangan">
+        <button className="text-left text-sm font-[600]">{arrivalCity}</button>
+        <hr className="mt-1 w-full" />
       </div>
       <ReactModal isOpen={isModalOpen} onRequestClose={closeModal} style={customStylesDestination} className="border-none absolute top-7 w-full overflow-hidden">
         <div className="bg-white w-full rounded-md relative">
@@ -110,5 +109,5 @@ export const Destination = () => {
         </div>
       </ReactModal>
     </div>
-  )
-}
+  );
+};
