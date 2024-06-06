@@ -36,50 +36,22 @@ export const SeatClass = () => {
 
   return (
     <div className="flex gap-x-4 w-full">
-      <ReactModal
-        isOpen={isModalOpenSeatClass}
-        onRequestClose={closeModalSeatClass}
-        style={customStyles}
-        className="border-none relative mx-10 overflow-hidden"
-      >
+      <ReactModal isOpen={isModalOpenSeatClass} onRequestClose={closeModalSeatClass} style={customStyles} className="border-none relative mx-10 overflow-hidden">
         <div className="text-center bg-white p-3 rounded-md relative">
-          <div
-            className="absolute top-2 right-2 cursor-pointer"
-            onClick={closeModalSeatClass}
-          >
+          <div className="absolute top-2 right-2 cursor-pointer" onClick={closeModalSeatClass}>
             <FontAwesomeIcon icon={faTimes} size="sm" />
           </div>
           <div className="flex flex-wrap gap-4 mt-3 justify-center">
             {seatClasses.map((seatClass, index) => (
               <div key={index} className="w-full">
                 <hr className="mt-1" />
-                <button
-                  className={`hover:bg-blue-50  text-left ml-3 font-bold text-black p-1 rounded-md w-full ${
-                    tempSelectedSeatClass?.name === seatClass.name
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white'
-                  }`}
-                  onClick={() => selectSeatClass(seatClass)}
-                >
+                <button className={`hover:bg-blue-50  text-left ml-3 font-bold text-black p-1 rounded-md w-full ${tempSelectedSeatClass?.name === seatClass.name ? 'bg-blue-500 text-white' : 'bg-white'}`} onClick={() => selectSeatClass(seatClass)}>
                   <div className="flex justify-between items-center">
                     <div>
                       {seatClass.name}
-                      <div
-                        className={`${
-                          tempSelectedSeatClass?.price === seatClass.price
-                            ? 'text-white'
-                            : 'text-blue-500'
-                        } text-left mt-1 text-sm`}
-                      >
-                        IDR {seatClass.price.toLocaleString()}
-                      </div>
+                      <div className={`${tempSelectedSeatClass?.price === seatClass.price ? 'text-white' : 'text-blue-500'} text-left mt-1 text-sm`}>IDR {seatClass.price.toLocaleString()}</div>
                     </div>
-                    {tempSelectedSeatClass?.name === seatClass.name && (
-                      <FontAwesomeIcon
-                        icon={faCheckCircle}
-                        className=" h-5 text-green-600"
-                      />
-                    )}
+                    {tempSelectedSeatClass?.name === seatClass.name && <FontAwesomeIcon icon={faCheckCircle} className=" h-5 text-green-600" />}
                   </div>
                 </button>
               </div>
@@ -87,10 +59,7 @@ export const SeatClass = () => {
           </div>
           <hr className="mt-5" />
           <div className="flex justify-end w-full mt-3">
-            <button
-              className="bg-blue-600 text-white p-2 text-sm rounded-md"
-              onClick={confirmSeatClass}
-            >
+            <button className="bg-blue-600 text-white p-2 text-sm rounded-md" onClick={confirmSeatClass}>
               Simpan
             </button>
           </div>
@@ -100,15 +69,10 @@ export const SeatClass = () => {
       <div className="text-gray-400 flex gap-x-4 items-center"></div>
 
       <div className="flex gap-x-2 w-full">
-        <div>
+        <div className="w-full">
           <h4 className="text-sm">Seat Class</h4>{' '}
-          <button
-            onClick={openModalSeatClass}
-            className="text-left my-2 text-sm font-[600] bg-white rounded-md"
-          >
-            {selectedSeatClass
-              ? `${selectedSeatClass.name}`
-              : 'Pilih Seat Class'}
+          <button onClick={openModalSeatClass} className="text-left my-2 text-sm font-[600] bg-white rounded-md">
+            {selectedSeatClass ? `${selectedSeatClass.name}` : 'Pilih Seat Class'}
           </button>
           <hr className="mt-1" />
         </div>
