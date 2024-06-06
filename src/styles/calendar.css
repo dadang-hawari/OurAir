@@ -1,91 +1,82 @@
+/* Untuk menyesuaikan elemen hari ini */
+div.rmdp-wrapper {
+  @apply rounded-xl
+}
 div.rmdp-wrapper .rmdp-day.rmdp-today span {
-  background-color: blue; /* ganti dengan warna yang diinginkan */
+  @apply bg-secondary;
 }
-
 div.rmdp-wrapper .rmdp-day.rmdp-today {
-  background-color: blue; /* ganti dengan warna yang diinginkan */
-  border-radius: 4px;
+  @apply bg-secondary rounded-sm;
 }
 
-/* Menargetkan semua hari */
 div.rmdp-wrapper .rmdp-day {
-  height: 58px;
-  width: 40.57px;
+  @apply h-[58px] w-[40.57px];
 }
-
-/* Menargetkan hari yang difokuskan kecuali hari rentang */
 div.rmdp-wrapper .rmdp-day:not(.rmdp-range):focus {
-  border-radius: 4px;
+  @apply rounded-sm;
 }
-
-/* Menargetkan hari rentang */
 div.rmdp-wrapper .rmdp-day.rmdp-range {
-  background-color: rgba(183, 213, 230, 0.67);
-  box-shadow: none;
-  color: black;
+  @apply bg-[#b7d5e6aa] shadow-none text-black;
 }
-
-/* Menargetkan span di dalam hari */
 div.rmdp-wrapper .rmdp-day span {
-  border-radius: 4px;
+  @apply rounded-sm;
 }
 
-/* Menargetkan hari yang sedang diaktifkan dalam minggu */
-div.rmdp-wrapper div.rmdp-week .rmdp-day:active {
-  background-color: black;
-}
-
-/* Menargetkan hari awal dan akhir dalam rentang */
 div.rmdp-wrapper .rmdp-day.rmdp-range.start,
 div.rmdp-wrapper .rmdp-day.rmdp-range.end {
-  background-color: blue; /* ganti dengan warna yang diinginkan */
-  color: white;
+  @apply bg-secondary text-white;
 }
-
-/* Menargetkan hari awal dalam rentang */
 div.rmdp-wrapper .rmdp-day.rmdp-range.start {
-  border-radius: 0.375rem 0 0 0.375rem;
+  @apply rounded-s-md;
 }
 
-/* Menambahkan konten khusus sebelum hari yang dipilih */
+/* Untuk menyesuaikan elemen yang dipilih */
 div.rmdp-wrapper .rmdp-day.rmdp-selected::before {
-  content: 'Keberangkatan';
-  position: absolute;
-  z-index: 50;
-  background-color: black;
-  padding: 5px;
-  width: 100px;
-  font-size: 10px;
-  border-radius: 4px;
-  font-weight: normal;
-  right: 0;
-  bottom: 58px;
-  color: white;
+  @apply content-['Keberangkatan'] absolute z-50 bg-black py-[5px] w-[100px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
 }
-
-/* Menargetkan hari yang dipilih */
 div.rmdp-wrapper .rmdp-day.rmdp-selected {
-  background-color: blue; /* ganti dengan warna yang diinginkan */
-  border-radius: 4px;
+  @apply bg-secondary rounded-sm;
 }
-
-/* Menargetkan span di dalam hari yang dipilih kecuali yang memiliki kelas .highlight */
 div.rmdp-wrapper .rmdp-day.rmdp-selected span:not(.highlight) {
-  box-shadow: none;
+  @apply shadow-none;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-range.start::before {
+  @apply content-['Keberangkatan'] absolute z-50 bg-black py-[5px] w-[100px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-range.end::after {
+  @apply content-['kembali'] absolute z-10 text-[10px] w-fit py-[5px] px-[10px] bg-black rounded font-normal top-[58px] left-0 h-fit text-white
+}
+div.rmdp-wrapper .rmdp-day.rmdp-range.end {
+  @apply rounded-e-md;
+}
+div.rmdp-wrapper .rmdp-week .rmdp-day span:hover {
+  @apply rounded-sm text-white border-none;
+}
+div.rmdp-wrapper .rmdp-day span.sd:hover {
+  @apply bg-transparent border-none;
+}
+div.rmdp-wrapper .rmdp-day:hover {
+  @apply bg-secondary rounded-sm text-white;
+}
+div.rmdp-wrapper .rmdp-day:active {
+  @apply bg-secondary rounded-sm;
 }
 
-/* Menambahkan konten khusus sebelum hari awal dalam rentang */
-div.rmdp-wrapper .rmdp-day.rmdp-range.start::before {
-  content: 'Keberangkatan';
-  position: absolute;
-  z-index: 50;
-  background-color: black;
-  padding: 5px;
-  width: 100px;
-  font-size: 10px;
-  border-radius: 4px;
-  font-weight: normal;
-  right: 0;
-  bottom: 58px;
-  color: white;
+div.rmdp-wrapper .rmdp-arrow-container.rmdp-left {
+  @apply rounded-full;
+}
+div.rmdp-wrapper button.rmdp-arrow-container.rmdp-left,
+div.rmdp-wrapper button.rmdp-arrow-container.rmdp-right {
+  @apply h-6 w-6 pt-1;
+}
+div.rmdp-wrapper .rmdp-arrow-container.rmdp-right {
+  @apply rounded-full;
+}
+div.rmdp-wrapper button.rmdp-arrow-container.rmdp-right {
+  @apply pt-[2px] ps-[1px];
+}
+
+/* Untuk menyesuaikan header */
+div.rmdp-wrapper .rmdp-header-values {
+  @apply font-[600];
 }
