@@ -35,7 +35,7 @@ export default function Header() {
           <hr className="mb-4" />
           <div className="grid grid-cols-1 gap-y-7">
             <DepartureReturn />
-            <div className="flex w-full gap-x-1">
+            <div className="flex w-full">
               <Passengers />
               <SeatClass />
             </div>

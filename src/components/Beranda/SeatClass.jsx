@@ -91,14 +91,12 @@ export const SeatClass = () => {
         </div>
       </ReactModal>
 
-      <div className="text-gray-400 flex gap-x-4 items-center"></div>
-
-      <div className="flex gap-x-2 w-full">
-        <div className="w-full">
+      <div className="flex gap-x-2 max-w-[402.67px] w-full">
+        <div className="w-full ">
           <h4 className="text-sm">Kelas</h4>{' '}
           <button
             onClick={openModalSeatClass}
-            className="text-left my-2 border p-3  font-[600] w-full max-w-[300px]"
+            className="text-left my-2 border p-3  font-[600] w-full"
           >
             {selectedSeatClass ? `${selectedSeatClass.name}` : 'Pilih Seat Class'}
           </button>
