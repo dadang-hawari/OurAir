@@ -44,7 +44,7 @@ export const Passengers = () => {
   }
 
   return (
-    <div className="flex gap-x-8 w-full ">
+    <div className="flex w-full  flex-grow ">
       <ReactModal
         isOpen={isModalOpenPassenger}
         onRequestClose={closeModalPassenger}
@@ -152,12 +152,12 @@ export const Passengers = () => {
         </div>
       </ReactModal>
 
-      <div className="ms-2 text-gray-primary hidden sm:flex w-16 mr-2 gap-x-4 items-center">
-        <img src="assets/images/seat.png" alt="Passenger" className="h-6 w-4 select-none none" />
+      <div className="ms-1 text-gray-primary hidden sm:flex min-w-16 mr-6 gap-x-4 items-center">
+        <img src="assets/images/seat.png" alt="Passenger" className="h-6 w-auto select-none none" />
         <span className="font-[600] text-sm">Seat</span>
       </div>
 
-      <div className="w-full ">
+      <div className="w-full max-w-[424.23px]">
         <div className="w-full">
           <h4 className="text-sm">Penumpang</h4>
           <button

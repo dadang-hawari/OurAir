@@ -22,7 +22,7 @@ export default function Header() {
         <img
           src="/assets/images/header_background.webp"
           alt="Pantai"
-          className="w-full h-86 absolute"
+          className="w-full h-[362px] xl:h-auto object-cover absolute"
         />
         <div className="absolute top-72 max-w-5xl w-11/12 h-fit px-4 pt-4 pb-20 md:p-6 xl:p-8 rounded-xl border bg-white left-1/2 -translate-x-1/2">
           <div>
@@ -35,7 +35,7 @@ export default function Header() {
           <hr className="mb-4" />
           <div className="grid grid-cols-1 gap-y-7">
             <DepartureReturn />
-            <div className="flex w-full gap-x-1">
+            <div className="flex gap-x-2 w-full justify-between md:ml-1">
               <Passengers />
               <SeatClass />
             </div>
