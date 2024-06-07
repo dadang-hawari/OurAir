@@ -22,7 +22,7 @@ export default function Beranda() {
     <div>
       <Header />
       {/* Destinasi Favorit */}
-    <DestinasiFavorit />
+      <DestinasiFavorit />
       <Toast autoClose={3000} position="bottom-center" transition={Bounce} margin="mt-0" />
       <Footer />
     </div>

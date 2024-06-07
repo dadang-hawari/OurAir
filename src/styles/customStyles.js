@@ -7,10 +7,9 @@ export const customStyles = {
   },
   content: {
     backgroundColor: 'rgba(0, 0, 0, 0)',
-    top: '46%',
+    top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    padding: '30px',
   },
 }
 export const customStylesDestination = {
@@ -22,11 +21,10 @@ export const customStylesDestination = {
   },
   content: {
     backgroundColor: 'rgba(0, 0, 0, 0)',
-    top: '46%',
+    top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    padding: '30px',
-    width: '100%',
+    width: '90%',
     maxWidth: '800px',
   },
 }
@@ -39,10 +37,9 @@ export const customStylesFilter = {
   },
   content: {
     backgroundColor: 'rgba(0, 0, 0, 0)',
-    top: '46%',
+    top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    padding: '30px',
     width: '100%',
     maxWidth: '800px',
   },
