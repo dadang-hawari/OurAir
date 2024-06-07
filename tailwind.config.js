@@ -28,6 +28,13 @@ export default {
       backgroundImage: {
         header: "url('/assets/images/header_background.png')",
       },
+      screens: {
+        xlm: '900px',
+        sml: '800px',
+        bsm: '700px',
+        mini: '400px',
+        xm: '10px',
+      },
     },
   },
   plugins: [],

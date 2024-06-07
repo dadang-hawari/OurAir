@@ -19,7 +19,11 @@ export default function Header() {
     <>
       <Navbar />
       <div className="h-86 relative">
-        <img src="/assets/images/header_background.webp" alt="Pantai" className="w-full h-86 absolute" />
+        <img
+          src="/assets/images/header_background.webp"
+          alt="Pantai"
+          className="w-full h-86 absolute"
+        />
         <div className="absolute top-72 max-w-5xl w-11/12 h-fit px-4 pt-4 pb-20 md:p-6 xl:p-8 rounded-xl border bg-white left-1/2 -translate-x-1/2">
           <div>
             <h1 className="font-bold text-xl">
@@ -27,9 +31,11 @@ export default function Header() {
             </h1>
           </div>
           <Destination />
+
+          <hr className="mb-4" />
           <div className="grid grid-cols-1 gap-y-7">
             <DepartureReturn />
-            <div className="flex w-full items-center">
+            <div className="flex w-full gap-x-1">
               <Passengers />
               <SeatClass />
             </div>

@@ -2,11 +2,18 @@ import { useState } from 'react'
 import ReactModal from 'react-modal'
 import { customStyles } from '../../styles/customStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPerson, faChild, faBaby, faMinus, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPerson,
+  faChild,
+  faBaby,
+  faMinus,
+  faPlus,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons'
 
 export const Passengers = () => {
   const [isModalOpenPassenger, setIsModalOpenPassenger] = useState(false)
-  const [adults, setAdults] = useState(2)
+  const [adults, setAdults] = useState(1)
   const [children, setChildren] = useState(0)
   const [infants, setInfants] = useState(0)
   const [tempAdults, setTempAdults] = useState(adults)
@@ -37,8 +44,13 @@ export const Passengers = () => {
   }
 
   return (
-    <div className="flex gap-x-8 w-full">
-      <ReactModal isOpen={isModalOpenPassenger} onRequestClose={closeModalPassenger} style={customStyles} className="border-none relative px-6">
+    <div className="flex gap-x-8 w-full ">
+      <ReactModal
+        isOpen={isModalOpenPassenger}
+        onRequestClose={closeModalPassenger}
+        style={customStyles}
+        className="border-none relative px-6"
+      >
         <div className="text-center bg-white px-4 pb-4 pt-8 rounded-md relative">
           <div className="absolute top-2 right-2 cursor-pointer" onClick={closeModalPassenger}>
             <FontAwesomeIcon icon={faTimes} size="lg" />
@@ -52,11 +64,19 @@ export const Passengers = () => {
                   <FontAwesomeIcon icon={faPerson} /> Dewasa
                 </span>
                 <div className="flex gap-x-2 items-center">
-                  <button onClick={() => handleDecrement(setAdults, setTempAdults, tempAdults)} className="px-2 py-1 border">
+                  <button
+                    onClick={() => handleDecrement(setAdults, setTempAdults, tempAdults)}
+                    className="px-2 py-1 border"
+                  >
                     <FontAwesomeIcon className="" icon={faMinus} />
                   </button>
-                  <span className="px-3 border py-[2px] w-12 rounded-sm text-center">{tempAdults}</span>
-                  <button onClick={() => handleIncrement(setAdults, setTempAdults, tempAdults)} className="px-2 py-1 border">
+                  <span className="px-3 border py-[2px] w-12 rounded-sm text-center">
+                    {tempAdults}
+                  </span>
+                  <button
+                    onClick={() => handleIncrement(setAdults, setTempAdults, tempAdults)}
+                    className="px-2 py-1 border"
+                  >
                     <FontAwesomeIcon className="text-blue-600" icon={faPlus} />
                   </button>
                 </div>
@@ -71,11 +91,19 @@ export const Passengers = () => {
                   <FontAwesomeIcon icon={faChild} /> Anak
                 </span>
                 <div className="flex gap-x-2 items-center">
-                  <button onClick={() => handleDecrement(setChildren, setTempChildren, tempChildren)} className="px-2 py-1 border">
+                  <button
+                    onClick={() => handleDecrement(setChildren, setTempChildren, tempChildren)}
+                    className="px-2 py-1 border"
+                  >
                     <FontAwesomeIcon icon={faMinus} />
                   </button>
-                  <span className="px-3 border py-[2px] w-12 rounded-sm text-center">{tempChildren}</span>
-                  <button onClick={() => handleIncrement(setChildren, setTempChildren, tempChildren)} className="px-2 py-1 border">
+                  <span className="px-3 border py-[2px] w-12 rounded-sm text-center">
+                    {tempChildren}
+                  </span>
+                  <button
+                    onClick={() => handleIncrement(setChildren, setTempChildren, tempChildren)}
+                    className="px-2 py-1 border"
+                  >
                     <FontAwesomeIcon className="text-blue-600" icon={faPlus} />
                   </button>
                 </div>
@@ -90,11 +118,19 @@ export const Passengers = () => {
                   <FontAwesomeIcon icon={faBaby} /> Bayi
                 </span>
                 <div className="flex gap-x-2 items-center">
-                  <button onClick={() => handleDecrement(setInfants, setTempInfants, tempInfants)} className="px-2 py-1 border">
+                  <button
+                    onClick={() => handleDecrement(setInfants, setTempInfants, tempInfants)}
+                    className="px-2 py-1 border"
+                  >
                     <FontAwesomeIcon className="" icon={faMinus} />
                   </button>
-                  <span className="px-3 border py-[2px] w-12 rounded-sm text-center">{tempInfants}</span>
-                  <button onClick={() => handleIncrement(setInfants, setTempInfants, tempInfants)} className="px-2 py-1 border">
+                  <span className="px-3 border py-[2px] w-12 rounded-sm text-center">
+                    {tempInfants}
+                  </span>
+                  <button
+                    onClick={() => handleIncrement(setInfants, setTempInfants, tempInfants)}
+                    className="px-2 py-1 border"
+                  >
                     <FontAwesomeIcon className="text-blue-600" icon={faPlus} />
                   </button>
                 </div>
@@ -105,7 +141,10 @@ export const Passengers = () => {
             </div>
 
             <div className="flex justify-end w-full">
-              <button className="bg-blue-600 text-white p-2 text-md px-5 mt-5 mb-2 font-[600] rounded-md" onClick={confirmPassenger}>
+              <button
+                className="bg-blue-600 text-white p-2 text-md px-5 mt-5 mb-2 font-[600] rounded-md"
+                onClick={confirmPassenger}
+              >
                 Simpan
               </button>
             </div>
@@ -113,18 +152,20 @@ export const Passengers = () => {
         </div>
       </ReactModal>
 
-      <div className="text-gray-400 flex gap-x-4 items-center">
-        <img src="assets/images/Vector (1).png" alt="Passenger" className="h-6 w-4 select-none none" />
-        Seat
+      <div className="ms-2 text-gray-primary hidden sm:flex w-16 mr-2 gap-x-4 items-center">
+        <img src="assets/images/seat.png" alt="Passenger" className="h-6 w-4 select-none none" />
+        <span className="font-[600] text-sm">Seat</span>
       </div>
 
-      <div className="flex gap-x-4 w-full">
+      <div className="w-full ">
         <div className="w-full">
-          <h4 className="text-sm">Passenger</h4>
-          <button onClick={openModalPassenger} className="text-left my-5 text-sm font-[600] bg-white w-max  rounded-md">
+          <h4 className="text-sm">Penumpang</h4>
+          <button
+            onClick={openModalPassenger}
+            className="text-left my-2 border p-3  font-[600] w-full"
+          >
             {adults + children + infants} Penumpang
           </button>
-          <hr className="mt-1" />
         </div>
       </div>
     </div>
