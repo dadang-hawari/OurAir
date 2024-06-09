@@ -84,14 +84,14 @@ export const DepartureReturn = () => {
 
   return (
     <div className="flex gap-x-7 w-full justify-between md:ml-1">
-      <div className="text-gray-primary hidden sm:flex  gap-x-4 text-sm font-[600] w-16 items-center">
+      <div className="text-gray-primary hidden sm:flex gap-x-4 text-sm font-[600] w-16 items-center">
         <FontAwesomeIcon icon={faCalendarDays} className="h-5" width="20" /> Date
       </div>
       <div className="flex flex-col sm:flex-row gap-x-4 w-full">
         <div className="flex-grow">
           <b className="text-gray-primary font-[600] block">Keberangkatan</b>
           <button onClick={openModal} className="text-left my-2 border p-3  font-[600] w-full">
-            {departureReturn[0]}
+            <span className="w-[135.66px] block">{departureReturn[0]}</span>
           </button>
         </div>
         <div className="flex-grow">

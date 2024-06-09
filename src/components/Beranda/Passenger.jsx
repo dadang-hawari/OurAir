@@ -10,6 +10,7 @@ import {
   faPlus,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons'
+import { SeatClass } from './SeatClass'
 
 export const Passengers = () => {
   const [isModalOpenPassenger, setIsModalOpenPassenger] = useState(false)
@@ -44,7 +45,7 @@ export const Passengers = () => {
   }
 
   return (
-    <div className="flex gap-x-8 w-full">
+    <div className="flex flex-col sm:flex-row gap-x-4 w-full sm:ms-[6px] ">
       <ReactModal
         isOpen={isModalOpenPassenger}
         onRequestClose={closeModalPassenger}
@@ -151,22 +152,17 @@ export const Passengers = () => {
           </div>
         </div>
       </ReactModal>
-
-      <div className=" text-gray-primary hidden sm:flex w-16 mr-2 gap-x-4 items-center">
-        <img src="assets/images/seat.png" alt="Passenger" className="h-6 w-4 select-none none" />
-        <span className="font-[600] text-sm">Seat</span>
-      </div>
-
-      <div className="w-full ">
-        <div className="w-full">
-          <h4 className="text-sm">Penumpang</h4>
+      <div className="flex flex-col sm:flex-row gap-x-4 w-full">
+        <div className="flex-grow  max-w-[426.44px]">
+          <h2 className="font-[600] text-gray-primary">Penumpang</h2>
           <button
             onClick={openModalPassenger}
-            className="text-left my-2 border p-3 font-[600] max-w-[414.97px] w-full"
+            className="text-left my-2 border p-3 font-[600] w-full"
           >
-            {adults + children + infants} Penumpang
+            <span className="block w-[135.66px]">{adults + children + infants} Penumpang</span>
           </button>
         </div>
+        <SeatClass />
       </div>
     </div>
   )
