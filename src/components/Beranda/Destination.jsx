@@ -98,39 +98,43 @@ export const Destination = () => {
           <span className=" hidden mini:block sm:hidden">From</span>
         </span>
       </div>
-      <div
-        className="w-full cursor-pointer  flex-grow"
-        onClick={() => openModal('departure')}
-        id="keberangkatan"
-      >
-        <button className="text-center sm:text-left text-sm font-[600] border w-full p-3">
-          {departureCity}
+      <div className="relative flex-col w-full flex gap-5 sm:gap-8 sm:flex-row items-center">
+        <div
+          className="w-full cursor-pointer  flex-grow"
+          onClick={() => openModal('departure')}
+          id="keberangkatan"
+        >
+          <button className="text-center sm:text-left text-sm font-[600] border w-full p-3">
+            {departureCity}
+          </button>
+        </div>
+
+        <button
+          id="swapBtn"
+          aria-label="Tukar Kota"
+          title="Tukar Kota"
+          onClick={swapCities}
+          className="bg-softer-blue p-2 w-10 rounded-md sm:absolute mini:translate-x-[unset] sm:left-[50%] sm:-translate-x-1/2 "
+        >
+          <FontAwesomeIcon icon={faArrowRightArrowLeft} className="text-gray-primary h-5" />
         </button>
-      </div>
 
-      <button
-        id="swapBtn"
-        aria-label="Tukar Kota"
-        title="Tukar Kota"
-        onClick={swapCities}
-        className="bg-softer-blue p-2 w-10 rounded-md sm:absolute mini:translate-x-[unset] sm:left-[59%] bsm:left-[58%] sml:left-[56.6%]  xlm:left-[55.7%] lg:left-[55%] xl:left-[55.1%] sm:-translate-x-1/2 "
-      >
-        <FontAwesomeIcon icon={faArrowRightArrowLeft} className="text-gray-primary h-5" />
-      </button>
-
-      <div
-        className="absolute sm:static bottom-3 sm:hidden left-2  text-gray-primary flex gap-x-4 items-center cursor-pointer w-16"
-        onClick={() => openModal('arrival')}
-      >
-        <FontAwesomeIcon icon={faPlaneArrival} width="20" />
-        <span className="font-[600] hidden mini:block ">To</span>
-      </div>
-      <div
-        className="w-full cursor-pointer flex-grow"
-        onClick={() => openModal('arrival')}
-        id="kepulangan"
-      >
-        <button className="text-center text-sm font-[600] w-full p-3 border">{arrivalCity}</button>
+        <div
+          className="absolute sm:static bottom-3 sm:hidden left-2  text-gray-primary flex gap-x-4 items-center cursor-pointer w-16"
+          onClick={() => openModal('arrival')}
+        >
+          <FontAwesomeIcon icon={faPlaneArrival} width="20" />
+          <span className="font-[600] hidden mini:block ">To</span>
+        </div>
+        <div
+          className="w-full cursor-pointer flex-grow"
+          onClick={() => openModal('arrival')}
+          id="kepulangan"
+        >
+          <button className="text-center text-sm font-[600] w-full p-3 border">
+            {arrivalCity}
+          </button>
+        </div>
       </div>
 
       <ReactModal

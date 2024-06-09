@@ -91,7 +91,7 @@ export const DepartureReturn = () => {
         <div className="flex-grow">
           <b className="text-gray-primary font-[600] block">Keberangkatan</b>
           <button onClick={openModal} className="text-left my-2 border p-3  font-[600] w-full">
-            {departureReturn[0]}
+            <span className="w-[135.66px] block">{departureReturn[0]}</span>
           </button>
         </div>
         <div className="flex-grow">

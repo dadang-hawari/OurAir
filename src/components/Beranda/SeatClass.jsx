@@ -35,7 +35,7 @@ export const SeatClass = () => {
   ]
 
   return (
-    <div className="flex w-full max-w-[424.23px]">
+    <div className="flex-grow">
       <ReactModal
         isOpen={isModalOpenSeatClass}
         onRequestClose={closeModalSeatClass}
@@ -91,18 +91,16 @@ export const SeatClass = () => {
         </div>
       </ReactModal>
 
-      <div className="text-gray-400 flex gap-x-4 items-center"></div>
-
-      <div className="flex gap-x-2 w-full ">
-        <div className="w-full">
-          <h4 className="text-sm">Kelas</h4>{' '}
-          <button
-            onClick={openModalSeatClass}
-            className="text-left my-2 border p-3  font-[600] w-full"
-          >
-            {selectedSeatClass ? `${selectedSeatClass.name}` : 'Pilih Seat Class'}
-          </button>
-        </div>
+      <div className="flex gap-x-5 w-full">
+        <h2 className="font-[600] text-gray-primary">Kelas</h2>
+      </div>
+      <div>
+        <button
+          onClick={openModalSeatClass}
+          className="text-left my-2 border p-3  font-[600] w-full"
+        >
+          {selectedSeatClass ? `${selectedSeatClass.name}` : 'Pilih Seat Class'}
+        </button>
       </div>
     </div>
   )
