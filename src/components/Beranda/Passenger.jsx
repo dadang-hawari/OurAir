@@ -45,7 +45,7 @@ export const Passengers = () => {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row gap-x-4 w-full">
+    <div className="flex flex-col sm:flex-row gap-x-4 w-full sm:ms-[6px] ">
       <ReactModal
         isOpen={isModalOpenPassenger}
         onRequestClose={closeModalPassenger}
@@ -153,11 +153,11 @@ export const Passengers = () => {
         </div>
       </ReactModal>
       <div className="flex flex-col sm:flex-row gap-x-4 w-full">
-        <div className="flex-grow">
+        <div className="flex-grow  max-w-[426.44px]">
           <h2 className="font-[600] text-gray-primary">Penumpang</h2>
           <button
             onClick={openModalPassenger}
-            className="text-left my-2 border p-3  font-[600] w-full"
+            className="text-left my-2 border p-3 font-[600] w-full"
           >
             <span className="block w-[135.66px]">{adults + children + infants} Penumpang</span>
           </button>

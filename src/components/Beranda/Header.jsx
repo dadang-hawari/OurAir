@@ -3,7 +3,6 @@ import { Destination } from './Destination'
 import { DepartureReturn } from './DepartureReturn'
 import { ButtonSearch } from './ButtonSearch'
 import { useNavigate } from 'react-router-dom'
-import { SeatClass } from './SeatClass'
 import Navbar from '../Navbar'
 
 export default function Header() {
@@ -34,8 +33,8 @@ export default function Header() {
           <Destination />
           <div className="grid  gap-y-4 mt-6">
             <DepartureReturn />
-            <div className="flex gap-x-7 w-full justify-between md:ml-2">
-              <div className="text-gray-primary hidden sm:flex  gap-x-4 text-sm font-[600] w-16 items-center">
+            <div className="flex gap-x-7 w-full justify-between md:ml-1">
+              <div className="text-gray-primary hidden sm:flex gap-x-4 text-sm font-[600] w-16 items-center">
                 <img
                   src="assets/images/seat.png"
                   alt="Passenger"
