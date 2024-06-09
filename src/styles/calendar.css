@@ -1,0 +1,82 @@
+/* Untuk menyesuaikan elemen hari ini */
+div.rmdp-wrapper {
+  @apply rounded-xl
+}
+div.rmdp-wrapper .rmdp-day.rmdp-today span {
+  @apply bg-secondary;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-today {
+  @apply bg-secondary rounded-sm;
+}
+
+div.rmdp-wrapper .rmdp-day {
+  @apply h-[58px] w-[40.57px];
+}
+div.rmdp-wrapper .rmdp-day:not(.rmdp-range):focus {
+  @apply rounded-sm;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-range {
+  @apply bg-[#b7d5e6aa] shadow-none text-black;
+}
+div.rmdp-wrapper .rmdp-day span {
+  @apply rounded-sm;
+}
+
+div.rmdp-wrapper .rmdp-day.rmdp-range.start,
+div.rmdp-wrapper .rmdp-day.rmdp-range.end {
+  @apply bg-secondary text-white;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-range.start {
+  @apply rounded-s-md;
+}
+
+/* Untuk menyesuaikan elemen yang dipilih */
+div.rmdp-wrapper .rmdp-day.rmdp-selected::before {
+  @apply content-['Keberangkatan'] absolute z-50 bg-black py-[5px] w-[100px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-selected {
+  @apply bg-secondary rounded-sm;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-selected span:not(.highlight) {
+  @apply shadow-none;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-range.start::before {
+  @apply content-['Keberangkatan'] absolute z-50 bg-black py-[5px] w-[100px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-range.end::after {
+  @apply content-['kembali'] absolute z-10 text-[10px] w-fit py-[5px] px-[10px] bg-black rounded font-normal top-[58px] left-0 h-fit text-white
+}
+div.rmdp-wrapper .rmdp-day.rmdp-range.end {
+  @apply rounded-e-md;
+}
+div.rmdp-wrapper .rmdp-week .rmdp-day span:hover {
+  @apply rounded-sm text-white border-none;
+}
+div.rmdp-wrapper .rmdp-day span.sd:hover {
+  @apply bg-transparent border-none;
+}
+div.rmdp-wrapper .rmdp-day:hover {
+  @apply bg-secondary rounded-sm text-white;
+}
+div.rmdp-wrapper .rmdp-day:active {
+  @apply bg-secondary rounded-sm;
+}
+
+div.rmdp-wrapper .rmdp-arrow-container.rmdp-left {
+  @apply rounded-full;
+}
+div.rmdp-wrapper button.rmdp-arrow-container.rmdp-left,
+div.rmdp-wrapper button.rmdp-arrow-container.rmdp-right {
+  @apply h-6 w-6 pt-1;
+}
+div.rmdp-wrapper .rmdp-arrow-container.rmdp-right {
+  @apply rounded-full;
+}
+div.rmdp-wrapper button.rmdp-arrow-container.rmdp-right {
+  @apply pt-[2px] ps-[1px];
+}
+
+/* Untuk menyesuaikan header */
+div.rmdp-wrapper .rmdp-header-values {
+  @apply font-[600];
+}

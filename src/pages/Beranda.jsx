@@ -2,10 +2,13 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/Beranda/Header'
 import Toast from '../components/common/Toast'
 import Navbar from '../components/Navbar'
+import DestinasiFavorit from '../components/Beranda/FavoriteDestination'
 import { useEffect } from 'react'
 import { checkLocationState } from '../utils/checkLocationState'
 import { Bounce } from 'react-toastify'
 import Footer from './Footer'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 export default function Beranda() {
   const navigate = useNavigate()
@@ -17,23 +20,10 @@ export default function Beranda() {
 
   return (
     <div>
-      <Navbar />
       <Header />
-      <div className="w-full h-screen flex items-center justify-center">
-        <div className="relative">
-          <button>
-            <Link to="/Login" className="text-black hover:text-blue-500">
-              Login
-            </Link>
-          </button>
-        </div>
-      </div>
-      <Toast
-        autoClose={3000}
-        position="bottom-center"
-        transition={Bounce}
-        margin="mt-0"
-      />
+      {/* Destinasi Favorit */}
+      <DestinasiFavorit />
+      <Toast autoClose={3000} position="bottom-center" transition={Bounce} margin="mt-0" />
       <Footer />
     </div>
   )
