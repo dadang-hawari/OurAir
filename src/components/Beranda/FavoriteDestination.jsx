@@ -10,7 +10,7 @@ export default function DestinasiFavorit() {
         Semua
       </button>
       {/* <div className="flex flex-wrap justify-around gap-y-4"> */}
-      <div className="grid mini:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 px-4">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
         <div>
           <img
             src="https://ik.imagekit.io/5zwoz8nkr/ourair/User/jakarta.webp?updateat=1717051701593"

@@ -6,50 +6,46 @@ import { setIsLoggedIn, setToken, setUserData } from '../reducers/authReducer'
 const loadingMessage = 'Mohon tunggu sebentar..'
 const toastIdWait = 'toasWait'
 
-export const registUser =
-  (phone_number, name, email, password, navigate) => async (dispatch) => {
-    try {
-      toast.loading(loadingMessage, {
-        toastId: toastIdWait,
-      })
-      const response = await axios.post(
-        `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/signup`,
-        {
-          phone_number,
-          name,
-          email,
-          password,
-        }
-      )
+export const registUser = (phone_number, name, email, password, navigate) => async (dispatch) => {
+  try {
+    toast.loading(loadingMessage, {
+      toastId: toastIdWait,
+    })
+    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/signup`, {
+      phone_number,
+      name,
+      email,
+      password,
+    })
 
-      // toast.dismiss("toastLoading");
-      if (response.status === 201) {
-        toast.dismiss(toastIdWait)
-        dispatch(setEmail(email))
-        navigate('/otp', {
-          state: { success: `Kode OTP dikirimkan ke email ${email}` },
-        })
-      }
-      console.log('response :>> ', response)
-    } catch (error) {
+    // toast.dismiss("toastLoading");
+    if (response.status === 201) {
       toast.dismiss(toastIdWait)
-      console.log(error)
-      if (error.response.status === 409) toast.info('Akun ini sudah terdatar')
-      else if (error?.response?.data?.errors[0])
-        error?.response?.data?.errors[0]?.msg ===
-        'Phone number must be between 10 and 15 characters long'
-          ? toast('Panjang nomor hp harus antara 10 hingga 15 karakter', {
-              className: 'toast-error',
-            })
-          : toast(error.response.data.errors[0].msg, {
-              className: 'toast-error',
-            })
-      else
-        toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
-          className: 'toast-error',
-        })
+      dispatch(setEmail(email))
+      navigate('/otp', {
+        state: { success: `Kode OTP dikirimkan ke email ${email}` },
+      })
     }
+    console.log('response :>> ', response)
+  } catch (error) {
+    toast.dismiss(toastIdWait)
+    console.log(error)
+    if (error.response.status === 409) toast.info('Akun ini sudah terdatar')
+    else if (error?.response?.data?.errors[0])
+      error?.response?.data?.errors[0]?.msg ===
+      'Phone number must be between 10 and 15 characters long'
+        ? toast('Panjang nomor hp harus antara 10 hingga 15 karakter', {
+            className: 'toast-error',
+          })
+        : toast(error.response.data.errors[0].msg, {
+            className: 'toast-error',
+          })
+    else
+      toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
+        className: 'toast-error',
+      })
   }
+}
 export const verifyOTP = (email, otp, navigate) => async (dispatch) => {
   try {
     toast.loading(loadingMessage, {
@@ -120,9 +116,7 @@ export const sendVerifyOtp = (email) => async () => {
 export const resetPassword = (token, password, navigate) => async () => {
   try {
     const response = await axios.post(
-      `${
-        import.meta.env.VITE_DOMAIN_API_DEV
-      }/api/v1/auth/reset-password-do-login`,
+      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/reset-password-do-login`,
       {
         password,
       },
@@ -160,9 +154,7 @@ export const forgotPassword = (email) => async () => {
     })
 
     const response = await axios.post(
-      `${
-        import.meta.env.VITE_DOMAIN_API_DEV
-      }/api/v1/auth/forgot-password-send-email`,
+      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/forgot-password-send-email`,
       {
         email,
       }
@@ -192,13 +184,10 @@ export const loginUser = (email, password, navigate) => async (dispatch) => {
     toast.loading(loadingMessage, {
       toastId: toastIdWait,
     })
-    const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/signin`,
-      {
-        email,
-        password,
-      }
-    )
+    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/signin`, {
+      email,
+      password,
+    })
     const data = response.data.data
     console.log('response login :>> ', response)
     if (response.data.message === 'success') {
@@ -212,6 +201,43 @@ export const loginUser = (email, password, navigate) => async (dispatch) => {
         },
       })
     }
+  } catch (error) {
+    toast.dismiss(toastIdWait)
+    if (error.response.status === 409)
+      toast('Email atau Password yang Anda masukkan Salah', {
+        className: 'toast-error',
+      })
+    else if (error.response.status === 404) toast.info('Akun belum terdaftar')
+    else
+      error?.response?.data?.errors[0]?.msg
+        ? toast(error.response.data.errors[0].msg, { className: 'toast-error' })
+        : toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
+            className: 'toast-error',
+          })
+    console.error('error', error)
+  }
+}
+
+export const loginGoogle = () => async (dispatch) => {
+  try {
+    toast.loading(loadingMessage, {
+      toastId: toastIdWait,
+    })
+    const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/google`)
+
+    const data = response.data.data
+    console.log('response login :>> ', response)
+    // if (response.data.message === 'success') {
+    //   toast.dismiss(toastIdWait)
+    //   dispatch(setToken(data.token))
+    //   dispatch(setUserData(data))
+    //   dispatch(setIsLoggedIn(true))
+    //   navigate('/', {
+    //     state: {
+    //       success: 'Berhasil Masuk',
+    //     },
+    //   })
+    // }
   } catch (error) {
     toast.dismiss(toastIdWait)
     if (error.response.status === 409)
