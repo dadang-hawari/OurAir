@@ -88,13 +88,13 @@ export const DepartureReturn = () => {
         <FontAwesomeIcon icon={faCalendarDays} className="h-5" width="20" /> Date
       </div>
       <div className="flex flex-col sm:flex-row gap-x-4 w-full">
-        <div className="flex-grow">
+        <div className="flex-grow w-full">
           <b className="text-gray-primary font-[600] block">Keberangkatan</b>
           <button onClick={openModal} className="text-left my-2 border p-3  font-[600] w-full">
             <span className="w-[135.66px] block">{departureReturn[0]}</span>
           </button>
         </div>
-        <div className="flex-grow">
+        <div className="flex-grow w-full">
           <div className="flex gap-x-5 w-full">
             <b className="text-gray-primary font-[600]">Kepulangan</b>
             <button

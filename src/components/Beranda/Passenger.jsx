@@ -153,7 +153,7 @@ export const Passengers = () => {
         </div>
       </ReactModal>
       <div className="flex flex-col sm:flex-row gap-x-4 w-full">
-        <div className="flex-grow  max-w-[426.44px]">
+        <div className="flex-grow  w-full">
           <h2 className="font-[600] text-gray-primary">Penumpang</h2>
           <button
             onClick={openModalPassenger}
