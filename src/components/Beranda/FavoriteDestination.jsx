@@ -1,7 +1,10 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useSelector } from 'react-redux'
 
 export default function DestinasiFavorit() {
+  const airports = useSelector((state) => state?.flightLists?.allFlights?.flights)
+  console.log('airports :>> ', airports)
   return (
     <div className="mt-[630px] sm:mt-[375px] md:mt-[355px] xl:mt-[350px]  max-w-5xl mx-auto px-4">
       <h2 className="font-bold text-xl">
@@ -20,45 +23,6 @@ export default function DestinasiFavorit() {
             className="w-full  xl:max-w-[232.5px] mb-2 h-auto object-cover rounded-md"
           />
           <h2 className="font-[600]">Jakarta - Manila</h2>
-          <b className="text-xs text-secondary">AirAsia</b>
-          <p>20 - 30 Maret 2023</p>
-          <p>
-            Mulai dari <b className="text-red-500">IDR 950.00</b>
-          </p>
-        </div>
-        <div>
-          <img
-            src="https://ik.imagekit.io/5zwoz8nkr/ourair/User/jakarta.webp?updateat=1717051701593"
-            alt="Jakarta"
-            className="w-full xl:max-w-[232.5px] mb-2 h-auto object-cover rounded-md"
-          />
-          <h2 className="font-[600]">Jakarta - Manila</h2>
-          <b className="text-xs text-secondary">AirAsia</b>
-          <p>20 - 30 Maret 2023</p>
-          <p>
-            Mulai dari <b className="text-red-500">IDR 950.00</b>
-          </p>
-        </div>
-        <div>
-          <img
-            src="https://ik.imagekit.io/5zwoz8nkr/ourair/User/jakarta.webp?updateat=1717051701593"
-            alt="Jakarta"
-            className="w-full xl:max-w-[232.5px] mb-2 h-auto object-cover rounded-md"
-          />
-          <h2 className="font-[600]">Jakarta - Manila</h2>
-          <b className="text-xs text-secondary">AirAsia</b>
-          <p>20 - 30 Maret 2023</p>
-          <p>
-            Mulai dari <b className="text-red-500">IDR 950.00</b>
-          </p>
-        </div>
-        <div>
-          <img
-            src="https://ik.imagekit.io/5zwoz8nkr/ourair/User/jakarta.webp?updateat=1717051701593"
-            alt="Jakarta"
-            className="w-full xl:max-w-[232.5px] mb-2 h-auto object-cover rounded-md"
-          />
-          <h2 className="font-[600]">Jakarta ❯ Manila</h2>
           <b className="text-xs text-secondary">AirAsia</b>
           <p>20 - 30 Maret 2023</p>
           <p>
