@@ -21,8 +21,10 @@ export const customStylesDestination = {
   },
   content: {
     backgroundColor: 'rgba(0, 0, 0, 0)',
-    top: '50%',
+    top: '30%',
     left: '50%',
+    height: '500px',
+    overflow: 'auto',
     transform: 'translate(-50%, -50%)',
     width: '90%',
     maxWidth: '800px',

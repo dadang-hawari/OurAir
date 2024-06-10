@@ -6,17 +6,33 @@ import {
   faSearch,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import ReactModal from 'react-modal'
 import { customStylesDestination } from '../../styles/customStyles'
 import { useDispatch, useSelector } from 'react-redux'
 import { setDepartureCity, setArrivalCity } from '../../redux/reducers/jadwalPenerbanganReducer'
+import { getAllFlights } from '../../redux/actions/flightsAction'
+
+const removeDuplicateAirports = (cities) => {
+  const seenAirports = new Set()
+  return cities.filter((city) => {
+    const airportName = city?.fromAirport?.name
+    if (seenAirports.has(airportName)) {
+      return false
+    } else {
+      seenAirports.add(airportName)
+      return true
+    }
+  })
+}
 
 const CityList = ({ cities, onCitySelect }) => {
-  const sortedCities = cities.sort((a, b) => a.negara.localeCompare(b.negara))
+  const sortedCities = cities.sort((a, b) => a.flight_type.localeCompare(b.flight_type))
 
-  return sortedCities.map((city, index) => (
+  const uniqueCities = removeDuplicateAirports(cities)
+
+  return uniqueCities.map((city, index) => (
     <div
       key={index}
       onClick={() => onCitySelect(city)}
@@ -24,8 +40,8 @@ const CityList = ({ cities, onCitySelect }) => {
     >
       <FontAwesomeIcon className="text-gray-400" icon={faLocationDot} />
       <div className="ps-3">
-        {city.negara}
-        <div className="text-gray-400 text-sm">{city.city}</div>
+        {city?.fromAirport?.name}
+        <div className="text-gray-400 text-sm">{city.fromAirport.countryName}</div>
       </div>
     </div>
   ))
@@ -40,17 +56,18 @@ export const Destination = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const dispatch = useDispatch()
 
-  const cities = [
-    { negara: 'Malaysia', city: 'Kuala Lumpur (KL)' },
-    { negara: 'Indonesia', city: 'Jakarta (JKT)' },
-    { negara: 'Brunei', city: 'Bandar Seri Begawan (BSB)' },
-  ]
+  const cities = useSelector((state) => state?.flightLists?.allFlights?.flights)
+  console.log('cities :>> ', cities)
+
+  useEffect(() => {
+    dispatch(getAllFlights())
+  }, [])
 
   const handleCitySelect = (city) => {
     if (selectedCityType === 'departure') {
-      dispatch(setDepartureCity(city.negara))
+      dispatch(setDepartureCity(city.fromAirport.name))
     } else {
-      dispatch(setArrivalCity(city.negara))
+      dispatch(setArrivalCity(city.toAirport.name))
     }
     closeModal()
   }
@@ -60,11 +77,13 @@ export const Destination = () => {
   }
 
   const openModal = (type) => {
+    // document.body.style.overflowY = 'hidden'
     setSelectedCityType(type)
     setIsModalOpen(true)
   }
 
   const closeModal = () => {
+    // document.body.style.overflowY = 'auto'
     setIsModalOpen(false)
   }
 
@@ -80,10 +99,11 @@ export const Destination = () => {
     dispatch(setArrivalCity(departureCity))
   }
 
-  const filteredCities = cities.filter(
+  const filteredCities = cities?.filter(
     (city) =>
-      city.negara.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (city.city && city.city.toLowerCase().includes(searchTerm.toLowerCase()))
+      // city?.flight_type?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+      // (city?.flight_type && city?.flight_type?.toLowerCase()?.includes(searchTerm?.toLowerCase()))
+      city?.flight_type
   )
 
   return (
@@ -141,9 +161,9 @@ export const Destination = () => {
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         style={customStylesDestination}
-        className="border-none absolute top-7 w-full overflow-hidden"
+        className="border-none absolute top-7 w-full "
       >
-        <div className="bg-white w-full rounded-md relative">
+        <div className="bg-white w-full rounded-md relative overflow-scroll">
           <form onSubmit={(e) => e.preventDefault()} className="p-4 relative">
             <div className="text-gray-400 w-full">
               <input

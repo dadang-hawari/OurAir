@@ -11,6 +11,8 @@ import ReactModal from 'react-modal'
 import { customStyles } from '../../styles/customStyles'
 import '../../styles/toast.css'
 import '../../styles/calendar.css'
+import { useDispatch } from 'react-redux'
+import { getAllFlights } from '../../redux/actions/flightsAction'
 
 export const DepartureReturn = () => {
   ReactModal.setAppElement('#modal')
@@ -19,9 +21,11 @@ export const DepartureReturn = () => {
   const [departureReturn, setDepartureReturn] = useState(['Tanggal Berangkat', 'Jadwal Kembali'])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [width, setWidth] = useState(window.outerWidth)
+  const dispatch = useDispatch()
 
   const openModal = () => {
     setIsModalOpen(true)
+    dispatch(getAllFlights())
   }
 
   const closeModal = () => {

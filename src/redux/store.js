@@ -7,11 +7,13 @@ import { thunk } from 'redux-thunk'
 import authReducer from './reducers/authReducer'
 import otpReducer from './reducers/otpReducers'
 import jadwalPenerbanganReducer from './reducers/jadwalPenerbanganReducer'
+import flightsReducer from './reducers/flightsReducer'
 
 const rootReducers = combineReducers({
   auth: authReducer,
   otp: otpReducer,
   jadwalPenerbangan: jadwalPenerbanganReducer,
+  flightLists: flightsReducer,
 })
 
 const persistConfig = {

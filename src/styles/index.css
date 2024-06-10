@@ -6,14 +6,13 @@
   height: 6px;
 }
 ::-webkit-scrollbar-button {
-  width: 0px;
+  width: 20px;
   height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-[#b6b9be] border-none rounded-3xl;
+  @apply bg-[#b6b9be] border-none;
 
   border: 0px none #ffffff;
-  border-radius: 50px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -23,7 +22,6 @@
   @apply bg-gray-300;
 
   border: 0px none #ffffff;
-  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-corner {
