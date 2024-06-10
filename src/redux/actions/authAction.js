@@ -1,7 +1,12 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { setEmail } from '../reducers/otpReducers'
-import { setIsLoggedIn, setToken, setUserData } from '../reducers/authReducer'
+import {
+  setIsLoggedIn,
+  setToken,
+  setUserData,
+  logout as logoutAction,
+} from '../reducers/authReducer'
 
 const loadingMessage = 'Mohon tunggu sebentar..'
 const toastIdWait = 'toasWait'
@@ -253,4 +258,8 @@ export const loginGoogle = () => async (dispatch) => {
           })
     console.error('error', error)
   }
+}
+
+export const logout = () => async (dispatch) => {
+  dispatch(logoutAction())
 }
