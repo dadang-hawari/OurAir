@@ -18,19 +18,19 @@ const SkeletonListBandara = () => (
   <div className="animate-pulse">
     {[...Array(3)].map((_, i) => (
       <React.Fragment key={i}>
-        <div className="h-4 w-72 bg-gray-300 rounded-full ms-4 mt-5"></div>
+        <div className="h-4 w-72 bg-gray-300 rounded-full -4 mt-5"></div>
         <div className="h-4 w-40 bg-gray-300 rounded-full ms-4 mt-4"></div>
       </React.Fragment>
     ))}
   </div>
 )
 
-const CityList = ({ cities, onCitySelect, selectedCityType }) => {
-  const removeDuplicateAirports = (cities) => {
+const AirPortList = ({ airports, onCitySelect, selectedCityType }) => {
+  const removeDuplicateAirports = (airports) => {
     const seenAirports = new Set()
-    return cities?.filter((city) => {
+    return airports?.filter((airport) => {
       const airportName =
-        selectedCityType === 'departure' ? city?.fromAirport?.name : city?.toAirport?.name
+        selectedCityType === 'departure' ? airport?.fromAirport?.name : airport?.toAirport?.name
       if (seenAirports.has(airportName)) {
         return false
       } else {
@@ -40,28 +40,28 @@ const CityList = ({ cities, onCitySelect, selectedCityType }) => {
     })
   }
 
-  const sortedCities = cities?.sort((a, b) =>
+  const sortedAirports = airports?.sort((a, b) =>
     selectedCityType === 'departure'
       ? a?.fromAirport?.name.localeCompare(b.fromAirport?.name)
       : a?.toAirport?.name.localeCompare(b.toAirport?.name)
   )
 
-  const uniqueCities = removeDuplicateAirports(sortedCities)
+  const uniqueAirports = removeDuplicateAirports(sortedAirports)
 
-  return uniqueCities?.length > 0 ? (
-    uniqueCities.map((city, index) => (
+  return uniqueAirports?.length > 0 ? (
+    uniqueAirports.map((airport, index) => (
       <div
         key={index}
-        onClick={() => onCitySelect(city)}
+        onClick={() => onCitySelect(airport)}
         className="flex items-center py-2 px-4 cursor-pointer hover:bg-gray-100"
       >
         <FontAwesomeIcon className="text-gray-400" icon={faLocationDot} />
         <div className="ps-3">
-          {selectedCityType === 'departure' ? city?.fromAirport?.name : city?.toAirport?.name}
+          {selectedCityType === 'departure' ? airport?.fromAirport?.name : airport?.toAirport?.name}
           <div className="text-gray-400 text-sm">
             {selectedCityType === 'departure'
-              ? city?.fromAirport?.countryName
-              : city?.toAirport?.countryName}
+              ? airport?.fromAirport?.countryName
+              : airport?.toAirport?.countryName}
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@ const CityList = ({ cities, onCitySelect, selectedCityType }) => {
 export const Destination = () => {
   const dispatch = useDispatch()
   const { departureCity, arrivalCity } = useSelector((state) => state?.jadwalPenerbangan)
-  const cities = useSelector((state) => state?.flightLists?.allFlights?.flights)
+  const airports = useSelector((state) => state?.flightLists?.allFlights?.flights)
 
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCityType, setSelectedCityType] = useState('departure')
@@ -87,11 +87,11 @@ export const Destination = () => {
     })
   }, [dispatch])
 
-  const handleCitySelect = (city) => {
+  const handleCitySelect = (airport) => {
     if (selectedCityType === 'departure') {
-      dispatch(setDepartureCity(city?.fromAirport?.name))
+      dispatch(setDepartureCity(airport?.fromAirport?.name))
     } else {
-      dispatch(setArrivalCity(city?.toAirport?.name))
+      dispatch(setArrivalCity(airport?.toAirport?.name))
     }
     closeModal()
   }
@@ -133,18 +133,18 @@ export const Destination = () => {
     dispatch(setArrivalCity(departureCity))
   }
 
-  const filteredCities = cities?.filter((city) => {
+  const filteredAirports = airports?.filter((airport) => {
     if (selectedCityType === 'departure') {
       return (
-        (city?.fromAirport?.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-          city?.fromAirport?.countryName?.toLowerCase()?.includes(searchTerm?.toLowerCase())) &&
-        city?.fromAirport?.name !== arrivalCity
+        (airport?.fromAirport?.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+          airport?.fromAirport?.countryName?.toLowerCase()?.includes(searchTerm?.toLowerCase())) &&
+        airport?.fromAirport?.name !== arrivalCity
       )
     } else {
       return (
-        (city?.toAirport?.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-          city?.toAirport?.countryName?.toLowerCase()?.includes(searchTerm?.toLowerCase())) &&
-        city?.toAirport?.name !== departureCity
+        (airport?.toAirport?.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+          airport?.toAirport?.countryName?.toLowerCase()?.includes(searchTerm?.toLowerCase())) &&
+        airport?.toAirport?.name !== departureCity
       )
     }
   })
@@ -226,8 +226,8 @@ export const Destination = () => {
             {isLoading ? (
               <SkeletonListBandara />
             ) : (
-              <CityList
-                cities={filteredCities}
+              <AirPortList
+                airports={filteredAirports}
                 onCitySelect={handleCitySelect}
                 selectedCityType={selectedCityType}
               />

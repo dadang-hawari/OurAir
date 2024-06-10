@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function DestinasiFavorit() {
   return (
-    <div className="mt-[630px]  sm:mt-[375px] md:mt-[355px] xl:mt-[350px]  max-w-5xl mx-auto px-4">
-      <h2 className="font-bold ">Destinasi Favorit</h2>
+    <div className="mt-[630px] sm:mt-[375px] md:mt-[355px] xl:mt-[350px]  max-w-5xl mx-auto px-4">
+      <h2 className="font-bold text-xl">
+        Rekomendasi <span className="text-accent">Destinasi</span>{' '}
+      </h2>
       <button className="text-sm text-white max-w-32 w-full h-12 my-4 rounded-xl bg-secondary">
         <FontAwesomeIcon icon={faSearch} className="mr-2" />
         Semua
