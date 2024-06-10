@@ -18,16 +18,17 @@ export const customStylesDestination = {
     top: 0,
     left: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    overflow: 'hidden',
   },
   content: {
     backgroundColor: 'rgba(0, 0, 0, 0)',
-    top: '30%',
+    top: '50%',
     left: '50%',
-    height: '500px',
     overflow: 'auto',
     transform: 'translate(-50%, -50%)',
     width: '90%',
-    maxWidth: '800px',
+    maxWidth: '700px',
+    overflow: 'hidden',
   },
 }
 export const customStylesFilter = {

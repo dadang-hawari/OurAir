@@ -6,9 +6,6 @@ const toastIdWait = 'toasWait'
 
 export const getAllFlights = () => async (dispatch) => {
   try {
-    toast.loading(loadingMessage, {
-      toastId: toastIdWait,
-    })
     const response = await axios.get(
       `${
         import.meta.env.VITE_DOMAIN_API_DEV
@@ -22,7 +19,6 @@ export const getAllFlights = () => async (dispatch) => {
     }
     console.log('response login :>> ', data)
   } catch (error) {
-    toast.dismiss(toastIdWait)
     console.error('error', error)
   }
 }

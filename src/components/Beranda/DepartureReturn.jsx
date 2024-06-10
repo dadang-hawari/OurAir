@@ -35,9 +35,9 @@ export const DepartureReturn = () => {
   const renderButton = (type, onClick) => {
     const chevron =
       type === 'left' ? (
-        <FontAwesomeIcon icon={faChevronLeft} />
+        <FontAwesomeIcon icon={faChevronLeft} className="text-gray-400" />
       ) : (
-        <FontAwesomeIcon icon={faChevronRight} />
+        <FontAwesomeIcon icon={faChevronRight} className="text-gray-400" />
       )
     return (
       <button type="button" className="p-1" onClick={onClick}>
@@ -78,7 +78,7 @@ export const DepartureReturn = () => {
   const Close = () => {
     return (
       <div
-        className="absolute top-0 cursor-pointer pt-2 py-1 px-4 right-0 text-xs text-gray-500"
+        className="absolute top-[2px] cursor-pointer pt-2 py-1 px-[13px] right-0 text-xs text-gray-500"
         onClick={closeModal}
       >
         <FontAwesomeIcon icon={faXmark} className="h-4" />

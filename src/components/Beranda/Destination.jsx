@@ -1,90 +1,124 @@
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import ReactModal from 'react-modal'
+import { toast } from 'react-toastify'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowRightArrowLeft,
   faLocationDot,
   faPlaneArrival,
   faPlaneDeparture,
   faSearch,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import ReactModal from 'react-modal'
 import { customStylesDestination } from '../../styles/customStyles'
-import { useDispatch, useSelector } from 'react-redux'
 import { setDepartureCity, setArrivalCity } from '../../redux/reducers/jadwalPenerbanganReducer'
 import { getAllFlights } from '../../redux/actions/flightsAction'
+const SkeletonListBandara = () => (
+  <div className="animate-pulse">
+    {[...Array(3)].map((_, i) => (
+      <React.Fragment key={i}>
+        <div className="h-4 w-72 bg-gray-300 rounded-full ms-4 mt-5"></div>
+        <div className="h-4 w-40 bg-gray-300 rounded-full ms-4 mt-4"></div>
+      </React.Fragment>
+    ))}
+  </div>
+)
 
-const removeDuplicateAirports = (cities) => {
-  const seenAirports = new Set()
-  return cities.filter((city) => {
-    const airportName = city?.fromAirport?.name
-    if (seenAirports.has(airportName)) {
-      return false
-    } else {
-      seenAirports.add(airportName)
-      return true
-    }
-  })
-}
+const CityList = ({ cities, onCitySelect, selectedCityType }) => {
+  const removeDuplicateAirports = (cities) => {
+    const seenAirports = new Set()
+    return cities?.filter((city) => {
+      const airportName =
+        selectedCityType === 'departure' ? city?.fromAirport?.name : city?.toAirport?.name
+      if (seenAirports.has(airportName)) {
+        return false
+      } else {
+        seenAirports.add(airportName)
+        return true
+      }
+    })
+  }
 
-const CityList = ({ cities, onCitySelect }) => {
-  const sortedCities = cities.sort((a, b) => a.flight_type.localeCompare(b.flight_type))
+  const sortedCities = cities?.sort((a, b) =>
+    selectedCityType === 'departure'
+      ? a?.fromAirport?.name.localeCompare(b.fromAirport?.name)
+      : a?.toAirport?.name.localeCompare(b.toAirport?.name)
+  )
 
-  const uniqueCities = removeDuplicateAirports(cities)
+  const uniqueCities = removeDuplicateAirports(sortedCities)
 
-  return uniqueCities.map((city, index) => (
-    <div
-      key={index}
-      onClick={() => onCitySelect(city)}
-      className="flex items-center py-2 px-4 cursor-pointer hover:bg-gray-100"
-    >
-      <FontAwesomeIcon className="text-gray-400" icon={faLocationDot} />
-      <div className="ps-3">
-        {city?.fromAirport?.name}
-        <div className="text-gray-400 text-sm">{city.fromAirport.countryName}</div>
+  return uniqueCities?.length > 0 ? (
+    uniqueCities.map((city, index) => (
+      <div
+        key={index}
+        onClick={() => onCitySelect(city)}
+        className="flex items-center py-2 px-4 cursor-pointer hover:bg-gray-100"
+      >
+        <FontAwesomeIcon className="text-gray-400" icon={faLocationDot} />
+        <div className="ps-3">
+          {selectedCityType === 'departure' ? city?.fromAirport?.name : city?.toAirport?.name}
+          <div className="text-gray-400 text-sm">
+            {selectedCityType === 'departure'
+              ? city?.fromAirport?.countryName
+              : city?.toAirport?.countryName}
+          </div>
+        </div>
       </div>
-    </div>
-  ))
+    ))
+  ) : (
+    <div className="text-center p-4 text-gray-500">Bandara atau negara tidak ditemukan</div>
+  )
 }
 
 export const Destination = () => {
-  const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
-  const departureCity = jadwalPenerbangan?.departureCity
-  const arrivalCity = jadwalPenerbangan?.arrivalCity
+  const dispatch = useDispatch()
+  const { departureCity, arrivalCity } = useSelector((state) => state?.jadwalPenerbangan)
+  const cities = useSelector((state) => state?.flightLists?.allFlights?.flights)
+
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCityType, setSelectedCityType] = useState('departure')
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const dispatch = useDispatch()
-
-  const cities = useSelector((state) => state?.flightLists?.allFlights?.flights)
-  console.log('cities :>> ', cities)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    dispatch(getAllFlights())
-  }, [])
+    dispatch(getAllFlights()).then(() => {
+      setIsLoading(false)
+    })
+  }, [dispatch])
 
   const handleCitySelect = (city) => {
     if (selectedCityType === 'departure') {
-      dispatch(setDepartureCity(city.fromAirport.name))
+      dispatch(setDepartureCity(city?.fromAirport?.name))
     } else {
-      dispatch(setArrivalCity(city.toAirport.name))
+      dispatch(setArrivalCity(city?.toAirport?.name))
     }
     closeModal()
   }
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value)
+    setSearchTerm(e.target.value.trim())
   }
 
   const openModal = (type) => {
-    // document.body.style.overflowY = 'hidden'
     setSelectedCityType(type)
     setIsModalOpen(true)
   }
 
   const closeModal = () => {
-    // document.body.style.overflowY = 'auto'
+    setSearchTerm('')
     setIsModalOpen(false)
+  }
+
+  const Close = () => {
+    return (
+      <div
+        className="absolute top-[2px] cursor-pointer pt-2 py-1 z-20 px-[13px] right-0 text-xs text-gray-500"
+        onClick={closeModal}
+      >
+        <FontAwesomeIcon icon={faXmark} className="h-4" />
+      </div>
+    )
   }
 
   const swapCities = () => {
@@ -99,12 +133,21 @@ export const Destination = () => {
     dispatch(setArrivalCity(departureCity))
   }
 
-  const filteredCities = cities?.filter(
-    (city) =>
-      // city?.flight_type?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-      // (city?.flight_type && city?.flight_type?.toLowerCase()?.includes(searchTerm?.toLowerCase()))
-      city?.flight_type
-  )
+  const filteredCities = cities?.filter((city) => {
+    if (selectedCityType === 'departure') {
+      return (
+        (city?.fromAirport?.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+          city?.fromAirport?.countryName?.toLowerCase()?.includes(searchTerm?.toLowerCase())) &&
+        city?.fromAirport?.name !== arrivalCity
+      )
+    } else {
+      return (
+        (city?.toAirport?.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+          city?.toAirport?.countryName?.toLowerCase()?.includes(searchTerm?.toLowerCase())) &&
+        city?.toAirport?.name !== departureCity
+      )
+    }
+  })
 
   return (
     <div className="relative flex flex-col gap-5 text-center sm:text-left my-4 sm:gap-8 sm:flex-row items-center">
@@ -120,56 +163,54 @@ export const Destination = () => {
       </div>
       <div className="relative flex-col w-full flex gap-5 sm:gap-8 sm:flex-row items-center">
         <div
-          className="w-full cursor-pointer  flex-grow"
+          className="w-full cursor-pointer flex-grow"
           onClick={() => openModal('departure')}
           id="keberangkatan"
         >
-          <button className="text-center sm:text-left text-sm font-[600] border w-full p-3">
+          <button className="text-center sm:text-left text-sm font-[600] border w-full py-3 ps-5 pr-3">
             {departureCity}
           </button>
         </div>
-
         <button
           id="swapBtn"
           aria-label="Tukar Kota"
           title="Tukar Kota"
           onClick={swapCities}
-          className="bg-softer-blue p-2 w-10 rounded-md sm:absolute mini:translate-x-[unset] sm:left-[50%] sm:-translate-x-1/2 "
+          className="bg-softer-blue p-2 w-10 rounded-md sm:absolute mini:translate-x-[unset] sm:left-[50%] sm:-translate-x-1/2"
         >
           <FontAwesomeIcon icon={faArrowRightArrowLeft} className="text-gray-primary h-5" />
         </button>
-
         <div
-          className="absolute sm:static bottom-3 sm:hidden left-2  text-gray-primary flex gap-x-4 items-center cursor-pointer w-16"
+          className="absolute sm:static bottom-3 sm:hidden left-2 text-gray-primary flex gap-x-4 items-center cursor-pointer w-16"
           onClick={() => openModal('arrival')}
         >
           <FontAwesomeIcon icon={faPlaneArrival} width="20" />
-          <span className="font-[600] hidden mini:block ">To</span>
+          <span className="font-[600] hidden mini:block">To</span>
         </div>
         <div
           className="w-full cursor-pointer flex-grow"
           onClick={() => openModal('arrival')}
           id="kepulangan"
         >
-          <button className="text-center text-sm font-[600] w-full p-3 border">
+          <button className="text-center text-sm font-[600] w-full  border py-3 ps-5 pr-3">
             {arrivalCity}
           </button>
         </div>
       </div>
-
       <ReactModal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         style={customStylesDestination}
-        className="border-none absolute top-7 w-full "
+        className="border-none absolute top-7 w-full"
       >
-        <div className="bg-white w-full rounded-md relative overflow-scroll">
+        <div className="bg-white w-full rounded-md relative pt-3">
+          <Close />
           <form onSubmit={(e) => e.preventDefault()} className="p-4 relative">
             <div className="text-gray-400 w-full">
               <input
                 type="text"
                 id="search"
-                placeholder="Masukkan Kota atau Negara"
+                placeholder="Masukkan Bandara atau Negara"
                 onChange={handleSearchChange}
                 value={searchTerm}
                 className="w-full h-10 my-2 ps-9 block border text-black rounded-md outline-none focus:border-accent"
@@ -180,9 +221,17 @@ export const Destination = () => {
               />
             </div>
           </form>
-          <div>
-            <h2 className="font-[600] px-4">Daftar Kota</h2>
-            <CityList cities={filteredCities} onCitySelect={handleCitySelect} />
+          <div className="overflow-auto h-64 pb-2">
+            <h2 className="font-[600] px-4">Daftar Bandara</h2>
+            {isLoading ? (
+              <SkeletonListBandara />
+            ) : (
+              <CityList
+                cities={filteredCities}
+                onCitySelect={handleCitySelect}
+                selectedCityType={selectedCityType}
+              />
+            )}
           </div>
         </div>
       </ReactModal>
