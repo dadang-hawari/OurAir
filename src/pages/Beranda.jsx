@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar'
 import DestinasiFavorit from '../components/Beranda/FavoriteDestination'
 import { useEffect } from 'react'
 import { checkLocationState } from '../utils/checkLocationState'
-import { Bounce } from 'react-toastify'
+import { Bounce, Flip } from 'react-toastify'
 import Footer from './Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -23,7 +23,7 @@ export default function Beranda() {
       <Header />
       {/* Destinasi Favorit */}
       <DestinasiFavorit />
-      <Toast autoClose={3000} position="bottom-center" transition={Bounce} margin="mt-0" />
+      <Toast autoClose={3000} position="bottom-center" transition={Flip} margin="mt-0" />
       <Footer />
     </div>
   )

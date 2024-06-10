@@ -19,7 +19,7 @@ export default function Header() {
       <Navbar />
       <div className="h-86 relative">
         <img
-          src="/assets/images/header_background.webp"
+          src="/assets/images/Group 160.webp"
           alt="Pantai"
           className="w-full h-[362px] xl:h-auto 2xl:max-h-96  object-cover absolute"
         />
