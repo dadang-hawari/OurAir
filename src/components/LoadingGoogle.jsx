@@ -1,0 +1,19 @@
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+
+export default function LoadingGoogle() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const test = ''
+  }, [])
+
+  return (
+    <div className="bg-softer-blue h-screen flex flex-col justify-center items-center px-5 text-center">
+      <img src="/assets/images/ourair_logo.svg" alt="" className="w-40 ms-5" />
+      <div className="text-6xl font-bold text-[#13587B] animate-bounce tracking-widest ">....</div>
+      <div className=" font-[600] text-[#13587B] ">
+        Mohon tunggu, Anda akan diarahkan ke Beranda
+      </div>
+    </div>
+  )
+}

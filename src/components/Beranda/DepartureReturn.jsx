@@ -130,10 +130,10 @@ export const DepartureReturn = () => {
               isOpen={isModalOpen}
               onRequestClose={closeModal}
               style={customStyles}
-              className="border-none absolute top-7 overflow-hidden"
+              className="border-none absolute top-7   overflow-hidden"
             >
               <Calendar
-                className="rounded-xl px-5 pb-3 pt-5"
+                className="rounded-xl pb-3 px-4 pt-5"
                 value={departureReturn}
                 onChange={handleDateChange}
                 numberOfMonths={width < 650 ? 1 : 2}
