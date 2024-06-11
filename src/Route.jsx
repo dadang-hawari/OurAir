@@ -9,6 +9,7 @@ import PilihPenerbangan from './pages/PilihPenerbangan'
 import Profile from './pages/Profile'
 import LoadingGoogle from './components/LoadingGoogle'
 import RiwayatPemesanan from './pages/RiwayatPemesanan'
+import Notification from './pages/Notification'
 export default function Route() {
   const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ export default function Route() {
     {
       path: '/riwayat-pemesanan',
       element: <RiwayatPemesanan />,
+    },
+    {
+      path: '/Notification',
+      element: <Notification />,
     },
     {
       path: '/profile',
