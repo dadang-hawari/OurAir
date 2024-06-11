@@ -5,20 +5,23 @@
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
-  src: local('Poppins Regular'), local('Poppins-Regular'), url('/fonts/Poppins-Regular.woff2') format('woff2');
+  src: local('Poppins Regular'), local('Poppins-Regular'),
+    url('/fonts/Poppins-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
-  src: local('Poppins Medium'), local('Poppins-Medium'), url('/fonts/Poppins-Medium.woff2') format('woff2');
+  src: local('Poppins Medium'), local('Poppins-Medium'),
+    url('/fonts/Poppins-Medium.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
-  src: local('Poppins Bold'), local('Poppins-Bold'), url('/fonts/Poppins-Bold.woff2') format('woff2');
+  src: local('Poppins Bold'), local('Poppins-Bold'),
+    url('/fonts/Poppins-Bold.woff2') format('woff2');
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -82,4 +85,29 @@ div.ReactModal__Content.ReactModal__Content--after-open {
 
 .ReactModal__Content {
   @apply w-fit border-none;
+}
+
+[data-title]:hover:after {
+  opacity: 1;
+  transition: all 0.1s ease 0.5s;
+  visibility: visible;
+}
+[data-title]:after {
+  content: attr(data-title);
+  background-color: #00ff00;
+  color: #111;
+  font-size: 150%;
+  position: absolute;
+  padding: 1px 5px 2px 5px;
+  bottom: -1.6em;
+  left: 100%;
+  white-space: nowrap;
+  box-shadow: 1px 1px 3px #222222;
+  opacity: 0;
+  border: 1px solid #111111;
+  z-index: 99999;
+  visibility: hidden;
+}
+[data-title] {
+  position: relative;
 }

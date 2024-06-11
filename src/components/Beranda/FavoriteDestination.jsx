@@ -2,16 +2,22 @@ import { faArrowRight, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFlightByCityorCountry } from '../../redux/actions/flightsAction'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function DestinasiFavorit() {
   const airports = useSelector((state) => state?.flightLists?.flightsByCountry?.flights)
+  const [chosenCountry, setChosenCountry] = useState('Indonesia')
   console.log('airports', airports)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getFlightByCityorCountry('Indonesia'))
+    setFirstCountry()
   }, [])
+
+  const setFirstCountry = () => {
+    dispatch(getFlightByCityorCountry('Indonesia'))
+    setChosenCountry('Indonesia')
+  }
 
   const formatFlightDates = (arrivalTime, departureTime) => {
     const arrivalDay = new Date(arrivalTime).getDate()
@@ -20,6 +26,11 @@ export default function DestinasiFavorit() {
       month: 'long',
       year: 'numeric',
     }).format(new Date(arrivalTime))}`
+  }
+
+  const getFlightsByCountry = (country) => {
+    setChosenCountry(country)
+    dispatch(getFlightByCityorCountry(country))
   }
 
   const formatCurrency = (amount) => {
@@ -35,18 +46,42 @@ export default function DestinasiFavorit() {
       </h2>
       <div className="flex gap-x-3 px-5 overflow-x-auto">
         <button
-          className="text-sm text-white max-w-32 min-w-32 w-full h-12 my-4 rounded-xl bg-secondary"
-          onClick={() => dispatch(getFlightByCityorCountry('Indonesia'))}
+          className={`text-sm  max-w-32 min-w-32 w-full h-12 my-4 rounded-xl ${
+            chosenCountry === 'Indonesia' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
+          }`}
+          onClick={() => getFlightsByCountry('Indonesia')}
         >
           <FontAwesomeIcon icon={faSearch} className="mr-2" />
           Indonesia
         </button>
         <button
-          className="text-sm text-black max-w-32 min-w-32 w-full h-12 my-4 rounded-xl bg-soft-blue"
-          onClick={() => dispatch(getFlightByCityorCountry('Malaysia'))}
+          className={`text-sm  w-fit min-w-32 px-6 h-12 my-4 rounded-xl  ${
+            chosenCountry === 'Brunei Darussalam'
+              ? 'bg-secondary text-white'
+              : 'bg-soft-blue text-black'
+          }`}
+          onClick={() => getFlightsByCountry('Brunei Darussalam')}
+        >
+          <FontAwesomeIcon icon={faSearch} className="mr-2" />
+          Brunei Darussalam
+        </button>
+        <button
+          className={`text-sm  max-w-32 min-w-32 w-full h-12 my-4 rounded-xl ${
+            chosenCountry === 'Malaysia' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
+          }`}
+          onClick={() => getFlightsByCountry('Malaysia')}
         >
           <FontAwesomeIcon icon={faSearch} className="mr-2" />
           Malaysia
+        </button>
+        <button
+          className={`text-sm  max-w-32 min-w-32 w-full h-12 my-4 rounded-xl ${
+            chosenCountry === 'Philippines' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
+          }`}
+          onClick={() => getFlightsByCountry('Philippines')}
+        >
+          <FontAwesomeIcon icon={faSearch} className="mr-2" />
+          Philippines
         </button>
       </div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
@@ -61,13 +96,19 @@ export default function DestinasiFavorit() {
               <div className="font-[600] text-sm flex items-center gap-2">
                 <span title={airport?.fromAirport?.cityName}>
                   {airport?.fromAirport?.cityName?.length > 12
-                    ? airport?.fromAirport?.cityName?.slice(0, 12) + '...'
+                    ? airport?.fromAirport?.cityName?.slice(0, 11) + '...'
                     : airport?.fromAirport?.cityName}
                 </span>
                 <FontAwesomeIcon icon={faArrowRight} />
-                {airport?.toAirport?.cityName}
+                <span title={airport?.toAirport?.cityName}>
+                  {airport?.toAirport?.cityName?.length > 12
+                    ? airport?.toAirport?.cityName?.slice(0, 11) + '...'
+                    : airport?.toAirport?.cityName}
+                </span>
               </div>
-              <div className="font-bold text-secondary text-xs">AirAsia</div>
+              <div className="font-bold text-secondary text-xs">
+                {airport?.whomAirplaneFlights?.whomAirlinesAirplanes.name}
+              </div>
 
               <div className="text-sm">
                 {formatFlightDates(airport?.arrival_time, airport?.departure_time)}

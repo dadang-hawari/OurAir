@@ -28,7 +28,6 @@ export const customStylesDestination = {
     transform: 'translate(-50%, -50%)',
     width: '90%',
     maxWidth: '700px',
-    overflow: 'hidden',
   },
 }
 export const customStylesFilter = {

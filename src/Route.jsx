@@ -7,6 +7,8 @@ import GantiPassword from './pages/GantiPassword'
 import Daftar from './pages/Daftar'
 import PilihPenerbangan from './pages/PilihPenerbangan'
 import Profile from './pages/Profile'
+import LoadingGoogle from './components/LoadingGoogle'
+import RiwayatPemesanan from './pages/RiwayatPemesanan'
 import Notification from './pages/Notification'
 export default function Route() {
   const router = createBrowserRouter([
@@ -35,8 +37,16 @@ export default function Route() {
       element: <GantiPassword />,
     },
     {
+      path: '/auth-user/:token',
+      element: <LoadingGoogle />,
+    },
+    {
       path: '/pilih-penerbangan',
       element: <PilihPenerbangan />,
+    },
+    {
+      path: '/riwayat-pemesanan',
+      element: <RiwayatPemesanan />,
     },
     {
       path: '/Notification',
