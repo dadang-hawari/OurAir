@@ -3,11 +3,7 @@ import OTPInput from 'react-otp-input'
 import ButtonPrimary from '../components/ButtonPrimary'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  decrementTimerOtp,
-  resetTimerOtp,
-  setOtpSentTime,
-} from '../redux/reducers/otpReducers'
+import { decrementTimerOtp, resetTimerOtp, setOtpSentTime } from '../redux/reducers/otpReducers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import Toast from '../components/common/Toast'
@@ -27,7 +23,7 @@ export default function OTP() {
   const [isTimerActive, setIsTimerActive] = useState(timer > 0)
 
   const checkEmail = () => {
-    // if (!email) navigate('/')
+    if (!email) navigate('/login')
   }
 
   // Memulai timer pengiriman ulang OTP
@@ -120,9 +116,7 @@ export default function OTP() {
           />
           <div className="mt-6 mb-20 font-medium">
             {isTimerActive ? (
-              <p className="text-gray-600 cursor-default">
-                Kirim Ulang OTP dalam {timer} detik
-              </p>
+              <p className="text-gray-600 cursor-default">Kirim Ulang OTP dalam {timer} detik</p>
             ) : (
               <button onClick={handleResendOTP} className="text-red-600">
                 Kirim Ulang OTP
