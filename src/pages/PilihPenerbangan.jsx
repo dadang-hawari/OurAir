@@ -52,11 +52,7 @@ export default function PilihPenerbangan() {
       departureTerminal: 'Soekarno Hatta - Terminal 1A Domestika',
       airline: 'Jet Air - Economy',
       flightNumber: 'JT - 203',
-      information: [
-        'Baggage 20kg',
-        'Cabin baggage 7 kg',
-        'In Flight Entertainment',
-      ],
+      information: ['Baggage 20kg', 'Cabin baggage 7 kg', 'In Flight Entertainment'],
       arrivalTerminal: 'Melbourne International Airport',
     },
     {
@@ -83,38 +79,13 @@ export default function PilihPenerbangan() {
         <h1 className="text-xl font-bold">Cari Penerbangan</h1>
         {/* Tab biru */}
         <div className="text-white bg-accent py-3 mt-3  rounded-xl flex item-center">
-          <Link
-            to="/"
-            id="back"
-            aria-label="tombol kembali"
-            className="px-5 flex items-center"
-          >
+          <Link to="/" id="back" aria-label="tombol kembali" className="px-5 flex items-center">
             <FontAwesomeIcon icon={faArrowLeft} className="h-5" />
           </Link>
           <b className="font-[600]">{data}</b>
         </div>
         {/* list tanggal */}
         <div className="text-sm flex justify-between my-5 overflow-x-auto">
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
           <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
             <b>Senin</b>
             <p className="text-gray-400 text-xs">01/03/2023</p>
@@ -146,11 +117,7 @@ export default function PilihPenerbangan() {
             className="font-medium px-3 text-secondary p-2 border-secondary border rounded-full"
             onClick={openModal}
           >
-            <FontAwesomeIcon
-              icon={faArrowRightArrowLeft}
-              className="rotate-90 me-1"
-            />{' '}
-            Termurah
+            <FontAwesomeIcon icon={faArrowRightArrowLeft} className="rotate-90 me-1" /> Termurah
           </button>
 
           <ReactModal
@@ -198,31 +165,19 @@ export default function PilihPenerbangan() {
           <div className="w-48 flex flex-col gap-y-2 cursor-default shadow-shadow-c-primary p-4 rounded-xl h-fit">
             <h2 className="font-[600]">Filter</h2>
             <h3>
-              <FontAwesomeIcon icon={faBox} className="mr-1 text-gray-300" />{' '}
-              Transit
+              <FontAwesomeIcon icon={faBox} className="mr-1 text-gray-300" /> Transit
             </h3>
             <h3 className="border-t border-b py-2">
-              <FontAwesomeIcon
-                icon={faHeart}
-                className="mr-[2px] text-gray-300"
-              />{' '}
-              Fasilitas
+              <FontAwesomeIcon icon={faHeart} className="mr-[2px] text-gray-300" /> Fasilitas
             </h3>
             <h3>
-              <FontAwesomeIcon
-                icon={faDollar}
-                className="ps-1 mr-1 text-gray-300 "
-              />{' '}
-              Harga
+              <FontAwesomeIcon icon={faDollar} className="ps-1 mr-1 text-gray-300 " /> Harga
             </h3>
           </div>
           {/* Hasil Pencarian */}
           <div className="flex flex-col gap-y-4 w-full">
             {flights.map((flight) => (
-              <div
-                className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit"
-                key={flight.id}
-              >
+              <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={flight.id}>
                 <div className="flex items-center">
                   <FontAwesomeIcon
                     icon={faIcons}
@@ -260,11 +215,7 @@ export default function PilihPenerbangan() {
                       onClick={() => toggleDetailVisibility(flight.id)}
                     >
                       <FontAwesomeIcon
-                        icon={
-                          activeDetailId === flight.id
-                            ? faChevronUp
-                            : faChevronDown
-                        }
+                        icon={activeDetailId === flight.id ? faChevronUp : faChevronDown}
                       />{' '}
                       Detail
                     </button>
@@ -277,9 +228,7 @@ export default function PilihPenerbangan() {
                   }`}
                 >
                   <hr className="my-3" />
-                  <h4 className="font-bold text-primary my-2">
-                    Detail Penerbangan
-                  </h4>
+                  <h4 className="font-bold text-primary my-2">Detail Penerbangan</h4>
                   <div className="flex justify-between text-sm">
                     <b className="text-base">{flight.time}</b>
                     <b className="text-soft-blue">Keberangkatan</b>

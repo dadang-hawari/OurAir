@@ -10,6 +10,7 @@ import Profile from './pages/Profile'
 import LoadingGoogle from './components/LoadingGoogle'
 import RiwayatPemesanan from './pages/RiwayatPemesanan'
 import Notification from './pages/Notification'
+import Tentang from './pages/Tentang'
 export default function Route() {
   const router = createBrowserRouter([
     {
@@ -55,6 +56,10 @@ export default function Route() {
     {
       path: '/profile',
       element: <Profile />,
+    },
+    {
+      path: '/tentang',
+      element: <Tentang />,
     },
   ])
 
