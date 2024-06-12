@@ -115,7 +115,7 @@ const Login = () => {
                 <label htmlFor="password" className="text-sm">
                   Password
                 </label>
-                <Link to="/lupa-password" className="text-accent text-sm my-2">
+                <Link to="/lupa-password" className="text-accent text-sm my-2" tabIndex={-1}>
                   Lupa kata sandi
                 </Link>
               </div>

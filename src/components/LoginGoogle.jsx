@@ -1,7 +1,4 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { loginGoogle } from '../redux/actions/authAction'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 function LoginGoogle() {
   const toGoogle = `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/google`
