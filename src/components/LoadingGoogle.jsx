@@ -1,10 +1,15 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import { authGoogleUser } from '../redux/actions/authAction'
+import Toast from './common/Toast'
 
 export default function LoadingGoogle() {
   const dispatch = useDispatch()
+  const { token } = useParams()
+  const navigate = useNavigate()
   useEffect(() => {
-    const test = ''
+    dispatch(authGoogleUser(token, navigate))
   }, [])
 
   return (
@@ -14,6 +19,7 @@ export default function LoadingGoogle() {
       <div className=" font-[600] text-[#13587B] ">
         Mohon tunggu, Anda akan diarahkan ke Beranda
       </div>
+      <Toast />
     </div>
   )
 }

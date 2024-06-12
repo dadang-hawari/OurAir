@@ -152,6 +152,38 @@ export const resetPassword = (token, password, navigate) => async () => {
   }
 }
 
+export const authGoogleUser = (token, navigate) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/who-am-i`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    console.log('response :>> ', response)
+    const data = response.data.data
+    if (response.status === 200) {
+      dispatch(setUserData(data))
+      dispatch(setToken(data.token))
+      dispatch(setIsLoggedIn(true))
+      navigate('/', {
+        state: {
+          success: 'Berhasil masuk',
+        },
+      })
+    }
+  } catch (error) {
+    error?.response?.data?.errors[0]?.msg
+      ? toast(error.response.data.errors[0].msg, { className: 'toast-error' })
+      : toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
+          className: 'toast-error',
+        })
+    console.error('Error:', error)
+  }
+}
+
 export const forgotPassword = (email) => async () => {
   try {
     toast.loading(loadingMessage, {
@@ -206,43 +238,6 @@ export const loginUser = (email, password, navigate) => async (dispatch) => {
         },
       })
     }
-  } catch (error) {
-    toast.dismiss(toastIdWait)
-    if (error.response.status === 409)
-      toast('Email atau Password yang Anda masukkan Salah', {
-        className: 'toast-error',
-      })
-    else if (error.response.status === 404) toast.info('Akun belum terdaftar')
-    else
-      error?.response?.data?.errors[0]?.msg
-        ? toast(error.response.data.errors[0].msg, { className: 'toast-error' })
-        : toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
-            className: 'toast-error',
-          })
-    console.error('error', error)
-  }
-}
-
-export const loginGoogle = () => async (dispatch) => {
-  try {
-    toast.loading(loadingMessage, {
-      toastId: toastIdWait,
-    })
-    const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/google`)
-
-    const data = response.data.data
-    console.log('response login :>> ', response)
-    // if (response.data.message === 'success') {
-    //   toast.dismiss(toastIdWait)
-    //   dispatch(setToken(data.token))
-    //   dispatch(setUserData(data))
-    //   dispatch(setIsLoggedIn(true))
-    //   navigate('/', {
-    //     state: {
-    //       success: 'Berhasil Masuk',
-    //     },
-    //   })
-    // }
   } catch (error) {
     toast.dismiss(toastIdWait)
     if (error.response.status === 409)
