@@ -12,6 +12,7 @@ export default {
         'gray-primary': '#787676',
         'gray-secondary': '#3c3c3c',
         'red-primary': '#EC0909',
+        'green-soft': '#73CA5C',
       },
       borderRadius: {
         '16px': '16px',

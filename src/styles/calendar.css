@@ -30,8 +30,7 @@ div.rmdp-wrapper .rmdp-day.rmdp-range.start {
   @apply rounded-s-md;
 }
 
-/* Untuk menyesuaikan elemen yang dipilih */
-div.rmdp-wrapper .rmdp-day.rmdp-selected::before {
+div.departure div.rmdp-wrapper .rmdp-day.rmdp-selected::before {
   @apply content-['berangkat'] absolute z-50 bg-black py-[5px] w-fit px-[9px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
 }
 div.rmdp-wrapper .rmdp-day.rmdp-selected {
