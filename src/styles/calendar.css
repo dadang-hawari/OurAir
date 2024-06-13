@@ -79,3 +79,11 @@ div.rmdp-wrapper button.rmdp-arrow-container.rmdp-right {
 div.rmdp-wrapper .rmdp-header-values {
   @apply font-[600];
 }
+
+div.calendar {
+  width: 100%;
+}
+
+div.rmdp-container {
+  width: 100%;
+}

@@ -2,7 +2,12 @@ import React, { useState } from 'react'
 import Navbar from '../../components/Navbar'
 import ReactModal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight, faIcons } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCalendar,
+  faChevronDown,
+  faChevronRight,
+  faIcons,
+} from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
 import { data } from 'autoprefixer'
 import DatePicker from 'react-multi-date-picker'
@@ -20,7 +25,7 @@ export default function CheckoutBiodataPemesan() {
   })
   const [penumpang, setPenumpang] = useState({
     data: {
-      title: '',
+      title: 'Mr.',
       namaLengkap: '',
       namaKeluarga: '',
       tanggalLahir: '',
@@ -203,8 +208,8 @@ export default function CheckoutBiodataPemesan() {
                       <select
                         name="title-1"
                         id="title1"
-                        value={penumpang.data.title}
-                        className="w-full cursor-pointer border outline-none relative appearance-none focus:border-secondary rounded-md h-10 px-3 mt-1 py-4"
+                        onChange={(e) => setDataPenumpang(e.target.value)}
+                        className="w-full cursor-pointer border outline-none  focus:border-secondary rounded-md h-10 appearance-none  px-3 mt-1 "
                       >
                         <option value="Mr.">Mr.</option>
                         <option value="Ms.">Ms.</option>
@@ -240,14 +245,30 @@ export default function CheckoutBiodataPemesan() {
                       onChange={(e) => setNamaLengkapPemesan(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <label className="font-bold" for="namaLengkap">
+                  <div className="relative">
+                    <label className="font-bold block" for="tanggalLahir">
                       Tanggal Lahir
                       <span class="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
-                    <DatePicker monthYearSeparator="-" highlightToday={false} />
+                    <div className="relative">
+                      <DatePicker
+                        monthYearSeparator="-"
+                        showOtherDays
+                        highlightToday={false}
+                        render={
+                          <input
+                            className="calendar w-full  block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                            id="tanggalLahir"
+                          />
+                        }
+                      />
+                      <FontAwesomeIcon
+                        icon={faCalendar}
+                        className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
