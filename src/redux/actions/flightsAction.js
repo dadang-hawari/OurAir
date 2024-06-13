@@ -8,7 +8,7 @@ export const getAllFlights = () => async (dispatch) => {
   try {
     const response = await axios.get(
       `${
-        import.meta.env.VITE_DOMAIN_API_DEV
+        import.meta.env.VITE_DOMAIN_API
       }/api/v1/flights/search-or-fetch-all-flight-from?page=1&limit=9999`
     )
     const data = response.data.data
@@ -24,9 +24,7 @@ export const getAllFlights = () => async (dispatch) => {
 export const getFlightByCityorCountry = (country) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `${
-        import.meta.env.VITE_DOMAIN_API_DEV
-      }/api/v1/flights/search-city-or-country?country=${country}`
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/flights/search-city-or-country?country=${country}`
     )
     const data = response.data.data
     if (response.status === 200 || response.status === 201) {
