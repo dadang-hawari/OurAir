@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { setFlightsByCountry, setFligthLists } from '../reducers/flightsReducer'
+import { setFlightsByCountry, setFligthLists, setFlightsByCity } from '../reducers/flightsReducer'
 const loadingMessage = 'Mohon tunggu sebentar..'
 const toastIdWait = 'toasWait'
 
@@ -31,6 +31,22 @@ export const getFlightByCityorCountry = (country) => async (dispatch) => {
       dispatch(setFlightsByCountry(data))
     }
     console.log('response flight :>> ', data)
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+export const getFlightsByCity = (city) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `${
+        import.meta.env.VITE_DOMAIN_API
+      }/api/v1/flights/search-city-or-country?city=${city}&limit=10`
+    )
+    const data = response.data.data
+    if (response.status === 200 || response.status === 201) {
+      dispatch(setFlightsByCity(data))
+    }
+    console.log('response bandara berdasarkan city :>> ', data)
   } catch (error) {
     console.log('error', error)
   }

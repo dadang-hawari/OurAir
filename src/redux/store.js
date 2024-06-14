@@ -19,7 +19,7 @@ const rootReducers = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['otp', 'auth'],
+  whitelist: ['otp', 'auth', 'jadwalPenerbangan'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducers)

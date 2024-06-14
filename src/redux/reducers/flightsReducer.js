@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   allFlights: [],
   flightsByCountry: null,
+  flightsByCity: [],
 }
 
 const flightLists = createSlice({
@@ -15,8 +16,11 @@ const flightLists = createSlice({
     setFlightsByCountry: (state, action) => {
       state.flightsByCountry = action.payload
     },
+    setFlightsByCity: (state, action) => {
+      state.flightsByCity = action.payload
+    },
   },
 })
 
-export const { setFligthLists, setFlightsByCountry } = flightLists.actions
+export const { setFligthLists, setFlightsByCountry, setFlightsByCity } = flightLists.actions
 export default flightLists.reducer

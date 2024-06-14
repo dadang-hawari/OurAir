@@ -12,7 +12,12 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { customStylesDestination } from '../../styles/customStyles'
-import { setDepartureCity, setArrivalCity } from '../../redux/reducers/jadwalPenerbanganReducer'
+import {
+  setDepartureCity,
+  setArrivalCity,
+  setKotaKeberangkatan,
+  setKotaTujuan,
+} from '../../redux/reducers/jadwalPenerbanganReducer'
 import { getAllFlights } from '../../redux/actions/flightsAction'
 const SkeletonListBandara = () => (
   <div className="animate-pulse">
@@ -73,13 +78,18 @@ const AirPortList = ({ airports, onCitySelect, selectedCityType }) => {
 
 export const Destination = () => {
   const dispatch = useDispatch()
-  const { departureCity, arrivalCity } = useSelector((state) => state?.jadwalPenerbangan)
+  const { departureCity, arrivalCity, kotaKeberangkatan, kotaTujuan } = useSelector(
+    (state) => state?.jadwalPenerbangan
+  )
+  const jadwal = useSelector((state) => state?.jadwalPenerbangan)
   const airports = useSelector((state) => state?.flightLists?.allFlights?.flights)
 
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCityType, setSelectedCityType] = useState('departure')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+
+  console.log('jadwal', jadwal)
 
   useEffect(() => {
     dispatch(getAllFlights()).then(() => {
@@ -90,8 +100,10 @@ export const Destination = () => {
   const handleCitySelect = (airport) => {
     if (selectedCityType === 'departure') {
       dispatch(setDepartureCity(airport?.fromAirport?.name))
+      dispatch(setKotaKeberangkatan(airport?.fromAirport?.cityName))
     } else {
       dispatch(setArrivalCity(airport?.toAirport?.name))
+      dispatch(setKotaTujuan(airport?.toAirport?.cityName))
     }
     closeModal()
   }
@@ -131,6 +143,8 @@ export const Destination = () => {
     }
     dispatch(setDepartureCity(arrivalCity))
     dispatch(setArrivalCity(departureCity))
+    dispatch(setKotaKeberangkatan(kotaTujuan))
+    dispatch(setKotaTujuan(kotaKeberangkatan))
   }
 
   const filteredAirports = airports?.filter((airport) => {

@@ -17,60 +17,78 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReactModal from 'react-modal'
 import { customStylesFilter } from '../styles/customStyles'
+import { useDispatch, useSelector } from 'react-redux'
+import { getFlightsByCity } from '../redux/actions/flightsAction'
 
 export default function PilihPenerbangan() {
   const location = useLocation()
   const data = location?.state?.searchValue
   const [activeDetailId, setActiveDetailId] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
+  const listFlights = useSelector((state) => state?.flightLists?.flightsByCity?.flights)
+  const kotaKeberangkatan = jadwalPenerbangan?.kotaKeberangkatan
+  const kotaTujuan = jadwalPenerbangan?.kotaTujuan
+  const [isLoading, setIsLoading] = useState(true)
+  const dispatch = useDispatch()
+
+  console.log('listFlights', listFlights)
   const openModal = () => {
     setIsModalOpen(true)
-    // document.body.style.overflowY = 'hidden'
   }
   const closeModal = () => {
     setIsModalOpen(false)
-    // document.body.style.overflowY = 'auto'
   }
 
   const toggleDetailVisibility = (id) => {
     setActiveDetailId((prevId) => (prevId === id ? null : id))
   }
 
-  const flights = [
-    {
-      id: 1,
-      time: '07:00',
-      departure: 'JKT',
-      duration: '4h 0m',
-      arrival: '11:00',
-      destination: 'MLB',
-      price: 'IDR 4.950.000',
-      date: '3 Maret 2023',
-      departureTerminal: 'Soekarno Hatta - Terminal 1A Domestika',
-      airline: 'Jet Air - Economy',
-      flightNumber: 'JT - 203',
-      information: ['Baggage 20kg', 'Cabin baggage 7 kg', 'In Flight Entertainment'],
-      arrivalTerminal: 'Melbourne International Airport',
-    },
-    {
-      id: 2,
-      time: '09:00',
-      departure: 'JKT',
-      duration: '4h 30m',
-      arrival: '13:30',
-      destination: 'MLB',
-      price: 'IDR 5.200.000',
-      date: '4 Maret 2023',
-      departureTerminal: 'Soekarno Hatta - Terminal 2B Domestika',
-      airline: 'Jet Air - Business',
-      flightNumber: 'JT - 204',
-      information: ['Baggage 30kg', 'Cabin baggage 10 kg', 'In Flight Meal'],
-      arrivalTerminal: 'Melbourne International Airport',
-    },
-  ]
+  const SkeletonLoading = ({ loop = 10 }) => {
+    const skeletons = Array.from({ length: loop }).map((_, index) => (
+      <div key={index} className="border animate-pulse w-full rounded-xl px-3 pt-4 pb-5 h-fit mb-4">
+        <div className="flex items-center mt-2">
+          <div className="h-4 w-44 bg-gray-300 rounded-xl"></div>
+        </div>
+        <div className="flex mt-2 gap-x-8">
+          <div className="w-full">
+            <div className="h-4 w-full bg-gray-300 rounded-xl mt-4 mb-3"></div>
+            <div className="h-4 w-full bg-gray-300 rounded-xl"></div>
+          </div>
+          <div>
+            <div className="h-4 w-24 bg-gray-300 rounded-xl"></div>
+            <div className="h-4 w-24 bg-gray-300 my-3 rounded-xl"></div>
+            <div className="h-4 w-24 bg-gray-300 rounded-xl"></div>
+          </div>
+        </div>
+      </div>
+    ))
+
+    return <>{skeletons}</>
+  }
+
+  const formatTimeToHM = (time) => {
+    const formattedTime = new Date(time)
+    return formattedTime.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    })
+  }
+  const formatTimeToIndonesia = (time) => {
+    const formattedTime = new Date(time)
+    const options = { day: 'numeric', month: 'long', year: 'numeric' }
+    return formattedTime.toLocaleDateString('id-ID', options)
+  }
+
+  useEffect(() => {
+    dispatch(getFlightsByCity(kotaKeberangkatan)).then(() => {
+      setIsLoading(false)
+    })
+  }, [])
 
   return (
     <>
@@ -175,122 +193,125 @@ export default function PilihPenerbangan() {
             </h3>
           </div>
           {/* Hasil Pencarian */}
-          <div className="flex flex-col gap-y-4 w-full">
-            {flights.map((flight) => (
-              <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={flight.id}>
-                <div className="flex items-center">
-                  <FontAwesomeIcon
-                    icon={faIcons}
-                    className="ps-1 mr-1 text-yellow-300 text-xs font-[600]"
-                  />{' '}
-                  <h4 className="font-[600]">{flight.airline}</h4>
-                </div>
-                <div className="flex gap-x-10 items-center text-sm">
-                  <div className="flex justify-center gap-x-4 w-full p-3">
-                    <div>
-                      <h4 className="font-bold">{flight.time}</h4>
-                      <p>{flight.departure}</p>
-                    </div>
-                    <div className="text-gray-300 w-full text-center relative">
-                      <h4>{flight.duration}</h4>
-                      <hr className="before:content-['>'] before:absolute before:-right-[2px] before:top-[21px] before:-translate-y-1/2" />
-                      <p>Langsung</p>
-                    </div>
-                    <div>
-                      <h4 className="font-bold">{flight.arrival}</h4>
-                      <p>{flight.destination}</p>
-                    </div>
-                    <FontAwesomeIcon
-                      icon={faSuitcase}
-                      className="text-secondary flex self-center mx-3"
-                    />
-                  </div>
-                  <div className="flex justify-center gap-y-2 flex-col">
-                    <b className="text-secondary w-max">{flight.price}</b>
-                    <button className="bg-secondary text-white max-w-[100px] w-full rounded-full py-1">
-                      Pilih
-                    </button>
-                    <button
-                      className="text-primary font-[600] mt-1"
-                      onClick={() => toggleDetailVisibility(flight.id)}
-                    >
-                      <FontAwesomeIcon
-                        icon={activeDetailId === flight.id ? faChevronUp : faChevronDown}
-                      />{' '}
-                      Detail
-                    </button>
-                  </div>
-                </div>
-                {/* Detail Penerbangan */}
-                <div
-                  className={`text-sm px-4 overflow-hidden transition-all duration-500 ${
-                    activeDetailId === flight.id ? 'max-h-screen' : 'max-h-0'
-                  }`}
-                >
-                  <hr className="my-3" />
-                  <h4 className="font-bold text-primary my-2">Detail Penerbangan</h4>
-                  <div className="flex justify-between text-sm">
-                    <b className="text-base">{flight.time}</b>
-                    <b className="text-soft-blue">Keberangkatan</b>
-                  </div>
-                  <p className="my-1">{flight.date}</p>
-                  <b className="font-[600]">{flight.departureTerminal}</b>
-                  <div className="ps-5">
-                    <hr className="w-1/2 mx-auto my-4" />
-                    <b className="block">{flight.airline}</b>
-                    <b>{flight.flightNumber}</b>
-                    <div className="relative">
-                      <FontAwesomeIcon
-                        icon={faIcons}
-                        className="absolute -left-5 top-[3px] text-yellow-400"
-                      />
-                      <b>Informasi:</b>
-                      <ul className="flex flex-col">
-                        {flight.information.map((info, index) => (
-                          <li key={index}>{info}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                  <hr className="w-1/2 mx-auto my-4" />
-                  <div className="flex justify-between text-sm">
-                    <b className="text-base">{flight.arrival}</b>
-                    <b className="text-soft-blue">Kedatangan</b>
-                  </div>
-                  <p className="my-1">{flight.date}</p>
-                  <b className="font-[600]">{flight.arrivalTerminal}</b>
-                </div>
-              </div>
-            ))}
-            {/* Skeleton Loading */}
-            <div className="border animate-pulse w-full rounded-xl px-3 pt-4 pb-5 h-fit">
-              <div className="flex items-center mt-2">
-                <div className="h-4 w-44 bg-gray-300 rounded-xl"></div>
-              </div>
-              <div className="flex mt-2 gap-x-8 ">
-                <div className="w-full">
-                  <div className="h-4 w-full bg-gray-300 rounded-xl mt-4 mb-3"></div>
-                  <div className="h-4 w-full bg-gray-300 rounded-xl"></div>
-                </div>
-                <div>
-                  <div className="h-4 w-24 bg-gray-300 rounded-xl"></div>
-                  <div className="h-4 w-24 bg-gray-300 my-3 rounded-xl"></div>
-                  <div className="h-4 w-24 bg-gray-300 rounded-xl"></div>
-                </div>
-              </div>
+          {isLoading ? (
+            <div className="w-full">
+              <SkeletonLoading />
             </div>
-            {/* Not found */}
-            <img
-              src="/assets/images/not-found-search.png"
-              alt="Tidak ditemukan"
-              className="max-w-64 w-full mx-auto h-auto"
-            />
-            <img
-              src="/assets/images/tiket-habis.png"
-              alt="Tiket Haibsn"
-              className="max-w-80 w-full mx-auto h-auto"
-            />
-          </div>
+          ) : (
+            <div className="flex flex-col gap-y-4 w-full">
+              {listFlights?.map((flight, i) => (
+                <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={i}>
+                  <div className="flex items-center">
+                    <FontAwesomeIcon
+                      icon={faIcons}
+                      className="ps-1 mr-1 text-yellow-300 text-xs font-[600]"
+                    />{' '}
+                    <h4 className="font-[600]">
+                      {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name}
+                    </h4>
+                  </div>
+                  <div className="flex gap-x-10 items-center text-sm">
+                    <div className="flex justify-center gap-x-4 w-full p-3">
+                      <div>
+                        <h4 className="font-bold">{formatTimeToHM(flight?.departure_time)}</h4>
+                        <p>{flight?.fromAirport?.cityCode}</p>
+                      </div>
+                      <div className="text-gray-300 w-full text-center relative">
+                        <h4>
+                          {' '}
+                          {(new Date(flight?.arrival_time) - new Date(flight?.departure_time)) /
+                            (1000 * 60 * 60)}
+                          h 0m
+                        </h4>
+                        <hr className="before:content-['>'] before:absolute before:-right-[2px] before:top-[21px] before:-translate-y-1/2" />
+                        <p>Langsung</p>
+                      </div>
+                      <div>
+                        <h4 className="font-bold">{formatTimeToHM(flight?.arrival_time)}</h4>
+                        <p>{flight?.toAirport?.cityCode}</p>
+                      </div>
+                      <FontAwesomeIcon
+                        icon={faSuitcase}
+                        className="text-secondary flex self-center mx-3"
+                      />
+                    </div>
+                    <div className="flex justify-center gap-y-2 flex-col">
+                      <b className="text-secondary w-max">
+                        IDR {flight?.ticket_price?.toLocaleString('id-ID')}
+                      </b>
+                      <button className="bg-secondary text-white max-w-[100px] w-full rounded-full py-1">
+                        Pilih
+                      </button>
+                      <button
+                        className="text-primary font-[600] mt-1"
+                        onClick={() => toggleDetailVisibility(flight?.id)}
+                      >
+                        <FontAwesomeIcon
+                          icon={activeDetailId === flight?.id ? faChevronUp : faChevronDown}
+                        />{' '}
+                        Detail
+                      </button>
+                    </div>
+                  </div>
+                  {/* Detail Penerbangan */}
+                  <div
+                    className={`text-sm px-4 overflow-hidden transition-all duration-500 ${
+                      activeDetailId === flight?.id ? 'max-h-screen' : 'max-h-0'
+                    }`}
+                  >
+                    <hr className="my-3" />
+                    <h4 className="font-bold text-primary my-2">Detail Penerbangan</h4>
+                    <div className="flex justify-between text-sm">
+                      <b className="text-base">{formatTimeToHM(flight?.departure_time)}</b>
+
+                      <b className="text-soft-blue">Keberangkatan</b>
+                    </div>
+                    <p className="my-1">{formatTimeToIndonesia(flight?.departure_time)}</p>
+                    <b className="font-[600]">{flight?.fromAirport?.name}</b>
+                    <div className="ps-5">
+                      <hr className="w-1/2 mx-auto my-4" />
+                      <b className="block">
+                        {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} - Economy
+                      </b>
+
+                      <b>{flight?.whomAirplaneFlights?.airplane_code}</b>
+                      <div className="relative">
+                        <FontAwesomeIcon
+                          icon={faIcons}
+                          className="absolute -left-5 top-[3px] text-yellow-400"
+                        />
+                        <b>Informasi:</b>
+                        <ul className="flex flex-col">
+                          <li>{flight?.whomAirplaneFlights?.baggage} kg</li>
+                          <li>{flight?.whomAirplaneFlights?.cabin_baggage} kg</li>
+                          <li>In Flight Entertainment</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <hr className="w-1/2 mx-auto my-4" />
+                    <div className="flex justify-between text-sm">
+                      <b className="text-base">{formatTimeToHM(flight?.arrival_time)}</b>
+                      <b className="text-soft-blue">Kedatangan</b>
+                    </div>
+                    <p className="my-1">{formatTimeToIndonesia(flight?.arrival_time)}</p>
+                    <b className="font-[600]">{flight?.toAirport?.name}</b>
+                  </div>
+                </div>
+              ))}
+
+              {/* Not found */}
+              <img
+                src="/assets/images/not-found-search.png"
+                alt="Tidak ditemukan"
+                className="max-w-64 w-full mx-auto h-auto"
+              />
+              <img
+                src="/assets/images/tiket-habis.png"
+                alt="Tiket Haibsn"
+                className="max-w-80 w-full mx-auto h-auto"
+              />
+            </div>
+          )}
         </div>
       </div>
     </>
