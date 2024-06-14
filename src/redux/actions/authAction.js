@@ -25,6 +25,7 @@ export const registUser = (phone_number, name, email, password, navigate) => asy
 
     // toast.dismiss("toastLoading");
     if (response?.status === 201) {
+
       toast.dismiss(toastIdWait)
       dispatch(setEmail(email))
       navigate('/otp', {
