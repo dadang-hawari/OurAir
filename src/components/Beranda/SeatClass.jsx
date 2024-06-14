@@ -51,7 +51,7 @@ export const SeatClass = () => {
               <div key={index} className="w-full">
                 <hr className="mt-1" />
                 <button
-                  className={`hover:bg-blue-50  text-left ml-3 font-bold text-black p-1 rounded-md w-full ${
+                  className={`  text-left  font-bold text-black p-1 rounded-md w-full ${
                     tempSelectedSeatClass?.name === seatClass.name
                       ? 'bg-blue-500 text-white'
                       : 'bg-white'

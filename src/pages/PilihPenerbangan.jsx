@@ -142,6 +142,18 @@ export default function PilihPenerbangan() {
             <b>Senin</b>
             <p className="text-gray-400 text-xs">01/03/2023</p>
           </div>
+          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
+            <b>Senin</b>
+            <p className="text-gray-400 text-xs">01/03/2023</p>
+          </div>
+          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
+            <b>Senin</b>
+            <p className="text-gray-400 text-xs">01/03/2023</p>
+          </div>
+          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
+            <b>Senin</b>
+            <p className="text-gray-400 text-xs">01/03/2023</p>
+          </div>
         </div>
         {/* Filter */}
         <div className="text-right">
