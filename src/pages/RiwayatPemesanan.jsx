@@ -97,7 +97,7 @@ export default function RiwayatPemesanan() {
             </form>
             {/* Sudah dibayar */}
             <div className="rounded-xl mb-4 border h-fit w-full p-4 cursor-pointer hover:border-secondary">
-              <span className="bg-[#73CA5C] py-1 px-3 text-white rounded-full">Issued</span>
+              <span className="bg-green-soft py-1 px-3 text-white rounded-full">Issued</span>
               <div className="flex gap-x-5 my-4 justify-between w-full md:max-w-[468px] items-center">
                 <div className="flex gap-x-2 justify-center w-fit">
                   <FontAwesomeIcon icon={faLocationDot} className="text-gray-primary pt-1" />
