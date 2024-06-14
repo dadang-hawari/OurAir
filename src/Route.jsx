@@ -13,6 +13,7 @@ import CheckoutBiodataPemesanan from './pages/Checkout/CheckoutBiodataPemesanan'
 import Notification from './pages/Notification'
 import Tentang from './pages/Tentang'
 import MenungguPembayaran from './pages/Checkout/MenungguPembayaran'
+import PembayaranSukses from './pages/Checkout/PembayaranSukses'
 export default function Route() {
   const router = createBrowserRouter([
     {
@@ -58,6 +59,10 @@ export default function Route() {
     {
       path: '/menunggu-pembayaran',
       element: <MenungguPembayaran />,
+    },
+    {
+      path: '/pembayaran-sukses',
+      element: <PembayaranSukses />,
     },
     {
       path: '/Notification',

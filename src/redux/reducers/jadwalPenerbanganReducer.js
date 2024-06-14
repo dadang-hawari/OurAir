@@ -6,8 +6,7 @@ const initialState = {
   arrivalCity: 'Tempat Tujuan',
   kotaKeberangkatan: '',
   kotaTujuan: '',
-  tanggalKeberangkatan: null,
-  tanggalKepulangan: null,
+  tanggalBerangkatKembali: ['Tanggal Berangkat', 'Jadwal Kembali'],
   jumlahPenumpang: {
     penumpangDewasa: null,
     penumpangAnak: null,
@@ -32,10 +31,18 @@ const penerbanganSlice = createSlice({
     setKotaTujuan: (state, action) => {
       state.kotaTujuan = action.payload
     },
+    setTanggalBerangkatKembali: (state, action) => {
+      state.tanggalBerangkatKembali = action.payload
+    },
   },
 })
 
-export const { setDepartureCity, setArrivalCity, setKotaKeberangkatan, setKotaTujuan } =
-  penerbanganSlice.actions
+export const {
+  setDepartureCity,
+  setArrivalCity,
+  setKotaKeberangkatan,
+  setKotaTujuan,
+  setTanggalBerangkatKembali,
+} = penerbanganSlice.actions
 
 export default penerbanganSlice.reducer

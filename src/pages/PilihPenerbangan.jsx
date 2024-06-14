@@ -28,11 +28,21 @@ export default function PilihPenerbangan() {
   const data = location?.state?.searchValue
   const [activeDetailId, setActiveDetailId] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedFilter, setSelectedFilter] = useState('Filter')
   const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
   const listFlights = useSelector((state) => state?.flightLists?.flightsByCity?.flights)
   const kotaKeberangkatan = jadwalPenerbangan?.kotaKeberangkatan
   const kotaTujuan = jadwalPenerbangan?.kotaTujuan
+  useEffect(() => {
+    dispatch(getFlightsByCity(kotaKeberangkatan)).then(() => {
+      setIsLoading(false)
+    })
+  }, [])
+  const tanggalKeberangkatan = jadwalPenerbangan?.tanggalBerangkatKembali[0]
+  const tanggalSampai = jadwalPenerbangan?.tanggalBerangkatKembali[1]
+  console.log('tanggalKeberangkatan,tanggalSampai', tanggalKeberangkatan, tanggalSampai)
   const [isLoading, setIsLoading] = useState(true)
+  console.log('jadwalPenerbangan', jadwalPenerbangan)
   const dispatch = useDispatch()
 
   console.log('listFlights', listFlights)
@@ -42,9 +52,19 @@ export default function PilihPenerbangan() {
   const closeModal = () => {
     setIsModalOpen(false)
   }
+  const [filteredFlights, setFilteredFlights] = useState(listFlights)
+  console.log('filteredFlights', filteredFlights)
 
   const toggleDetailVisibility = (id) => {
     setActiveDetailId((prevId) => (prevId === id ? null : id))
+  }
+
+  // Filter flights by lowest price
+  const filterByLowestPrice = () => {
+    setSelectedFilter('Harga Termurah')
+    const sortedFlights = [...listFlights].sort((a, b) => a.ticket_price - b.ticket_price)
+    setFilteredFlights(sortedFlights)
+    closeModal() // Close the modal after applying filter
   }
 
   const SkeletonLoading = ({ loop = 10 }) => {
@@ -83,12 +103,6 @@ export default function PilihPenerbangan() {
     const options = { day: 'numeric', month: 'long', year: 'numeric' }
     return formattedTime.toLocaleDateString('id-ID', options)
   }
-
-  useEffect(() => {
-    dispatch(getFlightsByCity(kotaKeberangkatan)).then(() => {
-      setIsLoading(false)
-    })
-  }, [])
 
   return (
     <>
@@ -135,7 +149,8 @@ export default function PilihPenerbangan() {
             className="font-medium px-3 text-secondary p-2 border-secondary border rounded-full"
             onClick={openModal}
           >
-            <FontAwesomeIcon icon={faArrowRightArrowLeft} className="rotate-90 me-1" /> Termurah
+            <FontAwesomeIcon icon={faArrowRightArrowLeft} className="rotate-90 me-1" /> {}
+            {selectedFilter}
           </button>
 
           <ReactModal
@@ -156,7 +171,10 @@ export default function PilihPenerbangan() {
                 </button>
               </div>
               <ul className="flex flex-col ">
-                <li className="px-4 cursor-pointer border-b py-4  hover:bg-secondary hover:font-bold hover:text-white">
+                <li
+                  onClick={filterByLowestPrice}
+                  className="px-4 cursor-pointer border-b py-4  hover:bg-secondary hover:font-bold hover:text-white"
+                >
                   <b>Harga</b> - Termurah
                 </li>
                 <li className="px-4 cursor-pointer border-b py-4  hover:bg-secondary hover:font-bold hover:text-white">
@@ -199,7 +217,7 @@ export default function PilihPenerbangan() {
             </div>
           ) : (
             <div className="flex flex-col gap-y-4 w-full">
-              {listFlights?.map((flight, i) => (
+              {filteredFlights?.map((flight, i) => (
                 <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={i}>
                   <div className="flex items-center">
                     <FontAwesomeIcon

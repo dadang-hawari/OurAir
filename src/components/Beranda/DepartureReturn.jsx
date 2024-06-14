@@ -11,14 +11,17 @@ import ReactModal from 'react-modal'
 import { customStyles } from '../../styles/customStyles'
 import '../../styles/toast.css'
 import '../../styles/calendar.css'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getAllFlights } from '../../redux/actions/flightsAction'
+import { setTanggalBerangkatKembali } from '../../redux/reducers/jadwalPenerbanganReducer'
 
 export const DepartureReturn = () => {
   ReactModal.setAppElement('#modal')
 
   const [isReturn, setIsReturn] = useState(true)
-  const [departureReturn, setDepartureReturn] = useState(['Tanggal Berangkat', 'Jadwal Kembali'])
+  const tanggalBerangkatKembali = useSelector(
+    (state) => state?.jadwalPenerbangan?.tanggalBerangkatKembali
+  )
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [width, setWidth] = useState(window.outerWidth)
   const dispatch = useDispatch()
@@ -62,16 +65,17 @@ export const DepartureReturn = () => {
 
   const setReturn = () => {
     setIsReturn(!isReturn)
-    if (isReturn === true) setDepartureReturn([departureReturn[0], 'Jadwal Kembali'])
+    if (isReturn === true)
+      dispatch(setTanggalBerangkatKembali([tanggalBerangkatKembali[0], 'Jadwal Kembali']))
   }
 
   const handleDateChange = (value) => {
     if (isReturn && value.length === 2) {
-      setDepartureReturn(value.map((date) => date.format('DD MMMM YYYY')))
+      dispatch(setTanggalBerangkatKembali(value.map((date) => date.format('DD MMMM YYYY'))))
     } else if (value.length === 1) {
-      setDepartureReturn([value[0].format('DD MMMM YYYY'), 'Jadwal Kembali'])
+      dispatch(setTanggalBerangkatKembali([value[0].format('DD MMMM YYYY'), 'Jadwal Kembali']))
     } else {
-      setDepartureReturn([value[1].format('DD MMMM YYYY'), 'Jadwal Kembali'])
+      dispatch(setTanggalBerangkatKembali([value[1].format('DD MMMM YYYY'), 'Jadwal Kembali']))
     }
   }
 
@@ -95,7 +99,7 @@ export const DepartureReturn = () => {
         <div className="flex-grow w-full">
           <b className="text-gray-primary font-[600] block">Keberangkatan</b>
           <button onClick={openModal} className="text-left my-2 border p-3  font-[600] w-full">
-            <span className="w-[135.66px] block">{departureReturn[0]}</span>
+            <span className="w-[135.66px] block">{tanggalBerangkatKembali[0]}</span>
           </button>
         </div>
         <div className="flex-grow w-full">
@@ -124,7 +128,7 @@ export const DepartureReturn = () => {
               }`}
               disabled={!isReturn}
             >
-              {isReturn ? departureReturn[1] : 'Tidak Kembali'}
+              {isReturn ? tanggalBerangkatKembali[1] : 'Tidak Kembali'}
             </button>
             <ReactModal
               isOpen={isModalOpen}
@@ -135,7 +139,7 @@ export const DepartureReturn = () => {
               <div className="departure">
                 <Calendar
                   className="rounded-xl pb-3 px-4 pt-5"
-                  value={departureReturn}
+                  value={tanggalBerangkatKembali}
                   onChange={handleDateChange}
                   numberOfMonths={width < 650 ? 1 : 2}
                   monthYearSeparator="-"
