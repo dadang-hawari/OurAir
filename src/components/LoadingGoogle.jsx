@@ -7,6 +7,7 @@ import Toast from './common/Toast'
 export default function LoadingGoogle() {
   const dispatch = useDispatch()
   const { token } = useParams()
+  console.log('token :>> ', token)
   const navigate = useNavigate()
   useEffect(() => {
     dispatch(authGoogleUser(token, navigate))

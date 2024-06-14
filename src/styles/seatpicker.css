@@ -1,0 +1,27 @@
+/* src/SeatPicker.css */
+.seat-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+.row {
+  display: flex;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #000;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.seat.selected {
+  background-color: green;
+  color: white;
+}

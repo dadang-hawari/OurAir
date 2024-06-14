@@ -14,11 +14,17 @@ import Notification from './pages/Notification'
 import Tentang from './pages/Tentang'
 import MenungguPembayaran from './pages/Checkout/MenungguPembayaran'
 import PembayaranSukses from './pages/Checkout/PembayaranSukses'
+import { SeatPicker } from './SeatPicker.jsx'
+
 export default function Route() {
   const router = createBrowserRouter([
     {
       path: '/',
       element: <Beranda />,
+    },
+    {
+      path: '/seat',
+      element: <SeatPicker />,
     },
     {
       path: `/otp`,

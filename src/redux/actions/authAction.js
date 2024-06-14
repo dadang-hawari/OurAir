@@ -25,7 +25,6 @@ export const registUser = (phone_number, name, email, password, navigate) => asy
 
     // toast.dismiss("toastLoading");
     if (response?.status === 201) {
-
       toast.dismiss(toastIdWait)
       dispatch(setEmail(email))
       navigate('/otp', {
@@ -155,16 +154,17 @@ export const resetPassword = (token, password, navigate) => async () => {
 
 export const authGoogleUser = (token, navigate) => async (dispatch) => {
   try {
-    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/who-am-i`, {
+    const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/who-am-i`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
+    console.log('import.meta.env.VITE_DOMAIN_API :>> ', import.meta.env.VITE_DOMAIN_API)
     console.log('response :>> ', response)
     const data = response?.data.data
     if (response?.status === 200) {
       dispatch(setUserData(data))
-      dispatch(setToken(data.token))
+      dispatch(setToken(token))
       dispatch(setIsLoggedIn(true))
       navigate('/', {
         state: {
@@ -173,6 +173,7 @@ export const authGoogleUser = (token, navigate) => async (dispatch) => {
       })
     }
   } catch (error) {
+    console.log(error)
     error?.response?.data?.errors[0]?.msg
       ? toast(error?.response?.data.errors[0].msg, { className: 'toast-error' })
       : toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
