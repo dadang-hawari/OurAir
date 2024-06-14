@@ -69,7 +69,7 @@ export default function Profile() {
   const [imageFile, setImageFile] = useState(null)
   const [isEditing, setIsEditing] = useState(false)
 
-  const [name, onNameChange] = useInput(() => userData?.name || '')
+  const [name, onNameChange] = useInput(() => userData?.name)
   const [phone, onPhoneChange] = useInput(() => userData?.phone_number || '')
   const [email, onEmailChange] = useInput(() => userData?.email || '')
 
