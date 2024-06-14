@@ -1,14 +1,11 @@
-import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 function LoginGoogle() {
-  const dummyFun = () => {
-    return true
-  }
+  const toGoogle = `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/google`
   return (
-    <button
-      onClick={dummyFun}
-      type="button"
-      className="relative border border-gray-300 py-1 h-[48px]  w-full text-center rounded-2xl  font-[600] mt-5"
+    <Link
+      to={toGoogle}
+      className="relative block  pt-3 border border-gray-300 py-1 h-[48px]  w-full text-center rounded-2xl  font-[600] mt-5"
     >
       Google
       <svg
@@ -36,7 +33,7 @@ function LoginGoogle() {
         />
         <path d="M1 1h22v22H1z" fill="none" />
       </svg>
-    </button>
+    </Link>
   )
 }
 

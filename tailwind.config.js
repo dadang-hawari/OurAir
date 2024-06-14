@@ -10,6 +10,9 @@ export default {
         'soft-blue': '#B7D5E6',
         'softer-blue': '#D4E2F0',
         'gray-primary': '#787676',
+        'gray-secondary': '#3c3c3c',
+        'red-primary': '#EC0909',
+        'green-soft': '#73CA5C',
       },
       borderRadius: {
         '16px': '16px',

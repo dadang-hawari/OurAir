@@ -11,6 +11,8 @@ import ReactModal from 'react-modal'
 import { customStyles } from '../../styles/customStyles'
 import '../../styles/toast.css'
 import '../../styles/calendar.css'
+import { useDispatch } from 'react-redux'
+import { getAllFlights } from '../../redux/actions/flightsAction'
 
 export const DepartureReturn = () => {
   ReactModal.setAppElement('#modal')
@@ -19,9 +21,11 @@ export const DepartureReturn = () => {
   const [departureReturn, setDepartureReturn] = useState(['Tanggal Berangkat', 'Jadwal Kembali'])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [width, setWidth] = useState(window.outerWidth)
+  const dispatch = useDispatch()
 
   const openModal = () => {
     setIsModalOpen(true)
+    dispatch(getAllFlights())
   }
 
   const closeModal = () => {
@@ -31,9 +35,9 @@ export const DepartureReturn = () => {
   const renderButton = (type, onClick) => {
     const chevron =
       type === 'left' ? (
-        <FontAwesomeIcon icon={faChevronLeft} />
+        <FontAwesomeIcon icon={faChevronLeft} className="text-gray-400" />
       ) : (
-        <FontAwesomeIcon icon={faChevronRight} />
+        <FontAwesomeIcon icon={faChevronRight} className="text-gray-400" />
       )
     return (
       <button type="button" className="p-1" onClick={onClick}>
@@ -74,7 +78,7 @@ export const DepartureReturn = () => {
   const Close = () => {
     return (
       <div
-        className="absolute top-0 cursor-pointer pt-2 py-1 px-4 right-0 text-xs text-gray-500"
+        className="absolute top-[2px] cursor-pointer pt-2 py-1 px-[13px] right-0 text-xs text-gray-500"
         onClick={closeModal}
       >
         <FontAwesomeIcon icon={faXmark} className="h-4" />
@@ -84,17 +88,17 @@ export const DepartureReturn = () => {
 
   return (
     <div className="flex gap-x-7 w-full justify-between md:ml-1">
-      <div className="text-gray-primary hidden sm:flex  gap-x-4 text-sm font-[600] w-16 items-center">
+      <div className="text-gray-primary hidden sm:flex gap-x-4 text-sm font-[600] w-16 items-center">
         <FontAwesomeIcon icon={faCalendarDays} className="h-5" width="20" /> Date
       </div>
       <div className="flex flex-col sm:flex-row gap-x-4 w-full">
-        <div className="flex-grow">
+        <div className="flex-grow w-full">
           <b className="text-gray-primary font-[600] block">Keberangkatan</b>
           <button onClick={openModal} className="text-left my-2 border p-3  font-[600] w-full">
             <span className="w-[135.66px] block">{departureReturn[0]}</span>
           </button>
         </div>
-        <div className="flex-grow">
+        <div className="flex-grow w-full">
           <div className="flex gap-x-5 w-full">
             <b className="text-gray-primary font-[600]">Kepulangan</b>
             <button
@@ -126,23 +130,26 @@ export const DepartureReturn = () => {
               isOpen={isModalOpen}
               onRequestClose={closeModal}
               style={customStyles}
-              className="border-none absolute top-7 overflow-hidden"
+              className="border-none absolute top-7   overflow-hidden"
             >
-              <Calendar
-                className="rounded-xl px-5 pb-3 pt-5"
-                value={departureReturn}
-                onChange={handleDateChange}
-                numberOfMonths={width < 650 ? 1 : 2}
-                monthYearSeparator="-"
-                range={isReturn}
-                showOtherDays
-                highlightToday={false}
-                format="DD MMMM YYYY"
-                weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
-                renderButton={renderButton}
-              >
-                <Close />
-              </Calendar>
+              <div className="departure">
+                <Calendar
+                  className="rounded-xl pb-3 px-4 pt-5"
+                  value={departureReturn}
+                  onChange={handleDateChange}
+                  numberOfMonths={width < 650 ? 1 : 2}
+                  monthYearSeparator="-"
+                  range={isReturn}
+                  showOtherDays
+                  disableYearPicker
+                  highlightToday={false}
+                  format="DD MMMM YYYY"
+                  weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
+                  renderButton={renderButton}
+                >
+                  <Close />
+                </Calendar>
+              </div>
             </ReactModal>
           </div>
         </div>

@@ -35,7 +35,7 @@ export const SeatClass = () => {
   ]
 
   return (
-    <div className="flex-grow">
+    <div className="flex-grow w-full">
       <ReactModal
         isOpen={isModalOpenSeatClass}
         onRequestClose={closeModalSeatClass}

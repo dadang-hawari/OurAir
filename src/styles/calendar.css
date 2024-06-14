@@ -1,6 +1,6 @@
 /* Untuk menyesuaikan elemen hari ini */
 div.rmdp-wrapper {
-  @apply rounded-xl
+  @apply rounded-xl;
 }
 div.rmdp-wrapper .rmdp-day.rmdp-today span {
   @apply bg-secondary;
@@ -30,9 +30,8 @@ div.rmdp-wrapper .rmdp-day.rmdp-range.start {
   @apply rounded-s-md;
 }
 
-/* Untuk menyesuaikan elemen yang dipilih */
-div.rmdp-wrapper .rmdp-day.rmdp-selected::before {
-  @apply content-['Keberangkatan'] absolute z-50 bg-black py-[5px] w-[100px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
+div.departure div.rmdp-wrapper .rmdp-day.rmdp-selected::before {
+  @apply content-['berangkat'] absolute z-50 bg-black py-[5px] w-fit px-[9px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
 }
 div.rmdp-wrapper .rmdp-day.rmdp-selected {
   @apply bg-secondary rounded-sm;
@@ -41,10 +40,10 @@ div.rmdp-wrapper .rmdp-day.rmdp-selected span:not(.highlight) {
   @apply shadow-none;
 }
 div.rmdp-wrapper .rmdp-day.rmdp-range.start::before {
-  @apply content-['Keberangkatan'] absolute z-50 bg-black py-[5px] w-[100px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
+  @apply content-['berangkat'] absolute z-50 bg-black py-[5px] w-fit px-[9px] text-[10px] rounded-[4px] font-normal right-0 bottom-[58px] text-white;
 }
 div.rmdp-wrapper .rmdp-day.rmdp-range.end::after {
-  @apply content-['kembali'] absolute z-10 text-[10px] w-fit py-[5px] px-[10px] bg-black rounded font-normal top-[58px] left-0 h-fit text-white
+  @apply content-['kembali'] absolute z-10 text-[10px] w-fit py-[5px] px-[10px] bg-black rounded font-normal top-[58px] left-0 h-fit text-white;
 }
 div.rmdp-wrapper .rmdp-day.rmdp-range.end {
   @apply rounded-e-md;
@@ -79,4 +78,12 @@ div.rmdp-wrapper button.rmdp-arrow-container.rmdp-right {
 /* Untuk menyesuaikan header */
 div.rmdp-wrapper .rmdp-header-values {
   @apply font-[600];
+}
+
+div.calendar {
+  width: 100%;
+}
+
+div.rmdp-container {
+  width: 100%;
 }

@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  faArrowLeft,
-  faCog,
-  faPencil,
-  faDoorOpen,
-} from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faCog, faPencil, faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import Footer from './Footer'
+import Toast from '../components/common/Toast'
 
 function Header({ title }) {
   return (
@@ -32,7 +30,7 @@ function Sidebar() {
   ]
 
   return (
-    <aside className="w-max h-full">
+    <aside className="w-full md:w-max h-full">
       {items.map(({ label, icon, to }) => (
         <Link
           key={to}
@@ -43,16 +41,11 @@ function Sidebar() {
           <span className="text-lg text-nowrap font-semibold">{label}</span>
         </Link>
       ))}
-      <Link
-        to={'/'}
-        className="flex items-center gap-4 w-full px-2 py-4 border-b border-gray-300"
-      >
+      <Link to={'/'} className="flex items-center gap-4 w-full px-2 py-4 border-b border-gray-300">
         <FontAwesomeIcon icon={faDoorOpen} className="text-accent size-6" />
         <span className="text-lg text-nowrap font-semibold">Keluar</span>
       </Link>
-      <div className="flex justify-center items-center p-2">
-        <p className="text-sm text-center text-gray-500">Version 1.1.0</p>
-      </div>
+      <div className="flex justify-center items-center p-2"></div>
     </aside>
   )
 }
@@ -68,12 +61,17 @@ function useInput(defaultValue = '') {
 }
 
 export default function Profile() {
+  const userData = useSelector((state) => state.auth.userData)
+
+  console.log({ userData })
+
   const [preview, setPreview] = useState('')
   const [imageFile, setImageFile] = useState(null)
+  const [isEditing, setIsEditing] = useState(false)
 
-  const [name, onNameChange] = useInput('')
-  const [phone, onPhoneChange] = useInput('')
-  const [email, onEmailChange] = useInput('')
+  const [name, onNameChange] = useInput(() => userData?.name || '')
+  const [phone, onPhoneChange] = useInput(() => userData?.phone_number || '')
+  const [email, onEmailChange] = useInput(() => userData?.email || '')
 
   const onPictureChange = (e) => {
     const file = e.target.files[0]
@@ -90,7 +88,7 @@ export default function Profile() {
   }
 
   const handleUpload = () => {
-    // upload gambar (di variabel imageFile) ke API
+    // upload gambar (variabel imageFile) ke API
     console.log({ imageFile })
   }
 
@@ -101,13 +99,16 @@ export default function Profile() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    alert(`${name} - ${phone} - ${email}`)
+    // Handle API / Redux dispatch
+    setIsEditing(false)
+    console.log(`${name} - ${phone} - ${email}`)
+    toast.success(`Data anda telah berhasil disimpan!`)
   }
 
   return (
     <div className="mt-10 space-y-10">
       <Header title="Akun" />
-      <main className="mt-10 w-full max-w-screen-lg mx-auto flex gap-10">
+      <main className="mt-10 w-full max-w-screen-lg mx-auto flex flex-col md:flex-row gap-10">
         <Sidebar />
         <div className="shadow-md px-4 py-10 w-full rounded-lg space-y-4">
           <h2 className="text-xl font-bold">Ubah Data Profil</h2>
@@ -115,7 +116,7 @@ export default function Profile() {
             Data Diri
           </span>
           <div className="flex flex-col gap-0.5">
-            <span className="text-accent font-semibold">Foto Profil</span>
+            <span className="text-primary font-semibold">Foto Profil</span>
             <div className="flex items-center gap-4">
               <img
                 src={preview}
@@ -139,13 +140,6 @@ export default function Profile() {
                 <>
                   <button
                     disabled={!imageFile}
-                    className="border-2 border-primary px-3 py-2 rounded-lg text-primary disabled:cursor-default disabled:opacity-50"
-                    onClick={handleUpload}
-                  >
-                    Upload Foto
-                  </button>
-                  <button
-                    disabled={!imageFile}
                     className="px-3 py-2 rounded-lg bg-red-600 text-white disabled:cursor-default disabled:opacity-50"
                     onClick={handleRemove}
                   >
@@ -157,10 +151,7 @@ export default function Profile() {
           </div>
           <form className="space-y-2" onSubmit={handleSubmit}>
             <fieldset className="flex flex-col gap-0.5">
-              <label
-                htmlFor="nama-lengkap"
-                className="text-primary font-semibold"
-              >
+              <label htmlFor="nama-lengkap" className="text-primary font-semibold">
                 Nama Lengkap
               </label>
               <input
@@ -168,15 +159,13 @@ export default function Profile() {
                 type="text"
                 placeholder="John Doe"
                 className="p-2 border border-gray-300 rounded-md"
+                disabled={!isEditing}
                 value={name}
                 onChange={onNameChange}
               />
             </fieldset>
             <fieldset className="flex flex-col gap-0.5">
-              <label
-                htmlFor="nomor-telepon"
-                className="text-primary font-semibold"
-              >
+              <label htmlFor="nomor-telepon" className="text-primary font-semibold">
                 Nomor Telepon
               </label>
               <input
@@ -184,6 +173,7 @@ export default function Profile() {
                 type="text"
                 placeholder="+6212345678910"
                 className="p-2 border border-gray-300 rounded-md"
+                disabled={!isEditing}
                 value={phone}
                 onChange={onPhoneChange}
               />
@@ -197,14 +187,24 @@ export default function Profile() {
                 type="email"
                 placeholder="johndoe@email.co"
                 className="p-2 border border-gray-300 rounded-md"
+                disabled={!isEditing}
                 value={email}
                 onChange={onEmailChange}
               />
             </fieldset>
-            <div className="w-full flex justify-center items-center pt-5">
+            <div className="w-full flex justify-center items-center gap-2 flex-wrap pt-5">
               <button
+                disabled={isEditing}
+                type="button"
+                className="border-2 border-primary text-primary px-10 py-3 rounded-lg text-lg disabled:opacity-50"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit
+              </button>
+              <button
+                disabled={!isEditing}
                 type="submit"
-                className="bg-primary text-white px-10 py-3 rounded-lg text-lg"
+                className="bg-primary border-2 border-primary text-white px-10 py-3 rounded-lg text-lg disabled:opacity-50"
               >
                 Simpan
               </button>
@@ -213,6 +213,7 @@ export default function Profile() {
         </div>
       </main>
       <Footer />
+      <Toast />
     </div>
   )
 }
