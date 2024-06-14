@@ -270,8 +270,92 @@ export default function CheckoutBiodataPemesan() {
                       />
                     </div>
                   </div>
+                  <div>
+                    <label className="font-bold" for="kewarganegaraan">
+                      Kewarganegaraan
+                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                        *
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                      placeholder="Masukkan Kewarganegaraan"
+                      id="kewarganegaraan"
+                      value={namaLengkapPemesan}
+                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="font-bold" for="ktpOrPasspor">
+                      KTP/Paspor
+                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                        *
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                      placeholder="Masukkan ktp/passpor"
+                      id="ktpOrPasspor"
+                      value={namaLengkapPemesan}
+                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="font-bold" for="negaraPenerbit">
+                      Negara penerbit
+                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                        *
+                      </span>
+                    </label>
+                    <div className="relative">
+                      <FontAwesomeIcon
+                        icon={faChevronDown}
+                        className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
+                      />
+                      <select
+                        name="title-1"
+                        id="title1"
+                        value={penumpang.data.title}
+                        className="w-full cursor-pointer border outline-none relative appearance-none focus:border-secondary rounded-md h-10 px-3 mt-1 py-4"
+                      >
+                        <option>Singapore</option>
+                        <option>Amerika</option>
+                        <option>Indonesia</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <label className="font-bold block" for="berlakuSampai">
+                      Berlaku sampai
+                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                        *
+                      </span>
+                    </label>
+                    <div className="relative">
+                      <DatePicker
+                        monthYearSeparator="-"
+                        showOtherDays
+                        highlightToday={false}
+                        render={
+                          <input
+                            className="calendar w-full  block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                            id="berlakuSampai"
+                          />
+                        }
+                      />
+                      <FontAwesomeIcon
+                        icon={faCalendar}
+                        className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
+            <div className="bg-secondary text-white px-5 my-4 rounded-xl py-4">
+              <p className="text-base text-center">Simpan</p>
             </div>
           </div>
 
@@ -334,6 +418,9 @@ export default function CheckoutBiodataPemesan() {
                   <b>Total</b>
                   <b className="text-secondary">IDR 9.850.000</b>
                 </div>
+              </div>
+              <div className="bg-secondary text-white px-5 my-4 rounded-xl py-5">
+                <p className="text-base text-center">Lanjut bayar</p>
               </div>
             </div>
           </div>
