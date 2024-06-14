@@ -132,21 +132,24 @@ export const DepartureReturn = () => {
               style={customStyles}
               className="border-none absolute top-7   overflow-hidden"
             >
-              <Calendar
-                className="rounded-xl pb-3 px-4 pt-5"
-                value={departureReturn}
-                onChange={handleDateChange}
-                numberOfMonths={width < 650 ? 1 : 2}
-                monthYearSeparator="-"
-                range={isReturn}
-                showOtherDays
-                highlightToday={false}
-                format="DD MMMM YYYY"
-                weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
-                renderButton={renderButton}
-              >
-                <Close />
-              </Calendar>
+              <div className="departure">
+                <Calendar
+                  className="rounded-xl pb-3 px-4 pt-5"
+                  value={departureReturn}
+                  onChange={handleDateChange}
+                  numberOfMonths={width < 650 ? 1 : 2}
+                  monthYearSeparator="-"
+                  range={isReturn}
+                  showOtherDays
+                  disableYearPicker
+                  highlightToday={false}
+                  format="DD MMMM YYYY"
+                  weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
+                  renderButton={renderButton}
+                >
+                  <Close />
+                </Calendar>
+              </div>
             </ReactModal>
           </div>
         </div>
