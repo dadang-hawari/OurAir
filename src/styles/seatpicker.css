@@ -1,27 +1,20 @@
 /* src/SeatPicker.css */
 .seat-picker {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px;
-}
-
-.row {
-  display: flex;
+  @apply max-w-[336px] w-full mx-auto flex gap-1 flex-wrap items-center justify-center select-none;
 }
 
 .seat {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #000;
-  margin: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  @apply w-10 h-10 m-1 flex justify-center items-center rounded-md cursor-pointer;
+}
+
+.seat.available {
+  @apply text-white bg-gray-500;
+}
+
+.seat.unavailable {
+  @apply bg-[#D0D0D0] text-white cursor-not-allowed;
 }
 
 .seat.selected {
-  background-color: green;
-  color: white;
+  @apply bg-primary;
 }
