@@ -1,8 +1,6 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { setFlightsByCountry, setFligthLists, setFlightsByCity } from '../reducers/flightsReducer'
-const loadingMessage = 'Mohon tunggu sebentar..'
-const toastIdWait = 'toasWait'
 
 export const getAllFlights = () => async (dispatch) => {
   try {

@@ -85,9 +85,9 @@ export default function CheckoutBiodataPemesan() {
                 </h2>
                 <div className="w-full p-3 flex flex-col gap-y-4">
                   <div>
-                    <label className="font-bold" for="namaLengkapPenumpang1">
+                    <label className="font-bold" htmlFor="namaLengkapPenumpang1">
                       Nama Lengkap
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -101,9 +101,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="titlePenumpang1">
+                    <label className="font-bold" htmlFor="titlePenumpang1">
                       Nama Lengkap
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -117,7 +117,7 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="namaKeluarga">
+                    <label className="font-bold" htmlFor="namaKeluarga">
                       Nama Keluarga (opsional)
                     </label>
                     <input
@@ -130,9 +130,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="namaKeluarga">
+                    <label className="font-bold" htmlFor="namaKeluarga">
                       Nomor Telepon
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -164,9 +164,9 @@ export default function CheckoutBiodataPemesan() {
                         ></div>
                       </button>
                     </div>
-                    <label className="font-bold" for="namaKeluarga">
+                    <label className="font-bold" htmlFor="namaKeluarga">
                       Email
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -194,9 +194,9 @@ export default function CheckoutBiodataPemesan() {
                 </h2>
                 <div className="w-full p-3 flex flex-col gap-y-4">
                   <div>
-                    <label className="font-bold" for="namaLengkap">
+                    <label className="font-bold" htmlFor="namaLengkap">
                       Title
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -217,9 +217,9 @@ export default function CheckoutBiodataPemesan() {
                     </div>
                   </div>
                   <div>
-                    <label className="font-bold" for="namaLengkap">
+                    <label className="font-bold" htmlFor="namaLengkap">
                       Nama Lengkap
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -233,7 +233,7 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="namaKeluarga">
+                    <label className="font-bold" htmlFor="namaKeluarga">
                       Nama Keluarga (opsional)
                     </label>
                     <input
@@ -246,9 +246,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div className="relative">
-                    <label className="font-bold block" for="tanggalLahir">
+                    <label className="font-bold block" htmlFor="tanggalLahir">
                       Tanggal Lahir
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -271,9 +271,9 @@ export default function CheckoutBiodataPemesan() {
                     </div>
                   </div>
                   <div>
-                    <label className="font-bold" for="kewarganegaraan">
+                    <label className="font-bold" htmlFor="kewarganegaraan">
                       Kewarganegaraan
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -287,9 +287,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="ktpOrPasspor">
+                    <label className="font-bold" htmlFor="ktpOrPasspor">
                       KTP/Paspor
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -303,9 +303,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="negaraPenerbit">
+                    <label className="font-bold" htmlFor="negaraPenerbit">
                       Negara penerbit
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -327,9 +327,9 @@ export default function CheckoutBiodataPemesan() {
                     </div>
                   </div>
                   <div className="relative">
-                    <label className="font-bold block" for="berlakuSampai">
+                    <label className="font-bold block" htmlFor="berlakuSampai">
                       Berlaku sampai
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>

@@ -42,13 +42,27 @@ export default function SeatPicker() {
         { id: '3E', status: 'available', NamaPenumpang: '' },
         { id: '3F', status: 'available', NamaPenumpang: '' },
       ],
+      [
+        { id: '3A', status: 'available', NamaPenumpang: '' },
+        { id: '3B', status: 'available', NamaPenumpang: '' },
+        { id: '3C', status: 'available', NamaPenumpang: '' },
+        { id: '3D', status: 'available', NamaPenumpang: '' },
+        { id: '3E', status: 'available', NamaPenumpang: '' },
+        { id: '3F', status: 'available', NamaPenumpang: '' },
+      ],
+      [
+        { id: '3A', status: 'available', NamaPenumpang: '' },
+        { id: '3B', status: 'available', NamaPenumpang: '' },
+        { id: '3C', status: 'available', NamaPenumpang: '' },
+        { id: '3D', status: 'available', NamaPenumpang: '' },
+        { id: '3E', status: 'available', NamaPenumpang: '' },
+        { id: '3F', status: 'available', NamaPenumpang: '' },
+      ],
     ],
   }
 
   useEffect(() => {
-    // Simulasi request data dari backend tanpa fetch
     const fetchData = async () => {
-      // Simulasi respons dari backend
       const result = data
       setSeats(result.seats)
     }
@@ -75,26 +89,26 @@ export default function SeatPicker() {
 
   return (
     <div className="seat-picker overflow-x-auto">
-      <div className="flex gap-x-1 items-center w-full justify-between bg-red-500">
-        <div className="flex w-full gap-1 justify-center items-center">
-          <h2 className="h-10 w-10 flex items-center justify-center bg-red-50 ">A</h2>
-          <h2 className="h-10 w-10 flex items-center justify-center ">B</h2>
-          <h2 className="h-10 w-10 flex items-center justify-center ">C</h2>
+      <div className="seat-row flex gap-x-1 items-center w-full">
+        <div className="w-full flex gap-x-1 items-center">
+          <div className="seat-heading">A</div>
+          <div className="seat-heading">B</div>
+          <div className="seat-heading">C</div>
         </div>
-        <div className="w-4 h-9 mx-1">d</div>
-        <div className="flex w-full gap-1 justify-center items-center">
-          <h2 className="h-10 w-10 flex items-center justify-center bg-blue-500">D</h2>
-          <h2 className="h-10 w-10 flex items-center justify-center ">E</h2>
-          <h2 className="h-10 w-10 flex items-center justify-center ">F</h2>
+        <h2 className={' w-10 h-9 mx-1'}></h2>
+        <div className="w-full flex gap-x-1 items-center">
+          <div className="seat-heading">D</div>
+          <div className="seat-heading">E</div>
+          <div className="seat-heading">F</div>
         </div>
       </div>
       {seats.map((row, rowIndex) => (
         <>
-          <div key={rowIndex} className="seat-row flex gap-x-1 items-center bg-red-500">
+          <div key={rowIndex} className="seat-row flex gap-x-1 items-center">
             {row.map((seat, i) => {
               const seatIndex = selectedSeats.indexOf(seat.id)
               const seatLabel =
-                seatIndex >= 0 ? `P${seatIndex + 1}` : seat.status === 'unavailable' ? 'X' : seat.id
+                seatIndex >= 0 ? `P${seatIndex + 1}` : seat.status === 'unavailable' ? 'X' : ''
               return (
                 <>
                   <h2

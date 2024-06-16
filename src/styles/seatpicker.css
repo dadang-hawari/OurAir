@@ -6,6 +6,9 @@
 .seat {
   @apply w-10 h-10 m-1 flex justify-center items-center rounded-md cursor-pointer;
 }
+.seat-heading {
+  @apply w-10 h-10 m-1 flex justify-center items-center;
+}
 
 .seat.available {
   @apply text-white bg-gray-500;
