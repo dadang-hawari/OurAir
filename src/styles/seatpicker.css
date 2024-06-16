@@ -1,0 +1,23 @@
+/* src/SeatPicker.css */
+.seat-picker {
+  @apply max-w-[336px] w-full mx-auto flex gap-1 flex-wrap items-center justify-center select-none;
+}
+
+.seat {
+  @apply w-10 h-10 m-1 flex justify-center items-center rounded-md cursor-pointer;
+}
+.seat-heading {
+  @apply w-10 h-10 m-1 flex justify-center items-center;
+}
+
+.seat.available {
+  @apply text-white bg-gray-500;
+}
+
+.seat.unavailable {
+  @apply bg-[#D0D0D0] text-white cursor-not-allowed;
+}
+
+.seat.selected {
+  @apply bg-primary;
+}

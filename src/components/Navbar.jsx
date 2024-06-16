@@ -5,8 +5,8 @@ import Logo from '/assets/images/logo.webp'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignInAlt, faList, faArrowLeft, faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 import { logout } from '../redux/actions/authAction'
-import iconFaBell from '../../public/assets/images/fi_bell.svg'
-import iconFaUser from '../../public/assets/images/fi_user.svg'
+import iconFaBell from '/assets/images/fi_bell.svg'
+import iconFaUser from '/assets/images/fi_user.svg'
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false)

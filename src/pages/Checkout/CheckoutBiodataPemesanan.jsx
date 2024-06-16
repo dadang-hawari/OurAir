@@ -11,6 +11,7 @@ import {
 import { useSelector } from 'react-redux'
 import { data } from 'autoprefixer'
 import DatePicker from 'react-multi-date-picker'
+import SeatPicker from '../../components/SeatPicker'
 
 export default function CheckoutBiodataPemesan() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -85,9 +86,9 @@ export default function CheckoutBiodataPemesan() {
                 </h2>
                 <div className="w-full p-3 flex flex-col gap-y-4">
                   <div>
-                    <label className="font-bold" for="namaLengkapPenumpang1">
+                    <label className="font-bold" htmlFor="namaLengkapPenumpang1">
                       Nama Lengkap
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -101,9 +102,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="titlePenumpang1">
+                    <label className="font-bold" htmlFor="titlePenumpang1">
                       Nama Lengkap
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -117,7 +118,7 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="namaKeluarga">
+                    <label className="font-bold" htmlFor="namaKeluarga">
                       Nama Keluarga (opsional)
                     </label>
                     <input
@@ -130,9 +131,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="namaKeluarga">
+                    <label className="font-bold" htmlFor="namaKeluarga">
                       Nomor Telepon
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -164,9 +165,9 @@ export default function CheckoutBiodataPemesan() {
                         ></div>
                       </button>
                     </div>
-                    <label className="font-bold" for="namaKeluarga">
+                    <label className="font-bold" htmlFor="namaKeluarga">
                       Email
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -194,9 +195,9 @@ export default function CheckoutBiodataPemesan() {
                 </h2>
                 <div className="w-full p-3 flex flex-col gap-y-4">
                   <div>
-                    <label className="font-bold" for="namaLengkap">
+                    <label className="font-bold" htmlFor="namaLengkap">
                       Title
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -217,9 +218,9 @@ export default function CheckoutBiodataPemesan() {
                     </div>
                   </div>
                   <div>
-                    <label className="font-bold" for="namaLengkap">
+                    <label className="font-bold" htmlFor="namaLengkap">
                       Nama Lengkap
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -233,7 +234,7 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="namaKeluarga">
+                    <label className="font-bold" htmlFor="namaKeluarga">
                       Nama Keluarga (opsional)
                     </label>
                     <input
@@ -246,9 +247,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div className="relative">
-                    <label className="font-bold block" for="tanggalLahir">
+                    <label className="font-bold block" htmlFor="tanggalLahir">
                       Tanggal Lahir
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -271,9 +272,9 @@ export default function CheckoutBiodataPemesan() {
                     </div>
                   </div>
                   <div>
-                    <label className="font-bold" for="kewarganegaraan">
+                    <label className="font-bold" htmlFor="kewarganegaraan">
                       Kewarganegaraan
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -287,9 +288,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="ktpOrPasspor">
+                    <label className="font-bold" htmlFor="ktpOrPasspor">
                       KTP/Paspor
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -303,9 +304,9 @@ export default function CheckoutBiodataPemesan() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold" for="negaraPenerbit">
+                    <label className="font-bold" htmlFor="negaraPenerbit">
                       Negara penerbit
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -327,9 +328,9 @@ export default function CheckoutBiodataPemesan() {
                     </div>
                   </div>
                   <div className="relative">
-                    <label className="font-bold block" for="berlakuSampai">
+                    <label className="font-bold block" htmlFor="berlakuSampai">
                       Berlaku sampai
-                      <span class="text-red-500 font-normal" title="Perlu diisi">
+                      <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
                       </span>
                     </label>
@@ -354,6 +355,21 @@ export default function CheckoutBiodataPemesan() {
                 </div>
               </div>
             </div>
+
+            {/* Kursi */}
+
+            <div className="border rounded-md h-fit my-8 p-5 w-full">
+              <b className="text-xl mb-3 block">Isi Data Penumpang</b>
+              <div className="w-full text-gray-secondary">
+                <h2 className="bg-gray-700 text-white text-center rounded-t-md p-2 text-[600]">
+                  Economy - 72 Kursi Tersedia
+                </h2>
+                <div className="w-full p-3 flex flex-col gap-y-4">
+                  <SeatPicker />
+                </div>
+              </div>
+            </div>
+
             <div className="bg-secondary text-white px-5 my-4 rounded-xl py-4">
               <p className="text-base text-center">Simpan</p>
             </div>

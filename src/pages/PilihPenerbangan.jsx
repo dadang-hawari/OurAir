@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react'
 import ReactModal from 'react-modal'
 import { customStylesFilter } from '../styles/customStyles'
 import { useDispatch, useSelector } from 'react-redux'
-import { getFlightsByCity } from '../redux/actions/flightsAction'
+import { getFlightByCityorCountry, getFlightsByCity } from '../redux/actions/flightsAction'
 
 export default function PilihPenerbangan() {
   const location = useLocation()
@@ -31,10 +31,12 @@ export default function PilihPenerbangan() {
   const [selectedFilter, setSelectedFilter] = useState('Filter')
   const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
   const listFlights = useSelector((state) => state?.flightLists?.flightsByCity?.flights)
-  const kotaKeberangkatan = jadwalPenerbangan?.kotaKeberangkatan
-  const kotaTujuan = jadwalPenerbangan?.kotaTujuan
+  const kotaKeberangkatan = jadwalPenerbangan?.departureCity
+  const kotaTujuan = jadwalPenerbangan?.departureCity
+  console.log('jadwalPenerbssangan', kotaKeberangkatan)
   useEffect(() => {
-    dispatch(getFlightsByCity(kotaKeberangkatan)).then(() => {
+    dispatch(getFlightByCityorCountry(kotaKeberangkatan)).then(() => {
+      console.log('kotaKeberangkatan', kotaKeberangkatan)
       setIsLoading(false)
     })
   }, [])
@@ -45,7 +47,6 @@ export default function PilihPenerbangan() {
   console.log('jadwalPenerbangan', jadwalPenerbangan)
   const dispatch = useDispatch()
 
-  console.log('listFlights', listFlights)
   const openModal = () => {
     setIsModalOpen(true)
   }
@@ -53,7 +54,6 @@ export default function PilihPenerbangan() {
     setIsModalOpen(false)
   }
   const [filteredFlights, setFilteredFlights] = useState(listFlights)
-  console.log('filteredFlights', filteredFlights)
 
   const toggleDetailVisibility = (id) => {
     setActiveDetailId((prevId) => (prevId === id ? null : id))
@@ -229,7 +229,7 @@ export default function PilihPenerbangan() {
             </div>
           ) : (
             <div className="flex flex-col gap-y-4 w-full">
-              {filteredFlights?.map((flight, i) => (
+              {(filteredFlights ? filteredFlights : listFlights).map((flight, i) => (
                 <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={i}>
                   <div className="flex items-center">
                     <FontAwesomeIcon
