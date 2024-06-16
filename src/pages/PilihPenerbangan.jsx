@@ -217,7 +217,7 @@ export default function PilihPenerbangan() {
             </div>
           ) : (
             <div className="flex flex-col gap-y-4 w-full">
-              {(filteredFlights ? filteredFlights : listFlights).map((flight, i) => (
+              {listFlights.map((flight, i) => (
                 <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={i}>
                   <div className="flex items-center">
                     <FontAwesomeIcon
@@ -289,7 +289,8 @@ export default function PilihPenerbangan() {
                     <div className="ps-5">
                       <hr className="w-1/2 mx-auto my-4" />
                       <b className="block">
-                        {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} - Economy
+                        {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} -{' '}
+                        {flight?.class === 'FIRSTCLASS' ? 'First Class' : 'Ekonomi'}
                       </b>
 
                       <b>{flight?.whomAirplaneFlights?.airplane_code}</b>
