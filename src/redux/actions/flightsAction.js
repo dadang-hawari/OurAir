@@ -19,14 +19,16 @@ export const getAllFlights = () => async (dispatch) => {
   }
 }
 
-export const getFlightByCityorCountry = (country) => async (dispatch) => {
+export const getFlightByCityorCountry = (airport) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_DOMAIN_API}/api/v1/flights/search-city-or-country?country=${country}`
+      `${
+        import.meta.env.VITE_DOMAIN_API_DEV
+      }/api/v1/flights/search-city-or-country-by-date-to-from?fromairport=${airport}`
     )
     const data = response.data.data
     if (response.status === 200 || response.status === 201) {
-      dispatch(setFlightsByCountry(data))
+      dispatch(setFlightsByCity(data))
     }
     console.log('response flight :>> ', data)
   } catch (error) {
@@ -41,6 +43,8 @@ export const getFlightsByCity = (city) => async (dispatch) => {
       }/api/v1/flights/search-city-or-country?city=${city}&limit=10`
     )
     const data = response.data.data
+    console.log('response', response)
+    alert('excute by city')
     if (response.status === 200 || response.status === 201) {
       dispatch(setFlightsByCity(data))
     }

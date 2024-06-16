@@ -14,7 +14,7 @@ import Notification from './pages/Notification'
 import Tentang from './pages/Tentang'
 import MenungguPembayaran from './pages/Checkout/MenungguPembayaran'
 import PembayaranSukses from './pages/Checkout/PembayaranSukses'
-import SeatPicker from './SeatPicker'
+import SeatPicker from './components/SeatPicker'
 
 export default function Route() {
   const router = createBrowserRouter([

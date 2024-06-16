@@ -11,6 +11,7 @@ import {
 import { useSelector } from 'react-redux'
 import { data } from 'autoprefixer'
 import DatePicker from 'react-multi-date-picker'
+import SeatPicker from '../../components/SeatPicker'
 
 export default function CheckoutBiodataPemesan() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -354,6 +355,21 @@ export default function CheckoutBiodataPemesan() {
                 </div>
               </div>
             </div>
+
+            {/* Kursi */}
+
+            <div className="border rounded-md h-fit my-8 p-5 w-full">
+              <b className="text-xl mb-3 block">Isi Data Penumpang</b>
+              <div className="w-full text-gray-secondary">
+                <h2 className="bg-gray-700 text-white text-center rounded-t-md p-2 text-[600]">
+                  Economy - 72 Kursi Tersedia
+                </h2>
+                <div className="w-full p-3 flex flex-col gap-y-4">
+                  <SeatPicker />
+                </div>
+              </div>
+            </div>
+
             <div className="bg-secondary text-white px-5 my-4 rounded-xl py-4">
               <p className="text-base text-center">Simpan</p>
             </div>
