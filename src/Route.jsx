@@ -15,6 +15,7 @@ import Tentang from './pages/Tentang'
 import MenungguPembayaran from './pages/Checkout/MenungguPembayaran'
 import PembayaranSukses from './pages/Checkout/PembayaranSukses'
 import SeatPicker from './components/SeatPicker'
+import ScrollToTop from './components/common/ScrollToTop'
 
 export default function Route() {
   const router = createBrowserRouter([
@@ -27,7 +28,7 @@ export default function Route() {
       element: <SeatPicker />,
     },
     {
-      path: `/otp`,
+      path: '/otp',
       element: <OTP />,
     },
     {
@@ -71,7 +72,7 @@ export default function Route() {
       element: <PembayaranSukses />,
     },
     {
-      path: '/Notification',
+      path: '/notification',
       element: <Notification />,
     },
     {
@@ -84,5 +85,9 @@ export default function Route() {
     },
   ])
 
-  return <RouterProvider router={router} />
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
+  )
 }

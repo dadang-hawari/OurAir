@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Navbar from '../../components/Navbar'
 import ReactModal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -257,6 +257,7 @@ export default function CheckoutBiodataPemesan() {
                       <DatePicker
                         monthYearSeparator="-"
                         showOtherDays
+                        format="YYYY-MM-DD"
                         highlightToday={false}
                         render={
                           <input

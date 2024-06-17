@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -22,24 +22,61 @@ import ReactModal from 'react-modal'
 import { customStylesFilter } from '../styles/customStyles'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFlightByCityorCountry, getFlightsByCity } from '../redux/actions/flightsAction'
+import { PenerbanganNotFound } from '../components/HasilCariPenerbangan/PenerbanganNotFound'
+import { checkLocationState } from '../utils/checkLocationState'
 
 export default function PilihPenerbangan() {
   const location = useLocation()
+  const navigate = useNavigate()
   const data = location?.state?.searchValue
   const [activeDetailId, setActiveDetailId] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState('Filter')
-  const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
   const listFlights = useSelector((state) => state?.flightLists?.flightsByCity?.flights)
+  const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
   const kotaKeberangkatan = jadwalPenerbangan?.departureCity
-  const kotaTujuan = jadwalPenerbangan?.departureCity
-  console.log('jadwalPenerbssangan', kotaKeberangkatan)
+  const kotaTujuan = jadwalPenerbangan?.arrivalCity
+  const tanggalBerangkat = jadwalPenerbangan?.tanggalBerangkatKembali[0]
+  const tanggalKembali = jadwalPenerbangan?.tanggalBerangkatKembali[1]
+
+  const kelas = jadwalPenerbangan?.kelas
+  console.log('tanggalBerangkat', kotaKeberangkatan)
+
   useEffect(() => {
-    dispatch(getFlightByCityorCountry(kotaKeberangkatan)).then(() => {
-      console.log('kotaKeberangkatan', kotaKeberangkatan)
+    checkLocationState(location, navigate)
+    getFlights()
+  }, [])
+
+  // Fungsi untuk mengubah format tanggal dari DD MMMM YYYY ke YYYY-MM-DD
+  const convertDateFormat = (dateString) => {
+    if (dateString === 'Jadwal Kembali') return
+
+    const date = new Date(dateString)
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0') // Bulan dimulai dari 0, jadi tambahkan 1
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  const getFlights = () => {
+    const formattedTanggalBerangkat = convertDateFormat(tanggalBerangkat)
+    const formattedTanggalKembali = convertDateFormat(tanggalKembali)
+
+    console.log('formattedtanggalBerangkat :>> ', formattedTanggalBerangkat)
+
+    dispatch(
+      getFlightByCityorCountry(
+        kotaKeberangkatan,
+        kotaTujuan,
+        kelas.name,
+        formattedTanggalBerangkat,
+        formattedTanggalKembali
+      )
+    ).then(() => {
+      console.log('kotaTuju', kotaTujuan)
       setIsLoading(false)
     })
-  }, [])
+  }
   const tanggalKeberangkatan = jadwalPenerbangan?.tanggalBerangkatKembali[0]
   const tanggalSampai = jadwalPenerbangan?.tanggalBerangkatKembali[1]
   console.log('tanggalKeberangkatan,tanggalSampai', tanggalKeberangkatan, tanggalSampai)
@@ -68,7 +105,7 @@ export default function PilihPenerbangan() {
   }
 
   const SkeletonLoading = ({ loop = 10 }) => {
-    const skeletons = Array.from({ length: loop }).map((_, index) => (
+    const skeletons = Array.from({ length: loop })?.map((_, index) => (
       <div key={index} className="border animate-pulse w-full rounded-xl px-3 pt-4 pb-5 h-fit mb-4">
         <div className="flex items-center mt-2">
           <div className="h-4 w-44 bg-gray-300 rounded-xl"></div>
@@ -229,118 +266,113 @@ export default function PilihPenerbangan() {
             </div>
           ) : (
             <div className="flex flex-col gap-y-4 w-full">
-              {listFlights.map((flight, i) => (
-                <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={i}>
-                  <div className="flex items-center">
-                    <FontAwesomeIcon
-                      icon={faIcons}
-                      className="ps-1 mr-1 text-yellow-300 text-xs font-[600]"
-                    />{' '}
-                    <h4 className="font-[600]">
-                      {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name}
-                    </h4>
-                  </div>
-                  <div className="flex gap-x-10 items-center text-sm">
-                    <div className="flex justify-center gap-x-4 w-full p-3">
-                      <div>
-                        <h4 className="font-bold">{formatTimeToHM(flight?.departure_time)}</h4>
-                        <p>{flight?.fromAirport?.cityCode}</p>
-                      </div>
-                      <div className="text-gray-300 w-full text-center relative">
-                        <h4>
-                          {' '}
-                          {(new Date(flight?.arrival_time) - new Date(flight?.departure_time)) /
-                            (1000 * 60 * 60)}
-                          h 0m
-                        </h4>
-                        <hr className="before:content-['>'] before:absolute before:-right-[2px] before:top-[21px] before:-translate-y-1/2" />
-                        <p>Langsung</p>
-                      </div>
-                      <div>
-                        <h4 className="font-bold">{formatTimeToHM(flight?.arrival_time)}</h4>
-                        <p>{flight?.toAirport?.cityCode}</p>
-                      </div>
+              {listFlights?.length > 0 ? (
+                listFlights?.map((flight, i) => (
+                  <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={i}>
+                    <div className="flex items-center">
                       <FontAwesomeIcon
-                        icon={faSuitcase}
-                        className="text-secondary flex self-center mx-3"
-                      />
+                        icon={faIcons}
+                        className="ps-1 mr-1 text-yellow-300 text-xs font-[600]"
+                      />{' '}
+                      <h4 className="font-[600]">
+                        {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name}
+                      </h4>
                     </div>
-                    <div className="flex justify-center gap-y-2 flex-col">
-                      <b className="text-secondary w-max">
-                        IDR {flight?.ticket_price?.toLocaleString('id-ID')}
-                      </b>
-                      <button className="bg-secondary text-white max-w-[100px] w-full rounded-full py-1">
-                        Pilih
-                      </button>
-                      <button
-                        className="text-primary font-[600] mt-1"
-                        onClick={() => toggleDetailVisibility(flight?.id)}
-                      >
+                    <div className="flex gap-x-10 items-center text-sm">
+                      <div className="flex justify-center gap-x-4 w-full p-3">
+                        <div>
+                          <h4 className="font-bold">{formatTimeToHM(flight?.departure_time)}</h4>
+                          <p>{flight?.fromAirport?.cityCode}</p>
+                        </div>
+                        <div className="text-gray-300 w-full text-center relative">
+                          <h4>
+                            {' '}
+                            {(new Date(flight?.arrival_time) - new Date(flight?.departure_time)) /
+                              (1000 * 60 * 60)}
+                            h 0m
+                          </h4>
+                          <hr className="before:content-['>'] before:absolute before:-right-[2px] before:top-[21px] before:-translate-y-1/2" />
+                          <p>Langsung</p>
+                        </div>
+                        <div>
+                          <h4 className="font-bold">{formatTimeToHM(flight?.arrival_time)}</h4>
+                          <p>{flight?.toAirport?.cityCode}</p>
+                        </div>
                         <FontAwesomeIcon
-                          icon={activeDetailId === flight?.id ? faChevronUp : faChevronDown}
-                        />{' '}
-                        Detail
-                      </button>
-                    </div>
-                  </div>
-                  {/* Detail Penerbangan */}
-                  <div
-                    className={`text-sm px-4 overflow-hidden transition-all duration-500 ${
-                      activeDetailId === flight?.id ? 'max-h-screen' : 'max-h-0'
-                    }`}
-                  >
-                    <hr className="my-3" />
-                    <h4 className="font-bold text-primary my-2">Detail Penerbangan</h4>
-                    <div className="flex justify-between text-sm">
-                      <b className="text-base">{formatTimeToHM(flight?.departure_time)}</b>
-
-                      <b className="text-soft-blue">Keberangkatan</b>
-                    </div>
-                    <p className="my-1">{formatTimeToIndonesia(flight?.departure_time)}</p>
-                    <b className="font-[600]">{flight?.fromAirport?.name}</b>
-                    <div className="ps-5">
-                      <hr className="w-1/2 mx-auto my-4" />
-                      <b className="block">
-                        {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} -{' '}
-                        {flight?.class === 'FIRSTCLASS' ? 'First Class' : 'Ekonomi'}
-                      </b>
-
-                      <b>{flight?.whomAirplaneFlights?.airplane_code}</b>
-                      <div className="relative">
-                        <FontAwesomeIcon
-                          icon={faIcons}
-                          className="absolute -left-5 top-[3px] text-yellow-400"
+                          icon={faSuitcase}
+                          className="text-secondary flex self-center mx-3"
                         />
-                        <b>Informasi:</b>
-                        <ul className="flex flex-col">
-                          <li>{flight?.whomAirplaneFlights?.baggage} kg</li>
-                          <li>{flight?.whomAirplaneFlights?.cabin_baggage} kg</li>
-                          <li>In Flight Entertainment</li>
-                        </ul>
+                      </div>
+                      <div className="flex justify-center gap-y-2 flex-col">
+                        <b className="text-secondary w-max">
+                          IDR {flight?.ticket_price?.toLocaleString('id-ID')}
+                        </b>
+                        <button
+                          className="bg-secondary text-white max-w-[100px] w-full rounded-full py-1"
+                          onClick={() => handleClickPilih()}
+                        >
+                          Pilih
+                        </button>
+                        <button
+                          className="text-primary font-[600] mt-1"
+                          onClick={() => toggleDetailVisibility(flight?.id)}
+                        >
+                          <FontAwesomeIcon
+                            icon={activeDetailId === flight?.id ? faChevronUp : faChevronDown}
+                          />{' '}
+                          Detail
+                        </button>
                       </div>
                     </div>
-                    <hr className="w-1/2 mx-auto my-4" />
-                    <div className="flex justify-between text-sm">
-                      <b className="text-base">{formatTimeToHM(flight?.arrival_time)}</b>
-                      <b className="text-soft-blue">Kedatangan</b>
-                    </div>
-                    <p className="my-1">{formatTimeToIndonesia(flight?.arrival_time)}</p>
-                    <b className="font-[600]">{flight?.toAirport?.name}</b>
-                  </div>
-                </div>
-              ))}
+                    {/* Detail Penerbangan */}
+                    <div
+                      className={`text-sm px-4 overflow-hidden transition-all duration-500 ${
+                        activeDetailId === flight?.id ? 'max-h-screen' : 'max-h-0'
+                      }`}
+                    >
+                      <hr className="my-3" />
+                      <h4 className="font-bold text-primary my-2">Detail Penerbangan</h4>
+                      <div className="flex justify-between text-sm">
+                        <b className="text-base">{formatTimeToHM(flight?.departure_time)}</b>
 
-              {/* Not found */}
-              <img
-                src="/assets/images/not-found-search.png"
-                alt="Tidak ditemukan"
-                className="max-w-64 w-full mx-auto h-auto"
-              />
-              <img
-                src="/assets/images/tiket-habis.png"
-                alt="Tiket Haibsn"
-                className="max-w-80 w-full mx-auto h-auto"
-              />
+                        <b className="text-soft-blue">Keberangkatan</b>
+                      </div>
+                      <p className="my-1">{formatTimeToIndonesia(flight?.departure_time)}</p>
+                      <b className="font-[600]">{flight?.fromAirport?.name}</b>
+                      <div className="ps-5">
+                        <hr className="w-1/2 mx-auto my-4" />
+                        <b className="block">
+                          {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} -{' '}
+                          {flight?.class === 'FIRSTCLASS' ? 'First Class' : 'Economy'}
+                        </b>
+
+                        <b>{flight?.whomAirplaneFlights?.airplane_code}</b>
+                        <div className="relative">
+                          <FontAwesomeIcon
+                            icon={faIcons}
+                            className="absolute -left-5 top-[3px] text-yellow-400"
+                          />
+                          <b>Informasi:</b>
+                          <ul className="flex flex-col">
+                            <li>{flight?.whomAirplaneFlights?.baggage} kg</li>
+                            <li>{flight?.whomAirplaneFlights?.cabin_baggage} kg</li>
+                            <li>In Flight Entertainment</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <hr className="w-1/2 mx-auto my-4" />
+                      <div className="flex justify-between text-sm">
+                        <b className="text-base">{formatTimeToHM(flight?.arrival_time)}</b>
+                        <b className="text-soft-blue">Kedatangan</b>
+                      </div>
+                      <p className="my-1">{formatTimeToIndonesia(flight?.arrival_time)}</p>
+                      <b className="font-[600]">{flight?.toAirport?.name}</b>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <PenerbanganNotFound />
+              )}
             </div>
           )}
         </div>
