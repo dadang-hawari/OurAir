@@ -11,10 +11,12 @@ import {
   faSearch,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
+
+import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import ReactModal from 'react-modal'
 import { customStyles, customStylesFilter } from '../styles/customStyles'
 export default function RiwayatPemesanan() {
@@ -23,6 +25,13 @@ export default function RiwayatPemesanan() {
   const [statusFilter, setStatusFilter] = useState('Semua Status')
 
   ReactModal.setAppElement('#modal')
+
+  const printRef = useRef()
+
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: 'ticket.ourAir',
+  })
 
   const openModal = () => {
     setIsModalOpen(true)
@@ -231,73 +240,80 @@ export default function RiwayatPemesanan() {
 
           {/* Detail Pesanan */}
           <div className="w-full md:max-w-[376px]">
-            {/* Paid */}
-            <div className="w-full">
-              <div className="flex justify-between mt-2">
-                <h2 className="font-bold text-xl">Detail Pesanan</h2>
-                <span className="bg-[#73CA5C] py-1 px-3 text-white rounded-full">Issued</span>
-              </div>
-              <div className="my-2">
-                Booking Code: <span className="text-secondary font-bold">6723y2GH3</span>
-              </div>
-              <div className="flex justify-between">
-                <b className="font-bold">19:10</b>
-                <b className="text-blue-400 text-xs">Keberangkatan</b>
-              </div>
-              <p className="my-1">5 Maret 2023</p>
-              <b className="font-[600]">Soekarno Hatta - Terminal 1A Domestik</b>
-              <div className="text-sm">
-                <hr className="w-[95%] mx-auto my-3 " />
-                <div className="flex items-center gap-x-2">
-                  <FontAwesomeIcon icon={faIcons} className="text-yellow-400" />
-                  <div className="w-full">
-                    <div className="font-bold">
-                      <h4>Jet Air - Economy</h4>
-                      <h5>JT- 203</h5>
+            {/* Detail Pesanan */}
+            <div className="w-full md:max-w-[376px] bg-white p-4 rounded-lg shadow-md">
+              <div ref={printRef} className="p-4">
+                <div className="w-full">
+                  <div className="flex justify-between mt-2">
+                    <h2 className="font-bold text-xl">Detail Pesanan</h2>
+                    <span className="bg-[#73CA5C] py-1 px-3 text-white rounded-full">Issued</span>
+                  </div>
+                  <div className="my-2">
+                    Booking Code: <span className="text-secondary font-bold">6723y2GH3</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <b className="font-bold">19:10</b>
+                    <b className="text-secondary text-xs">Keberangkatan</b>
+                  </div>
+                  <p className="my-1">5 Maret 2023</p>
+                  <b className="font-[600]">Soekarno Hatta - Terminal 1A Domestik</b>
+                  <div className="text-sm">
+                    <hr className="w-[95%] mx-auto my-3" />
+                    <div className="flex items-center gap-x-2">
+                      <div className="w-full">
+                        <div className="font-bold">
+                          <h4>Jet Air - Economy</h4>
+                          <h5>JT-203</h5>
+                        </div>
+                        <div>
+                          <b>Informasi:</b>
+                          <p className="text-secondary font-[600]">Penumpang 1: Mr. Harr</p>
+                          <p>ID: 12344</p>
+                          <p className="text-secondary font-[600]">Penumpang 2: Miss her</p>
+                          <p>ID: 12341243423</p>
+                        </div>
+                      </div>
                     </div>
+                    <hr className="w-[95%] mx-auto my-3" />
                     <div>
-                      <b>Informasi:</b>
-                      <p className="text-secondary font-[600]">Penumpang 1: Mr. Harr</p>
-                      <p>ID: 12344</p>
-                      <p className="text-secondary font-[600]">Penumpang 2: Miss her</p>
-                      <p>ID: 12341243423</p>
+                      <div className="flex justify-between">
+                        <h3 className="font-bold">21:10</h3>
+                        <b className="text-secondary">Kedatangan</b>
+                      </div>
+                      <h4>5 Maret 2023</h4>
+                      <h5 className="font-[600]">Melbourne International Airport</h5>
+                    </div>
+                    <hr className="w-[95%] mx-auto my-3" />
+                    <div className="w-[95%]">
+                      <b>Rincian Harga</b>
+                      <div className="flex justify-between">
+                        <span>2 Orang Dewasa</span>
+                        <span>IDR 9.550.000</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>1 Bayi</span>
+                        <span>IDR 0</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Pajak</span>
+                        <span>IDR 300.000</span>
+                      </div>
+                    </div>
+                    <hr className="w-[95%] mx-auto my-3" />
+                    <div className="flex justify-between text-base">
+                      <b>Total</b>
+                      <b className="text-secondary">IDR 9.850.000</b>
                     </div>
                   </div>
                 </div>
-                <hr className="w-[95%] mx-auto my-3 " />
-                <div>
-                  <div className="flex justify-between">
-                    <h3 className="font-bold">21:10</h3>
-                    <b className="text-blue-400">Kedatangan</b>
-                  </div>
-                  <h4>5 Maret 2023</h4>
-                  <h5 className="font-[600]">Melbourne International Airport</h5>
-                </div>
-                <hr className="w-[95%] mx-auto my-3 " />
-                <div className="w-[95%]">
-                  <b>Rincian Harga</b>
-                  <div className="flex justify-between">
-                    <span>2 Orang Dewasa</span>
-                    <span>IDR 9.550.00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>1 Bayi</span>
-                    <span>IDR 0</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Pajak</span>
-                    <span>IDR 300.000</span>
-                  </div>
-                </div>
-                <hr className="w-[95%] mx-auto my-3 " />
-                <div className="flex justify-between text-base">
-                  <b>Total</b>
-                  <b className="text-secondary">IDR 9.850.000</b>
-                </div>
-                <button className="mt-3 text-xl font-[600] bg-secondary text-white rounded-md w-full h-[62px]">
-                  Cetak Tiket
-                </button>
               </div>
+
+              <button
+                onClick={handlePrint}
+                className="mt-3 text-xl font-[600] bg-secondary hover:bg-blue-600 text-white rounded-md w-full h-[62px]"
+              >
+                Cetak Tiket
+              </button>
             </div>
             {/* Unpaid */}
             <div className="w-full mt-5">
@@ -310,7 +326,7 @@ export default function RiwayatPemesanan() {
               </div>
               <div className="flex justify-between">
                 <b className="font-bold">19:10</b>
-                <b className="text-blue-400 text-xs">Keberangkatan</b>
+                <b className="text-secondary text-xs">Keberangkatan</b>
               </div>
               <p className="my-1">5 Maret 2023</p>
               <b className="font-[600]">Soekarno Hatta - Terminal 1A Domestik</b>
@@ -336,7 +352,7 @@ export default function RiwayatPemesanan() {
                 <div>
                   <div className="flex justify-between">
                     <h3 className="font-bold">21:10</h3>
-                    <b className="text-blue-400">Kedatangan</b>
+                    <b className="text-secondary">Kedatangan</b>
                   </div>
                   <h4>5 Maret 2023</h4>
                   <h5 className="font-[600]">Melbourne International Airport</h5>
