@@ -8,18 +8,20 @@ import authReducer from './reducers/authReducer'
 import otpReducer from './reducers/otpReducers'
 import jadwalPenerbanganReducer from './reducers/jadwalPenerbanganReducer'
 import flightsReducer from './reducers/flightsReducer'
+import checkoutReducer from './reducers/checkoutReducer'
 
 const rootReducers = combineReducers({
   auth: authReducer,
   otp: otpReducer,
   jadwalPenerbangan: jadwalPenerbanganReducer,
   flightLists: flightsReducer,
+  checkout: checkoutReducer
 })
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['otp', 'auth', 'jadwalPenerbangan'],
+  whitelist: ['otp', 'auth', 'jadwalPenerbangan', 'checkout'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducers)

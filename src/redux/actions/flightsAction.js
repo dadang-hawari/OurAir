@@ -38,10 +38,8 @@ export const getFlightByCityorCountry =
           import.meta.env.VITE_DOMAIN_API_DEV
         }/api/v1/flights/search?fromairport=${fromairport}&toairport=${toairport}&class=${
           kelas === 'First Class' ? 'firstclass' : kelas
-        }&startDate=${startDate}&endDate='${endDate}'
-        `
-      )
-
+        }${startDate ? `&startDate=${startDate}` : ''}${endDate ? `&endDate=${endDate}` : ''}`
+      );
       const data = response.data.data
       if (response?.status === 200 || response?.status === 201) {
         dispatch(setFlightsByCity(data))

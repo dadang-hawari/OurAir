@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getFlightByCityorCountry, getFlightsByCity } from '../redux/actions/flightsAction'
 import { PenerbanganNotFound } from '../components/HasilCariPenerbangan/PenerbanganNotFound'
 import { checkLocationState } from '../utils/checkLocationState'
+import { setIdFlight } from '../redux/reducers/checkoutReducer'
 
 export default function PilihPenerbangan() {
   const location = useLocation()
@@ -49,8 +50,8 @@ export default function PilihPenerbangan() {
 
   // Fungsi untuk mengubah format tanggal dari DD MMMM YYYY ke YYYY-MM-DD
   const convertDateFormat = (dateString) => {
-    if (dateString === 'Jadwal Kembali') return
-
+    if (dateString === 'Jadwal Kembali' || dateString==='Tanggal Berangkat') return
+alert('execute')
     const date = new Date(dateString)
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0') // Bulan dimulai dari 0, jadi tambahkan 1
@@ -105,11 +106,12 @@ export default function PilihPenerbangan() {
   }
 
   const handleClickPilih = (id) => {
-    navigate("/checkout-pemesanan", {
-      state: {
-        id
-      }
-    })
+    dispatch(
+      setIdFlight(id)
+    )
+    navigate("/checkout-pemesanan")
+     
+   
   }
 
   const SkeletonLoading = ({ loop = 10 }) => {
@@ -317,7 +319,7 @@ export default function PilihPenerbangan() {
                         </b>
                         <button
                           className="bg-secondary text-white max-w-[100px] w-full rounded-full py-1"
-                          onClick={() => handleClickPilih(flight?.toAirport?.airplane_id)}
+                          onClick={() => handleClickPilih(flight?.id)}
                         >
                           Pilih
                         </button>

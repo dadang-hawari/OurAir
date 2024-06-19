@@ -8,71 +8,69 @@ import {
   faChevronRight,
   faIcons,
 } from '@fortawesome/free-solid-svg-icons'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { data } from 'autoprefixer'
 import DatePicker from 'react-multi-date-picker'
 import SeatPicker from '../../components/SeatPicker'
+import { setPemesan, setPenumpang, setUseCurrentEmail, updateBerlakuSampai, updatePenumpang, updateTanggalLahir } from '../../redux/reducers/checkoutReducer'
+import { useLocation } from 'react-router-dom'
+import { getFlightById } from '../../redux/actions/checkoutAction'
 
 export default function CheckoutBiodataPemesan() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
+  const dataCheckout = useSelector((state)=> state?.checkout)
+  const flightId = dataCheckout?.idFlight
+  const pemesan = dataCheckout?.pemesan
+  const penumpang = dataCheckout?.penumpang
+  const useCurrentEmail = dataCheckout?.useCurrentEmail
+  const flightDetail = dataCheckout?.flightDetail
+  console.log('flightDetail', flightDetail)
+  const location = useLocation();
+  console.log('location', location)
+
   const jumlahPenumpang = useSelector((state) => state)
   console.log('jumlahPenumpang', jumlahPenumpang)
-  ReactModal.setAppElement('#modal')
-  const [pemesan, setPemesan] = useState({
-    data: {
-      namaLengkapPemesan: '',
-      namaKeluargaPemesan: '',
-      nomorTeleponPemesan: '',
-      emailPemesan: '',
-    },
-  })
-  const [useCurrentEmail, setUseCurrentEmail] = useState(false)
+  const dispatch = useDispatch();
 
-  const penumpangSaatIni = 3
-  const [penumpang, setPenumpang] = useState([])
+    const penumpangSaatIni = 3
+    const setDataPenumpang = () => {
+      dispatch(setPenumpang(
+        Array.from({ length: penumpangSaatIni }, (_, index) => ({
+          id: `penumpang ${index + 1}`,
+          title: 'Mr.',
+          namaLengkap: '',
+          namaKeluarga: '',
+          tanggalLahir: '',
+          kewarganegaraan: '',
+          ktpOrPasspor: '',
+          negaraPenerbit: 'Singapore', // Misalnya defaultnya Singapore
+          berlakuSampai: '',
+        }))
+      ))
+    }
 
   useEffect(() => {
     // Inisialisasi state penumpang berdasarkan jumlah penumpangSaatIni
-    setPenumpang(
-      Array.from({ length: penumpangSaatIni }, (_, index) => ({
-        id: `penumpang ${index + 1}`,
-        title: 'Mr.',
-        namaLengkap: '',
-        namaKeluarga: '',
-        tanggalLahir: '',
-        kewarganegaraan: '',
-        ktpOrPasspor: '',
-        negaraPenerbit: 'Singapore', // Misalnya defaultnya Singapore
-        berlakuSampai: '',
-      }))
-    )
+    setDataPenumpang();
+    dispatch(getFlightById(flightId))
+    
+    
   }, [penumpangSaatIni])
 
   const handlePenumpang = (e, id) => {
-    const { name, value } = e.target
-    setPenumpang((prevPenumpang) =>
-      prevPenumpang.map((penumpang) =>
-        penumpang.id === id ? { ...penumpang, [name]: value } : penumpang
-      )
-    )
-  }
+    const { name, value } = e.target;
+    dispatch(updatePenumpang({ id, name, value }));
+    console.log('penumpang', penumpang)
+  };
 
   const handleTanggalLahirChange = (date, id) => {
-    setPenumpang((prevPenumpang) =>
-      prevPenumpang.map((penumpang) =>
-        penumpang.id === id ? { ...penumpang, tanggalLahir: date.format('YYYY-MM-DD') } : penumpang
-      )
-    )
-  }
+    dispatch(updateTanggalLahir({ id, date: date.format('YYYY-MM-DD') }));
+  };
 
   const handleBerlakuSampaiChange = (date, id) => {
-    setPenumpang((prevPenumpang) =>
-      prevPenumpang.map((penumpang) =>
-        penumpang.id === id ? { ...penumpang, berlakuSampai: date.format('YYYY-MM-DD') } : penumpang
-      )
-    )
-  }
+    dispatch(updateBerlakuSampai({ id, date: date.format('YYYY-MM-DD') }));
+  };
 
   const openModal = () => {
     setIsModalOpen(true)
@@ -83,15 +81,9 @@ export default function CheckoutBiodataPemesan() {
   }
 
   const handlePemesan = (e) => {
-    const { name, value } = e.target
-    setPemesan((prevPemesan) => ({
-      ...prevPemesan,
-      data: {
-        ...prevPemesan.data,
-        [name]: value,
-      },
-    }))
-  }
+    const { name, value } = e.target;
+    dispatch(setPemesan({ name, value }));
+  };
 
   return (
     <div>
@@ -134,7 +126,7 @@ export default function CheckoutBiodataPemesan() {
                       placeholder="Masukkan nama lengkap"
                       id="namaLengkapPemesan"
                       name="namaLengkapPemesan"
-                      value={pemesan.data.namaLengkap}
+                      value={pemesan.data.namaLengkapPemesan}
                       onChange={handlePemesan}
                     />
                   </div>
@@ -149,7 +141,7 @@ export default function CheckoutBiodataPemesan() {
                       placeholder="Masukkan nama keluarga"
                       id="namaKeluargaPemesan"
                       name="namaKeluargaPemesan"
-                      value={pemesan.data.namaKeluarga}
+                      value={pemesan.data.namaKeluargaPemesan}
                       onChange={handlePemesan}
                     />
                   </div>
@@ -175,7 +167,7 @@ export default function CheckoutBiodataPemesan() {
                     <div className="flex mb-2 justify-between">
                       <p>Gunakan email saat ini?</p>
                       <button
-                        onClick={() => setUseCurrentEmail(!useCurrentEmail)}
+                        onClick={() => dispatch(setUseCurrentEmail(!useCurrentEmail))}
                         id="useCurrentEmail"
                         name="useCurrentEmail"
                         aria-label="Toggle Email Saat Ini"
