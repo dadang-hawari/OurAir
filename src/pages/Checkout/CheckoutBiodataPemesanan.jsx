@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/Navbar'
 import ReactModal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,39 +15,63 @@ import SeatPicker from '../../components/SeatPicker'
 
 export default function CheckoutBiodataPemesan() {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [statusFilter, setStatusFilter] = useState('Semua Status')
+  const emailnow = useSelector((state) => state?.auth?.userData?.email)
+  ReactModal.setAppElement('#modal')
   const [pemesan, setPemesan] = useState({
     data: {
-      namaLengkap: '',
-      namaKeluarga: '',
-      nomorTelepon: '',
-      email: '',
+      namaLengkapPemesan: '',
+      namaKeluargaPemesan: '',
+      nomorTeleponPemesan: '',
+      emailPemesan: '',
     },
   })
-  const [penumpang, setPenumpang] = useState({
-    data: {
-      title: 'Mr.',
-      namaLengkap: '',
-      namaKeluarga: '',
-      tanggalLahir: '',
-      kewarganegaraan: '',
-      ktpOrPasspor: '',
-      negaraPenerbit: '',
-      berlakuSampai: '',
-    },
-  })
-  4
-  const setDataPenumpang = (isi) => {
-    setPenumpang(...data, isi)
-  }
-  const [namaLengkapPemesan, setNamaLengkapPemesan] = useState('')
-  const [nomorTelepon, setNomorTelepon] = useState('')
-  const [email, setEmail] = useState('')
   const [useCurrentEmail, setUseCurrentEmail] = useState(false)
-  const [currentEmail, setCurrentEmail] = useState('')
-  const emailnow = useSelector((state) => state?.auth?.userData?.email)
-  console.log('data', emailnow)
-  ReactModal.setAppElement('#modal')
+
+  const penumpangSaatIni = 3
+  const [penumpang, setPenumpang] = useState([])
+
+  useEffect(() => {
+    // Inisialisasi state penumpang berdasarkan jumlah penumpangSaatIni
+    setPenumpang(
+      Array.from({ length: penumpangSaatIni }, (_, index) => ({
+        id: `penumpang ${index + 1}`,
+        title: 'Mr.',
+        namaLengkap: '',
+        namaKeluarga: '',
+        tanggalLahir: '',
+        kewarganegaraan: '',
+        ktpOrPasspor: '',
+        negaraPenerbit: 'Singapore', // Misalnya defaultnya Singapore
+        berlakuSampai: '',
+      }))
+    )
+  }, [penumpangSaatIni])
+
+  const handlePenumpang = (e, id) => {
+    const { name, value } = e.target
+    setPenumpang((prevPenumpang) =>
+      prevPenumpang.map((penumpang) =>
+        penumpang.id === id ? { ...penumpang, [name]: value } : penumpang
+      )
+    )
+    console.log('penumpang', penumpang)
+  }
+
+  const handleTanggalLahirChange = (date, id) => {
+    setPenumpang((prevPenumpang) =>
+      prevPenumpang.map((penumpang) =>
+        penumpang.id === id ? { ...penumpang, tanggalLahir: date.format('YYYY-MM-DD') } : penumpang
+      )
+    )
+  }
+
+  const handleBerlakuSampaiChange = (date, id) => {
+    setPenumpang((prevPenumpang) =>
+      prevPenumpang.map((penumpang) =>
+        penumpang.id === id ? { ...penumpang, berlakuSampai: date.format('YYYY-MM-DD') } : penumpang
+      )
+    )
+  }
 
   const openModal = () => {
     setIsModalOpen(true)
@@ -55,6 +79,18 @@ export default function CheckoutBiodataPemesan() {
 
   const closeModal = () => {
     setIsModalOpen(false)
+  }
+
+  const handlePemesan = (e) => {
+    const { name, value } = e.target
+    setPemesan((prevPemesan) => ({
+      ...prevPemesan,
+      data: {
+        ...prevPemesan.data,
+        [name]: value,
+      },
+    }))
+    console.log('pemesan', pemesan)
   }
 
   return (
@@ -86,7 +122,7 @@ export default function CheckoutBiodataPemesan() {
                 </h2>
                 <div className="w-full p-3 flex flex-col gap-y-4">
                   <div>
-                    <label className="font-bold" htmlFor="namaLengkapPenumpang1">
+                    <label className="font-bold" htmlFor="namaLengkapPemesan">
                       Nama Lengkap
                       <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
@@ -96,27 +132,13 @@ export default function CheckoutBiodataPemesan() {
                       type="text"
                       className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                       placeholder="Masukkan nama lengkap"
-                      id="namaLengkapPenumpang1"
-                      value={namaLengkapPemesan}
-                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
+                      id="namaLengkapPemesan"
+                      name="namaLengkapPemesan"
+                      value={pemesan.data.namaLengkap}
+                      onChange={handlePemesan}
                     />
                   </div>
-                  <div>
-                    <label className="font-bold" htmlFor="titlePenumpang1">
-                      Nama Lengkap
-                      <span className="text-red-500 font-normal" title="Perlu diisi">
-                        *
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                      placeholder="Masukkan nama lengkap"
-                      id="titlePenumpang1"
-                      value={namaLengkapPemesan}
-                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
-                    />
-                  </div>
+
                   <div>
                     <label className="font-bold" htmlFor="namaKeluarga">
                       Nama Keluarga (opsional)
@@ -125,13 +147,14 @@ export default function CheckoutBiodataPemesan() {
                       type="text"
                       className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                       placeholder="Masukkan nama keluarga"
-                      id="namaKeluarga"
-                      value={namaLengkapPemesan}
-                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
+                      id="namaKeluargaPemesan"
+                      name="namaKeluargaPemesan"
+                      value={pemesan.data.namaKeluarga}
+                      onChange={handlePemesan}
                     />
                   </div>
                   <div>
-                    <label className="font-bold" htmlFor="namaKeluarga">
+                    <label className="font-bold" htmlFor="nomorTeleponPemesan">
                       Nomor Telepon
                       <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
@@ -141,10 +164,11 @@ export default function CheckoutBiodataPemesan() {
                       type="number"
                       className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                       placeholder="Masukkan nomor telepon"
-                      id="namaKeluarga"
+                      id="nomorTeleponPemesan"
                       min={0}
-                      value={namaLengkapPemesan}
-                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
+                      name="nomorTeleponPemesan"
+                      value={pemesan.data.nomorTeleponPemesan}
+                      onChange={handlePemesan}
                     />
                   </div>
                   <div>
@@ -152,8 +176,9 @@ export default function CheckoutBiodataPemesan() {
                       <p>Gunakan email saat ini?</p>
                       <button
                         onClick={() => setUseCurrentEmail(!useCurrentEmail)}
-                        id="returnBtn"
-                        aria-label="Tombol kepulangan"
+                        id="useCurrentEmail"
+                        name="useCurrentEmail"
+                        aria-label="Toggle Email Saat Ini"
                         className={`w-10 h-5 flex items-center rounded-full transition-colors duration-300 cursor-pointer ${
                           useCurrentEmail ? 'bg-accent' : 'bg-gray-300'
                         }`}
@@ -165,7 +190,7 @@ export default function CheckoutBiodataPemesan() {
                         ></div>
                       </button>
                     </div>
-                    <label className="font-bold" htmlFor="namaKeluarga">
+                    <label className="font-bold" htmlFor="emailPemesan">
                       Email
                       <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
@@ -177,10 +202,11 @@ export default function CheckoutBiodataPemesan() {
                         useCurrentEmail ? 'cursor-default' : ''
                       }`}
                       placeholder="Contoh: kusuma@gmail.com"
-                      id="namaKeluarga"
+                      id="emailPemesan"
+                      name="emailPemesan"
                       readOnly={useCurrentEmail}
-                      value={useCurrentEmail ? emailnow : email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={useCurrentEmail ? emailnow : pemesan.data.emailPemesan}
+                      onChange={handlePemesan}
                     />
                   </div>
                 </div>
@@ -190,170 +216,201 @@ export default function CheckoutBiodataPemesan() {
             <div className="border rounded-md h-fit my-8 p-5 w-full">
               <b className="text-xl mb-3 block">Isi Data Penumpang</b>
               <div className="w-full text-gray-secondary">
-                <h2 className="bg-gray-700 text-white rounded-t-md p-2 text-[600]">
-                  Data Diri Penumpang 1 - Adult
-                </h2>
-                <div className="w-full p-3 flex flex-col gap-y-4">
-                  <div>
-                    <label className="font-bold" htmlFor="namaLengkap">
-                      Title
-                      <span className="text-red-500 font-normal" title="Perlu diisi">
-                        *
-                      </span>
-                    </label>
-                    <div className="relative">
-                      <FontAwesomeIcon
-                        icon={faChevronDown}
-                        className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
-                      />
-                      <select
-                        name="title-1"
-                        id="title1"
-                        onChange={(e) => setDataPenumpang(e.target.value)}
-                        className="w-full cursor-pointer border outline-none  focus:border-secondary rounded-md h-10 appearance-none  px-3 mt-1 "
-                      >
-                        <option value="Mr.">Mr.</option>
-                        <option value="Ms.">Ms.</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="font-bold" htmlFor="namaLengkap">
-                      Nama Lengkap
-                      <span className="text-red-500 font-normal" title="Perlu diisi">
-                        *
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                      placeholder="Masukkan nama lengkap"
-                      id="namaLengkap"
-                      value={namaLengkapPemesan}
-                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="font-bold" htmlFor="namaKeluarga">
-                      Nama Keluarga (opsional)
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                      placeholder="Masukkan nama keluarga"
-                      id="namaKeluarga"
-                      value={namaLengkapPemesan}
-                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
-                    />
-                  </div>
-                  <div className="relative">
-                    <label className="font-bold block" htmlFor="tanggalLahir">
-                      Tanggal Lahir
-                      <span className="text-red-500 font-normal" title="Perlu diisi">
-                        *
-                      </span>
-                    </label>
-                    <div className="relative">
-                      <DatePicker
-                        monthYearSeparator="-"
-                        showOtherDays
-                        format="YYYY-MM-DD"
-                        highlightToday={false}
-                        render={
-                          <input
-                            className="calendar w-full  block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                            id="tanggalLahir"
+                {penumpang.map((penumpangData) => (
+                  <div key={penumpangData.id}>
+                    <h2 className="bg-gray-700 text-white rounded-t-md p-2 text-[600]">
+                      Data Diri {penumpangData.id} - Adult
+                    </h2>
+                    <div className="w-full p-3 flex flex-col gap-y-4">
+                      <div>
+                        <label className="font-bold" htmlFor={`title-${penumpangData.id}`}>
+                          Title
+                          <span className="text-red-500 font-normal" title="Perlu diisi">
+                            *
+                          </span>
+                        </label>
+                        <div className="relative">
+                          <FontAwesomeIcon
+                            icon={faChevronDown}
+                            className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
+                          <select
+                            name="title"
+                            id={`title-${penumpangData.id}`}
+                            className="w-full cursor-pointer border outline-none focus:border-secondary rounded-md h-10 appearance-none px-3 mt-1"
+                            value={penumpangData.title}
+                            onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                          >
+                            <option value="Mr.">Mr.</option>
+                            <option value="Ms.">Ms.</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="font-bold" htmlFor={`namaLengkap-${penumpangData.id}`}>
+                          Nama Lengkap
+                          <span className="text-red-500 font-normal" title="Perlu diisi">
+                            *
+                          </span>
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                          placeholder="Masukkan nama lengkap"
+                          id={`namaLengkap-${penumpangData.id}`}
+                          name="namaLengkap"
+                          value={penumpangData.namaLengkap}
+                          onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-bold" htmlFor={`namaKeluarga-${penumpangData.id}`}>
+                          Nama Keluarga (opsional)
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                          placeholder="Masukkan nama keluarga"
+                          id={`namaKeluarga-${penumpangData.id}`}
+                          name="namaKeluarga"
+                          value={penumpangData.namaKeluarga}
+                          onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                        />
+                      </div>
+                      <div className="relative">
+                        <label
+                          className="font-bold block"
+                          htmlFor={`tanggalLahir-${penumpangData.id}`}
+                        >
+                          Tanggal Lahir
+                          <span className="text-red-500 font-normal" title="Perlu diisi">
+                            *
+                          </span>
+                        </label>
+                        <div className="relative">
+                          <DatePicker
+                            monthYearSeparator="-"
+                            format="YYYY-MM-DD"
+                            showOtherDays
+                            highlightToday={false}
+                            value={penumpangData.tanggalLahir}
+                            onChange={(date) => handleTanggalLahirChange(date, penumpangData.id)}
+                            render={
+                              <input
+                                className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                                id={`tanggalLahir-${penumpangData.id}`}
+                                name="tanggalLahir"
+                                value={penumpangData.tanggalLahir}
+                                readOnly
+                              />
+                            }
                           />
-                        }
-                      />
-                      <FontAwesomeIcon
-                        icon={faCalendar}
-                        className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="font-bold" htmlFor="kewarganegaraan">
-                      Kewarganegaraan
-                      <span className="text-red-500 font-normal" title="Perlu diisi">
-                        *
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                      placeholder="Masukkan Kewarganegaraan"
-                      id="kewarganegaraan"
-                      value={namaLengkapPemesan}
-                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="font-bold" htmlFor="ktpOrPasspor">
-                      KTP/Paspor
-                      <span className="text-red-500 font-normal" title="Perlu diisi">
-                        *
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                      placeholder="Masukkan ktp/passpor"
-                      id="ktpOrPasspor"
-                      value={namaLengkapPemesan}
-                      onChange={(e) => setNamaLengkapPemesan(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="font-bold" htmlFor="negaraPenerbit">
-                      Negara penerbit
-                      <span className="text-red-500 font-normal" title="Perlu diisi">
-                        *
-                      </span>
-                    </label>
-                    <div className="relative">
-                      <FontAwesomeIcon
-                        icon={faChevronDown}
-                        className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
-                      />
-                      <select
-                        name="title-1"
-                        id="title1"
-                        value={penumpang.data.title}
-                        className="w-full cursor-pointer border outline-none relative appearance-none focus:border-secondary rounded-md h-10 px-3 mt-1 py-4"
-                      >
-                        <option>Singapore</option>
-                        <option>Amerika</option>
-                        <option>Indonesia</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="relative">
-                    <label className="font-bold block" htmlFor="berlakuSampai">
-                      Berlaku sampai
-                      <span className="text-red-500 font-normal" title="Perlu diisi">
-                        *
-                      </span>
-                    </label>
-                    <div className="relative">
-                      <DatePicker
-                        monthYearSeparator="-"
-                        showOtherDays
-                        highlightToday={false}
-                        render={
-                          <input
-                            className="calendar w-full  block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                            id="berlakuSampai"
+
+                          <FontAwesomeIcon
+                            icon={faCalendar}
+                            className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
                           />
-                        }
-                      />
-                      <FontAwesomeIcon
-                        icon={faCalendar}
-                        className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
-                      />
+                        </div>
+                      </div>
+                      <div>
+                        <label
+                          className="font-bold"
+                          htmlFor={`kewarganegaraan-${penumpangData.id}`}
+                        >
+                          Kewarganegaraan
+                          <span className="text-red-500 font-normal" title="Perlu diisi">
+                            *
+                          </span>
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                          placeholder="Masukkan Kewarganegaraan"
+                          id={`kewarganegaraan-${penumpangData.id}`}
+                          name="kewarganegaraan"
+                          value={penumpangData.kewarganegaraan}
+                          onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-bold" htmlFor={`ktpOrPasspor-${penumpangData.id}`}>
+                          KTP/Paspor
+                          <span className="text-red-500 font-normal" title="Perlu diisi">
+                            *
+                          </span>
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                          placeholder="Masukkan KTP/Paspor"
+                          id={`ktpOrPasspor-${penumpangData.id}`}
+                          name="ktpOrPasspor"
+                          value={penumpangData.ktpOrPasspor}
+                          onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-bold" htmlFor={`negaraPenerbit-${penumpangData.id}`}>
+                          Negara Penerbit
+                          <span className="text-red-500 font-normal" title="Perlu diisi">
+                            *
+                          </span>
+                        </label>
+                        <div className="relative">
+                          <FontAwesomeIcon
+                            icon={faChevronDown}
+                            className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
+                          />
+                          <select
+                            name="negaraPenerbit"
+                            id={`negaraPenerbit-${penumpangData.id}`}
+                            className="w-full cursor-pointer border outline-none focus:border-secondary rounded-md h-10 appearance-none px-3 mt-1"
+                            value={penumpangData.negaraPenerbit}
+                            onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                          >
+                            <option value="Singapore">Singapore</option>
+                            <option value="Amerika">Amerika</option>
+                            <option value="Indonesia">Indonesia</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="relative">
+                        <label
+                          className="font-bold block"
+                          htmlFor={`berlakuSampai-${penumpangData.id}`}
+                        >
+                          Berlaku
+                          <span className="text-red-500 font-normal" title="Perlu diisi">
+                            *
+                          </span>
+                        </label>
+                        <div className="relative">
+                          <DatePicker
+                            monthYearSeparator="-"
+                            showOtherDays
+                            highlightToday={false}
+                            format="YYYY-MM-DD"
+                            value={penumpangData.berlakuSampai}
+                            onChange={(date) => handleBerlakuSampaiChange(date, penumpangData.id)}
+                            render={
+                              <input
+                                className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                                id={`berlakuSampai-${penumpangData.id}`}
+                                name="berlakuSampai"
+                                value={penumpangData.berlakuSampai}
+                                readOnly
+                              />
+                            }
+                          />
+
+                          <FontAwesomeIcon
+                            icon={faCalendar}
+                            className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
 
