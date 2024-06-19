@@ -233,7 +233,6 @@ export default function CheckoutBiodataPemesan() {
                           <FontAwesomeIcon
                             icon={faChevronDown}
                             className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
-                          />
                           <select
                             name="title"
                             id={`title-${penumpangData.id}`}

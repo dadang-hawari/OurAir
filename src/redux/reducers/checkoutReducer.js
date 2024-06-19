@@ -5,7 +5,7 @@ const initialState = {
   dataPenumpang: null,
 }
 
-const primaryLogin = createSlice({
+const checkoutSlice = createSlice({
   name: 'checkout',
   initialState,
   reducers: {
@@ -18,5 +18,5 @@ const primaryLogin = createSlice({
   },
 })
 
-export const { setDataPemesan, setDataPenumpang } = primaryLogin.actions
-export default primaryLogin.reducer
+export const { setDataPemesan, setDataPenumpang } = checkoutSlice.actions
+export default checkoutSlice.reducer

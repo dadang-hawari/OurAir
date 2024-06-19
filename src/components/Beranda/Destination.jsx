@@ -134,7 +134,7 @@ export const Destination = () => {
   }
 
   const swapCities = () => {
-    if (departureCity === 'Tempat Keberangkatan' || arrivalCity === 'Tempat Tujuan') {
+    if (departureCity === 'Bandara Keberangkatan' || arrivalCity === 'Bandara Tujuan') {
       toast('Mohon untuk memilih kota tujuan atau keberangkatan', {
         className: 'toast-info',
         toastId: 'toast-info',

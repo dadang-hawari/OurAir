@@ -1,11 +1,12 @@
 import { faArrowRight, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux'
-import { getFlightByCityorCountry } from '../../redux/actions/flightsAction'
+import { getFlightRecomendation } from '../../redux/actions/flightsAction'
 import { useEffect, useState } from 'react'
 
 export default function DestinasiFavorit() {
-  const airports = useSelector((state) => state?.flightLists?.flightsByCountry?.flights)
+  const airports = useSelector((state) => state?.flightLists?.flightRecomendation)
+  console.log('airports :>> ', airports)
   const [chosenCountry, setChosenCountry] = useState('Indonesia')
   console.log('airports', airports)
   const dispatch = useDispatch()
@@ -15,7 +16,7 @@ export default function DestinasiFavorit() {
   }, [])
 
   const setFirstCountry = () => {
-    dispatch(getFlightByCityorCountry('Indonesia'))
+    dispatch(getFlightRecomendation('Indonesia'))
     setChosenCountry('Indonesia')
   }
 
@@ -30,7 +31,7 @@ export default function DestinasiFavorit() {
 
   const getFlightsByCountry = (country) => {
     setChosenCountry(country)
-    dispatch(getFlightByCityorCountry(country))
+    dispatch(getFlightRecomendation(country))
   }
 
   const formatCurrency = (amount) => {
