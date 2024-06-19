@@ -68,7 +68,7 @@ export default function PilihPenerbangan() {
       getFlightByCityorCountry(
         kotaKeberangkatan,
         kotaTujuan,
-        kelas.name,
+        kelas?.name,
         formattedTanggalBerangkat,
         formattedTanggalKembali
       )
@@ -102,6 +102,14 @@ export default function PilihPenerbangan() {
     const sortedFlights = [...listFlights].sort((a, b) => a.ticket_price - b.ticket_price)
     setFilteredFlights(sortedFlights)
     closeModal() // Close the modal after applying filter
+  }
+
+  const handleClickPilih = (id) => {
+    navigate("/checkout-pemesanan", {
+      state: {
+        id
+      }
+    })
   }
 
   const SkeletonLoading = ({ loop = 10 }) => {
@@ -309,7 +317,7 @@ export default function PilihPenerbangan() {
                         </b>
                         <button
                           className="bg-secondary text-white max-w-[100px] w-full rounded-full py-1"
-                          onClick={() => handleClickPilih()}
+                          onClick={() => handleClickPilih(flight?.toAirport?.airplane_id)}
                         >
                           Pilih
                         </button>

@@ -16,6 +16,8 @@ import SeatPicker from '../../components/SeatPicker'
 export default function CheckoutBiodataPemesan() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
+  const jumlahPenumpang = useSelector((state) => state)
+  console.log('jumlahPenumpang', jumlahPenumpang)
   ReactModal.setAppElement('#modal')
   const [pemesan, setPemesan] = useState({
     data: {
@@ -54,7 +56,6 @@ export default function CheckoutBiodataPemesan() {
         penumpang.id === id ? { ...penumpang, [name]: value } : penumpang
       )
     )
-    console.log('penumpang', penumpang)
   }
 
   const handleTanggalLahirChange = (date, id) => {
@@ -90,7 +91,6 @@ export default function CheckoutBiodataPemesan() {
         [name]: value,
       },
     }))
-    console.log('pemesan', pemesan)
   }
 
   return (
@@ -233,7 +233,8 @@ export default function CheckoutBiodataPemesan() {
                           <FontAwesomeIcon
                             icon={faChevronDown}
                             className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
-                          <select
+                          />
+                            <select
                             name="title"
                             id={`title-${penumpangData.id}`}
                             className="w-full cursor-pointer border outline-none focus:border-secondary rounded-md h-10 appearance-none px-3 mt-1"
@@ -472,7 +473,7 @@ export default function CheckoutBiodataPemesan() {
                   <h5 className="font-[600]">Melbourne International Airport</h5>
                 </div>
                 <hr className="w-[95%] mx-auto my-3 " />
-                <div className="w-[95%]">
+                <div className="w-full">
                   <b>Rincian Harga</b>
                   <div className="flex justify-between">
                     <span>2 Orang Dewasa</span>
