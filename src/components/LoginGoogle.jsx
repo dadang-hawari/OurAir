@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 function LoginGoogle() {
-  const toGoogle = `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/google`
+  const toGoogle = `${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/google`
   return (
     <Link
       to={toGoogle}

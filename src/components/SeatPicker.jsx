@@ -58,14 +58,7 @@ export default function SeatPicker() {
         { id: '5E', status: 'available', NamaPenumpang: '' },
         { id: '5F', status: 'available', NamaPenumpang: '' },
       ],
-      [
-        { id: '5A', status: 'available', NamaPenumpang: '' },
-        { id: '5B', status: 'available', NamaPenumpang: '' },
-        { id: '5C', status: 'available', NamaPenumpang: '' },
-        { id: '5D', status: 'available', NamaPenumpang: '' },
-        { id: '5E', status: 'available', NamaPenumpang: '' },
-        { id: '5F', status: 'available', NamaPenumpang: '' },
-      ],
+
       [
         { id: '6A', status: 'available', NamaPenumpang: '' },
         { id: '6B', status: 'available', NamaPenumpang: '' },
