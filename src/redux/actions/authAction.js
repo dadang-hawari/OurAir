@@ -97,9 +97,12 @@ export const sendVerifyOtp = (email) => async () => {
       toastId: toastIdWait,
     })
     console.log('email :>> ', email)
-    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/try-send-email`, {
-      email,
-    })
+    const response = await axios.post(
+      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/try-send-email`,
+      {
+        email,
+      }
+    )
 
     console.log('response :>> ', response)
     if (response?.status === 201) {
@@ -129,7 +132,7 @@ export const resetPassword = (token, password, navigate) => async () => {
       }
     )
     console.log('response :>> ', response)
-    if (response?.status === 200) {
+    if (response?.status === 200 || response?.status === 201) {
       toast.dismiss('toastLoading')
       navigate('/login', {
         state: {

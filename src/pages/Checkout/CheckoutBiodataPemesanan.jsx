@@ -26,7 +26,6 @@ import { getFlightById } from '../../redux/actions/checkoutAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
 
 export default function CheckoutBiodataPemesan() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
   const flightDetail = useSelector((state) => state?.flightLists?.flightDetail)
   const dataCheckout = useSelector((state) => state?.checkout)
@@ -77,6 +76,7 @@ export default function CheckoutBiodataPemesan() {
         ktpOrPasspor: '',
         negaraPenerbit: 'Indonesia',
         berlakuSampai: '',
+        flightId,
       })
     }
 
@@ -91,6 +91,7 @@ export default function CheckoutBiodataPemesan() {
         ktpOrPasspor: '',
         negaraPenerbit: 'Indonesia',
         berlakuSampai: '',
+        flightId,
       })
     }
 
@@ -116,17 +117,13 @@ export default function CheckoutBiodataPemesan() {
     dispatch(updateBerlakuSampai({ id, date: date.format('YYYY-MM-DD') }))
   }
 
-  const openModal = () => {
-    setIsModalOpen(true)
-  }
-
-  const closeModal = () => {
-    setIsModalOpen(false)
-  }
-
   const handlePemesan = (e) => {
     const { name, value } = e.target
     dispatch(setPemesan({ name, value }))
+  }
+
+  const handleLanjutBayar = () => {
+    console.log('dataCheckout', dataCheckout)
   }
 
   return (
@@ -176,7 +173,7 @@ export default function CheckoutBiodataPemesan() {
                   </div>
 
                   <div>
-                    <label className="font-bold" htmlFor="namaKeluarga">
+                    <label className="font-bold" htmlFor="namaKeluargaPemesan">
                       Nama Keluarga (opsional)
                     </label>
                     <input
@@ -253,7 +250,7 @@ export default function CheckoutBiodataPemesan() {
               <b className="text-xl mb-3 block">Isi Data Penumpang</b>
               <div className="w-full text-gray-secondary">
                 {penumpang.map((penumpangData) => (
-                  <div key={penumpangData?.id}>
+                  <div key={penumpangData?.id} className="mb-5">
                     <h2 className="bg-gray-700 text-white rounded-t-md p-2 text-[600]">
                       Data Diri {penumpangData?.id}
                     </h2>
@@ -333,20 +330,22 @@ export default function CheckoutBiodataPemesan() {
                             highlightToday={false}
                             value={penumpangData?.tanggalLahir}
                             onChange={(date) => handleTanggalLahirChange(date, penumpangData?.id)}
-                            render={
-                              <input
-                                className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                                id={`tanggalLahir-${penumpangData?.id}`}
-                                name="tanggalLahir"
-                                value={penumpangData?.tanggalLahir}
-                                readOnly
-                              />
-                            }
-                          />
-
-                          <FontAwesomeIcon
-                            icon={faCalendar}
-                            className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
+                            render={({ openCalendar, handleValueChange }) => (
+                              <div>
+                                <input
+                                  className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                                  id={`tanggalLahir-${penumpangData?.id}`}
+                                  name="tanggalLahir"
+                                  value={penumpangData?.tanggalLahir}
+                                  readOnly
+                                />
+                                <FontAwesomeIcon
+                                  icon={faCalendar}
+                                  className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
+                                  onClick={openCalendar} // Use openCalendar function here
+                                />
+                              </div>
+                            )}
                           />
                         </div>
                       </div>
@@ -433,20 +432,23 @@ export default function CheckoutBiodataPemesan() {
                             format="YYYY-MM-DD"
                             value={penumpangData?.berlakuSampai}
                             onChange={(date) => handleBerlakuSampaiChange(date, penumpangData?.id)}
-                            render={
-                              <input
-                                className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                                id={`berlakuSampai-${penumpangData?.id}`}
-                                name="berlakuSampai"
-                                value={penumpangData?.berlakuSampai}
-                                readOnly
-                              />
-                            }
-                          />
-
-                          <FontAwesomeIcon
-                            icon={faCalendar}
-                            className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
+                            render={({ openCalendar, handleValueChange }) => (
+                              <div className="relative">
+                                <input
+                                  className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
+                                  id={`berlakuSampai-${penumpangData?.id}`}
+                                  name="berlakuSampai"
+                                  value={penumpangData?.berlakuSampai}
+                                  readOnly
+                                  onClick={openCalendar} // Attach the openCalendar function to handle click
+                                />
+                                <FontAwesomeIcon
+                                  icon={faCalendar}
+                                  className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
+                                  onClick={openCalendar} // Attach the openCalendar function here as well
+                                />
+                              </div>
+                            )}
                           />
                         </div>
                       </div>
@@ -519,19 +521,19 @@ export default function CheckoutBiodataPemesan() {
                   <b>Rincian Harga</b>
                   <div className={`flex justify-between ${!jumlahPenumpangDewasa && 'hidden'}`}>
                     <div className="flex">
-                      <span className="w-2">{jumlahPenumpangDewasa} </span> Orang Dewasa{' '}
+                      <span className="w-3">{jumlahPenumpangDewasa} </span> Orang Dewasa{' '}
                     </div>
                     <span>IDR {hargaTiketDewasa.toLocaleString('id-ID')}</span>
                   </div>
                   <div className={`flex justify-between ${!jumlahPenumpangAnak && 'hidden'}`}>
                     <div className="flex">
-                      <span className="w-2">{jumlahPenumpangAnak}</span> Orang Anak{' '}
+                      <span className="w-3">{jumlahPenumpangAnak}</span> Orang Anak{' '}
                     </div>
                     <span>IDR {hargaTiketAnak.toLocaleString('id-ID')}</span>
                   </div>
                   <div className={`flex justify-between ${!jumlahPenumpangBayi && 'hidden'}`}>
                     <div className="flex">
-                      <span className="w-2">{jumlahPenumpangBayi}</span> Bayi{' '}
+                      <span className="w-3">{jumlahPenumpangBayi}</span> Bayi
                     </div>
                     <span>IDR 0</span>
                   </div>
@@ -548,8 +550,11 @@ export default function CheckoutBiodataPemesan() {
                   </b>
                 </div>
               </div>
-              <button className="bg-secondary text-white px-5 my-4 rounded-xl py-5 w-full">
-                <p className="text-base text-center">Lanjut bayar</p>
+              <button
+                onClick={handleLanjutBayar}
+                className="bg-secondary text-white text-base text-center px-5 my-4 rounded-xl py-5 w-full"
+              >
+                Lanjut bayar
               </button>
             </div>
           </div>

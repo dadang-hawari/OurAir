@@ -17,6 +17,9 @@
 .seat.unavailable {
   @apply bg-[#D0D0D0] text-white cursor-not-allowed;
 }
+.seat.unavailable-info {
+  @apply bg-[#D0D0D0] text-white cursor-default;
+}
 
 .seat.selected {
   @apply bg-primary;
