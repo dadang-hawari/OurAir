@@ -24,7 +24,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getFlightByCityorCountry, getFlightsByCity } from '../redux/actions/flightsAction'
 import { PenerbanganNotFound } from '../components/HasilCariPenerbangan/PenerbanganNotFound'
 import { checkLocationState } from '../utils/checkLocationState'
-import { setIdFlight } from '../redux/reducers/checkoutReducer'
+import { setIdFlight, setJumlahPenumpang } from '../redux/reducers/checkoutReducer'
+import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
 
 export default function PilihPenerbangan() {
   const location = useLocation()
@@ -41,7 +42,6 @@ export default function PilihPenerbangan() {
   const tanggalKembali = jadwalPenerbangan?.tanggalBerangkatKembali[1]
 
   const kelas = jadwalPenerbangan?.kelas
-  console.log('tanggalBerangkat', kotaKeberangkatan)
 
   useEffect(() => {
     checkLocationState(location, navigate)
@@ -63,8 +63,6 @@ alert('execute')
     const formattedTanggalBerangkat = convertDateFormat(tanggalBerangkat)
     const formattedTanggalKembali = convertDateFormat(tanggalKembali)
 
-    console.log('formattedtanggalBerangkat :>> ', formattedTanggalBerangkat)
-
     dispatch(
       getFlightByCityorCountry(
         kotaKeberangkatan,
@@ -74,15 +72,12 @@ alert('execute')
         formattedTanggalKembali
       )
     ).then(() => {
-      console.log('kotaTuju', kotaTujuan)
       setIsLoading(false)
     })
   }
   const tanggalKeberangkatan = jadwalPenerbangan?.tanggalBerangkatKembali[0]
   const tanggalSampai = jadwalPenerbangan?.tanggalBerangkatKembali[1]
-  console.log('tanggalKeberangkatan,tanggalSampai', tanggalKeberangkatan, tanggalSampai)
   const [isLoading, setIsLoading] = useState(true)
-  console.log('jadwalPenerbangan', jadwalPenerbangan)
   const dispatch = useDispatch()
 
   const openModal = () => {
@@ -109,7 +104,9 @@ alert('execute')
     dispatch(
       setIdFlight(id)
     )
-    navigate("/checkout-pemesanan")
+
+    navigate("/checkout-pemesanan", {state: {jumlahPenumpang: jadwalPenerbangan?.jumlahPenumpang}} 
+    )
      
    
   }
@@ -137,19 +134,7 @@ alert('execute')
     return <>{skeletons}</>
   }
 
-  const formatTimeToHM = (time) => {
-    const formattedTime = new Date(time)
-    return formattedTime.toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    })
-  }
-  const formatTimeToIndonesia = (time) => {
-    const formattedTime = new Date(time)
-    const options = { day: 'numeric', month: 'long', year: 'numeric' }
-    return formattedTime.toLocaleDateString('id-ID', options)
-  }
+
 
   return (
     <>

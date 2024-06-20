@@ -151,7 +151,7 @@ export const resetPassword = (token, password, navigate) => async () => {
 
 export const authGoogleUser = (token, navigate) => async (dispatch) => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/who-am-i`, {
+    const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/who-am-i`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

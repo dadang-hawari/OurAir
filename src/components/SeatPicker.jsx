@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import '../styles/seatpicker.css'
+import {
+  addSelectedSeat,
+  removeSelectedSeat,
+  resetSelectedSeats,
+  setSelectedSeat,
+} from '../redux/reducers/checkoutReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function SeatPicker() {
   const [seats, setSeats] = useState([])
-  const [selectedSeats, setSelectedSeats] = useState([])
+  const selectedSeats = useSelector((state) => state?.checkout?.selectedSeats)
+  const dispatch = useDispatch()
 
   // Jumlah penumpang
   const penumpang = 2
@@ -50,7 +58,6 @@ export default function SeatPicker() {
         { id: '4E', status: 'available', NamaPenumpang: '' },
         { id: '4F', status: 'available', NamaPenumpang: '' },
       ],
-
     ],
   }
 
@@ -68,16 +75,16 @@ export default function SeatPicker() {
 
     if (selectedSeats.includes(seatId)) {
       // Jika kursi sudah dipilih, batalkan pilihan
-      setSelectedSeats((prevSelectedSeats) => prevSelectedSeats.filter((id) => id !== seatId))
+      dispatch(removeSelectedSeat(seatId))
     } else if (selectedSeats.length < penumpang) {
       // Jika jumlah kursi yang dipilih belum mencapai batas maksimal
-      setSelectedSeats((prevSelectedSeats) => [...prevSelectedSeats, seatId])
+      dispatch(addSelectedSeat(seatId))
     } else {
       // Jika jumlah kursi yang dipilih sudah mencapai batas maksimal
       // Batalkan semua kursi yang dipilih sebelumnya dan pilih kursi yang baru
-      setSelectedSeats([seatId])
+      dispatch(resetSelectedSeats())
+      dispatch(setSelectedSeat(seatId))
     }
-    console.log('selectedSeats', selectedSeats)
   }
 
   return (
@@ -113,37 +120,35 @@ export default function SeatPicker() {
         </div>
       </div>
       {seats.map((row, rowIndex) => (
-          <div key={rowIndex}  className="seat-row flex gap-x-1 items-center">
-            {console.log('rowIndexto', row)}
-            {row.map((seat, i) => {
-              const seatIndex = selectedSeats.indexOf(seat.id)
-              const seatLabel =
-                seatIndex >= 0 ? `P${seatIndex + 1}` : seat.status === 'unavailable' ? 'X' : ''
-              return (
-                <>
-                  <h2
-                  
-                    className={
-                      i === 3
-                        ? 'flex items-center justify-center w-4 h-9 mx-1 rounded-xl text-center text-gray-600  bg-gray-100  text-xs'
-                        : 'hidden'
-                    }
-                  >
-                    {rowIndex + 1}
-                  </h2>
-                  <div
-                    key={seat.id}
-                    className={`seat ${seat.status} ${
-                      selectedSeats.includes(seat.id) ? 'selected' : ''
-                    }`}
-                    onClick={() => handleSeatClick(seat.id)}
-                  >
-                    {seatLabel}
-                  </div>
-                </>
-              )
-            })}
-          </div>
+        <div key={rowIndex} className="seat-row flex gap-x-1 items-center">
+          {row.map((seat, i) => {
+            const seatIndex = selectedSeats.indexOf(seat.id)
+            const seatLabel =
+              seatIndex >= 0 ? `P${seatIndex + 1}` : seat.status === 'unavailable' ? 'X' : ''
+            return (
+              <>
+                <h2
+                  className={
+                    i === 3
+                      ? 'flex items-center justify-center w-4 h-9 mx-1 rounded-xl text-center text-gray-600  bg-gray-100  text-xs'
+                      : 'hidden'
+                  }
+                >
+                  {rowIndex + 1}
+                </h2>
+                <div
+                  key={seat.id}
+                  className={`seat ${seat.status} ${
+                    selectedSeats.includes(seat.id) ? 'selected' : ''
+                  }`}
+                  onClick={() => handleSeatClick(seat.id)}
+                >
+                  {seatLabel}
+                </div>
+              </>
+            )
+          })}
+        </div>
       ))}
     </div>
   )

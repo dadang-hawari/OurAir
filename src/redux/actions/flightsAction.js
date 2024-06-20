@@ -26,13 +26,7 @@ export const getAllFlights = () => async (dispatch) => {
 export const getFlightByCityorCountry =
   (fromairport, toairport, kelas="Economy", startDate, endDate) => async (dispatch) => {
     try {
-     
-      console.log('from :>> ', fromairport)
-      console.log('from :>> ', toairport)
-      console.log('from :>> ', kelas)
-      console.log('kelas :>> ', startDate)
-      console.log('kelas :>> ', startDate)
-      console.log('to :>> ', endDate)
+  
       const response = await axios.get(
         `${
           import.meta.env.VITE_DOMAIN_API_DEV

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../../components/Navbar'
 import ReactModal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,65 +12,109 @@ import { useDispatch, useSelector } from 'react-redux'
 import { data } from 'autoprefixer'
 import DatePicker from 'react-multi-date-picker'
 import SeatPicker from '../../components/SeatPicker'
-import { setPemesan, setPenumpang, setUseCurrentEmail, updateBerlakuSampai, updatePenumpang, updateTanggalLahir } from '../../redux/reducers/checkoutReducer'
+import {
+  setJumlahPenumpang,
+  setPemesan,
+  setPenumpang,
+  setUseCurrentEmail,
+  updateBerlakuSampai,
+  updatePenumpang,
+  updateTanggalLahir,
+} from '../../redux/reducers/checkoutReducer'
 import { useLocation } from 'react-router-dom'
 import { getFlightById } from '../../redux/actions/checkoutAction'
+import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
 
 export default function CheckoutBiodataPemesan() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
-  const dataCheckout = useSelector((state)=> state?.checkout)
+  const flightDetail = useSelector((state) => state?.flightLists?.flightDetail)
+  const dataCheckout = useSelector((state) => state?.checkout)
   const flightId = dataCheckout?.idFlight
   const pemesan = dataCheckout?.pemesan
   const penumpang = dataCheckout?.penumpang
   const useCurrentEmail = dataCheckout?.useCurrentEmail
-  const flightDetail = dataCheckout?.flightDetail
-  console.log('flightDetail', flightDetail)
-  const location = useLocation();
+  const location = useLocation()
   console.log('location', location)
 
-  const jumlahPenumpang = useSelector((state) => state)
-  console.log('jumlahPenumpang', jumlahPenumpang)
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-    const penumpangSaatIni = 3
-    const setDataPenumpang = () => {
-      dispatch(setPenumpang(
-        Array.from({ length: penumpangSaatIni }, (_, index) => ({
-          id: `penumpang ${index + 1}`,
-          title: 'Mr.',
-          namaLengkap: '',
-          namaKeluarga: '',
-          tanggalLahir: '',
-          kewarganegaraan: '',
-          ktpOrPasspor: '',
-          negaraPenerbit: 'Singapore', // Misalnya defaultnya Singapore
-          berlakuSampai: '',
-        }))
-      ))
+  const penumpangSaatIni = dataCheckout?.jumlahPenumpang
+  const jumlahPenumpang = location?.state?.jumlahPenumpang
+  const pajak =
+    (penumpangSaatIni?.penumpangAnak + penumpangSaatIni?.penumpangDewasa) *
+    flightDetail?.ticket_price *
+    0.025
+
+  const hargaTiketAnak = flightDetail?.ticket_price * penumpangSaatIni?.penumpangAnak
+  const hargaTiketDewasa = flightDetail?.ticket_price * penumpangSaatIni?.penumpangDewasa
+  const jumlahPenumpangAnak = penumpangSaatIni?.penumpangAnak
+  const jumlahPenumpangDewasa = penumpangSaatIni?.penumpangDewasa
+  const jumlahPenumpangBayi = penumpangSaatIni?.penumpangBayi
+
+  console.log('penumpang', penumpang)
+  console.log('pemesan', pemesan)
+
+  const setDataPenumpang = () => {
+    if (
+      (penumpangSaatIni?.penumpangDewasa === jumlahPenumpang?.penumpangDewasa &&
+        penumpangSaatIni?.penumpangAnak === jumlahPenumpang?.penumpangAnak) ||
+      jumlahPenumpang?.penumpangDewasa === null ||
+      jumlahPenumpang?.penumpangDewasa === undefined
+    )
+      return
+    dispatch(setJumlahPenumpang(jumlahPenumpang))
+    const { penumpangDewasa, penumpangAnak } = jumlahPenumpang ?? {}
+    const penumpangBaru = []
+    for (let i = 0; i < penumpangDewasa; i++) {
+      penumpangBaru.push({
+        id: `penumpang ${i + 1} - Dewasa`,
+        title: 'Mr.',
+        namaLengkap: '',
+        namaKeluarga: '',
+        tanggalLahir: '',
+        kewarganegaraan: '',
+        ktpOrPasspor: '',
+        negaraPenerbit: 'Indonesia',
+        berlakuSampai: '',
+      })
     }
+
+    for (let i = 0; i < penumpangAnak; i++) {
+      penumpangBaru.push({
+        id: `penumpang ${penumpangDewasa + i + 1} - Anak`,
+        title: 'Mr.',
+        namaLengkap: '',
+        namaKeluarga: '',
+        tanggalLahir: '',
+        kewarganegaraan: '',
+        ktpOrPasspor: '',
+        negaraPenerbit: 'Indonesia',
+        berlakuSampai: '',
+      })
+    }
+
+    dispatch(setPenumpang(penumpangBaru))
+  }
 
   useEffect(() => {
     // Inisialisasi state penumpang berdasarkan jumlah penumpangSaatIni
-    setDataPenumpang();
+    setDataPenumpang()
     dispatch(getFlightById(flightId))
-    
-    
   }, [penumpangSaatIni])
 
   const handlePenumpang = (e, id) => {
-    const { name, value } = e.target;
-    dispatch(updatePenumpang({ id, name, value }));
-    console.log('penumpang', penumpang)
-  };
+    const { name, value } = e.target
+    dispatch(updatePenumpang({ id, name, value }))
+  }
 
   const handleTanggalLahirChange = (date, id) => {
-    dispatch(updateTanggalLahir({ id, date: date.format('YYYY-MM-DD') }));
-  };
+    dispatch(updateTanggalLahir({ id, date: date.format('YYYY-MM-DD') }))
+  }
 
   const handleBerlakuSampaiChange = (date, id) => {
-    dispatch(updateBerlakuSampai({ id, date: date.format('YYYY-MM-DD') }));
-  };
+    dispatch(updateBerlakuSampai({ id, date: date.format('YYYY-MM-DD') }))
+  }
 
   const openModal = () => {
     setIsModalOpen(true)
@@ -81,9 +125,9 @@ export default function CheckoutBiodataPemesan() {
   }
 
   const handlePemesan = (e) => {
-    const { name, value } = e.target;
-    dispatch(setPemesan({ name, value }));
-  };
+    const { name, value } = e.target
+    dispatch(setPemesan({ name, value }))
+  }
 
   return (
     <div>
@@ -209,13 +253,13 @@ export default function CheckoutBiodataPemesan() {
               <b className="text-xl mb-3 block">Isi Data Penumpang</b>
               <div className="w-full text-gray-secondary">
                 {penumpang.map((penumpangData) => (
-                  <div key={penumpangData.id}>
+                  <div key={penumpangData?.id}>
                     <h2 className="bg-gray-700 text-white rounded-t-md p-2 text-[600]">
-                      Data Diri {penumpangData.id} - Adult
+                      Data Diri {penumpangData?.id}
                     </h2>
                     <div className="w-full p-3 flex flex-col gap-y-4">
                       <div>
-                        <label className="font-bold" htmlFor={`title-${penumpangData.id}`}>
+                        <label className="font-bold" htmlFor={`title-${penumpangData?.id}`}>
                           Title
                           <span className="text-red-500 font-normal" title="Perlu diisi">
                             *
@@ -226,20 +270,22 @@ export default function CheckoutBiodataPemesan() {
                             icon={faChevronDown}
                             className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
                           />
-                            <select
+                          <select
                             name="title"
-                            id={`title-${penumpangData.id}`}
+                            id={`title-${penumpangData?.id}`}
                             className="w-full cursor-pointer border outline-none focus:border-secondary rounded-md h-10 appearance-none px-3 mt-1"
-                            value={penumpangData.title}
-                            onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                            value={penumpangData?.title}
+                            onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                           >
                             <option value="Mr.">Mr.</option>
                             <option value="Ms.">Ms.</option>
+                            <option value="Miss">Miss</option>
+                            <option value="Mrs.">Mrs.</option>
                           </select>
                         </div>
                       </div>
                       <div>
-                        <label className="font-bold" htmlFor={`namaLengkap-${penumpangData.id}`}>
+                        <label className="font-bold" htmlFor={`namaLengkap-${penumpangData?.id}`}>
                           Nama Lengkap
                           <span className="text-red-500 font-normal" title="Perlu diisi">
                             *
@@ -249,30 +295,30 @@ export default function CheckoutBiodataPemesan() {
                           type="text"
                           className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                           placeholder="Masukkan nama lengkap"
-                          id={`namaLengkap-${penumpangData.id}`}
+                          id={`namaLengkap-${penumpangData?.id}`}
                           name="namaLengkap"
-                          value={penumpangData.namaLengkap}
-                          onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                          value={penumpangData?.namaLengkap}
+                          onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                         />
                       </div>
                       <div>
-                        <label className="font-bold" htmlFor={`namaKeluarga-${penumpangData.id}`}>
+                        <label className="font-bold" htmlFor={`namaKeluarga-${penumpangData?.id}`}>
                           Nama Keluarga (opsional)
                         </label>
                         <input
                           type="text"
                           className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                           placeholder="Masukkan nama keluarga"
-                          id={`namaKeluarga-${penumpangData.id}`}
+                          id={`namaKeluarga-${penumpangData?.id}`}
                           name="namaKeluarga"
-                          value={penumpangData.namaKeluarga}
-                          onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                          value={penumpangData?.namaKeluarga}
+                          onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                         />
                       </div>
                       <div className="relative">
                         <label
                           className="font-bold block"
-                          htmlFor={`tanggalLahir-${penumpangData.id}`}
+                          htmlFor={`tanggalLahir-${penumpangData?.id}`}
                         >
                           Tanggal Lahir
                           <span className="text-red-500 font-normal" title="Perlu diisi">
@@ -285,14 +331,14 @@ export default function CheckoutBiodataPemesan() {
                             format="YYYY-MM-DD"
                             showOtherDays
                             highlightToday={false}
-                            value={penumpangData.tanggalLahir}
-                            onChange={(date) => handleTanggalLahirChange(date, penumpangData.id)}
+                            value={penumpangData?.tanggalLahir}
+                            onChange={(date) => handleTanggalLahirChange(date, penumpangData?.id)}
                             render={
                               <input
                                 className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                                id={`tanggalLahir-${penumpangData.id}`}
+                                id={`tanggalLahir-${penumpangData?.id}`}
                                 name="tanggalLahir"
-                                value={penumpangData.tanggalLahir}
+                                value={penumpangData?.tanggalLahir}
                                 readOnly
                               />
                             }
@@ -307,7 +353,7 @@ export default function CheckoutBiodataPemesan() {
                       <div>
                         <label
                           className="font-bold"
-                          htmlFor={`kewarganegaraan-${penumpangData.id}`}
+                          htmlFor={`kewarganegaraan-${penumpangData?.id}`}
                         >
                           Kewarganegaraan
                           <span className="text-red-500 font-normal" title="Perlu diisi">
@@ -318,14 +364,14 @@ export default function CheckoutBiodataPemesan() {
                           type="text"
                           className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                           placeholder="Masukkan Kewarganegaraan"
-                          id={`kewarganegaraan-${penumpangData.id}`}
+                          id={`kewarganegaraan-${penumpangData?.id}`}
                           name="kewarganegaraan"
-                          value={penumpangData.kewarganegaraan}
-                          onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                          value={penumpangData?.kewarganegaraan}
+                          onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                         />
                       </div>
                       <div>
-                        <label className="font-bold" htmlFor={`ktpOrPasspor-${penumpangData.id}`}>
+                        <label className="font-bold" htmlFor={`ktpOrPasspor-${penumpangData?.id}`}>
                           KTP/Paspor
                           <span className="text-red-500 font-normal" title="Perlu diisi">
                             *
@@ -335,14 +381,17 @@ export default function CheckoutBiodataPemesan() {
                           type="text"
                           className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                           placeholder="Masukkan KTP/Paspor"
-                          id={`ktpOrPasspor-${penumpangData.id}`}
+                          id={`ktpOrPasspor-${penumpangData?.id}`}
                           name="ktpOrPasspor"
-                          value={penumpangData.ktpOrPasspor}
-                          onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                          value={penumpangData?.ktpOrPasspor}
+                          onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                         />
                       </div>
                       <div>
-                        <label className="font-bold" htmlFor={`negaraPenerbit-${penumpangData.id}`}>
+                        <label
+                          className="font-bold"
+                          htmlFor={`negaraPenerbit-${penumpangData?.id}`}
+                        >
                           Negara Penerbit
                           <span className="text-red-500 font-normal" title="Perlu diisi">
                             *
@@ -355,10 +404,10 @@ export default function CheckoutBiodataPemesan() {
                           />
                           <select
                             name="negaraPenerbit"
-                            id={`negaraPenerbit-${penumpangData.id}`}
+                            id={`negaraPenerbit-${penumpangData?.id}`}
                             className="w-full cursor-pointer border outline-none focus:border-secondary rounded-md h-10 appearance-none px-3 mt-1"
-                            value={penumpangData.negaraPenerbit}
-                            onChange={(e) => handlePenumpang(e, penumpangData.id)}
+                            value={penumpangData?.negaraPenerbit}
+                            onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                           >
                             <option value="Singapore">Singapore</option>
                             <option value="Amerika">Amerika</option>
@@ -369,7 +418,7 @@ export default function CheckoutBiodataPemesan() {
                       <div className="relative">
                         <label
                           className="font-bold block"
-                          htmlFor={`berlakuSampai-${penumpangData.id}`}
+                          htmlFor={`berlakuSampai-${penumpangData?.id}`}
                         >
                           Berlaku
                           <span className="text-red-500 font-normal" title="Perlu diisi">
@@ -382,14 +431,14 @@ export default function CheckoutBiodataPemesan() {
                             showOtherDays
                             highlightToday={false}
                             format="YYYY-MM-DD"
-                            value={penumpangData.berlakuSampai}
-                            onChange={(date) => handleBerlakuSampaiChange(date, penumpangData.id)}
+                            value={penumpangData?.berlakuSampai}
+                            onChange={(date) => handleBerlakuSampaiChange(date, penumpangData?.id)}
                             render={
                               <input
                                 className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                                id={`berlakuSampai-${penumpangData.id}`}
+                                id={`berlakuSampai-${penumpangData?.id}`}
                                 name="berlakuSampai"
-                                value={penumpangData.berlakuSampai}
+                                value={penumpangData?.berlakuSampai}
                                 readOnly
                               />
                             }
@@ -408,7 +457,6 @@ export default function CheckoutBiodataPemesan() {
             </div>
 
             {/* Kursi */}
-
             <div className="border rounded-md h-fit my-8 p-5 w-full">
               <b className="text-xl mb-3 block">Isi Data Penumpang</b>
               <div className="w-full text-gray-secondary">
@@ -433,24 +481,26 @@ export default function CheckoutBiodataPemesan() {
                 <h2 className="font-bold text-xl">Detail Penerbangan</h2>
               </div>
               <div className="flex justify-between mt-2">
-                <b className="font-bold">19:10</b>
-                <b className="text-blue-400 text-xs">Keberangkatan</b>
+                <b className="font-bold">{formatTimeToHM(flightDetail?.departure_time)}</b>
+                <b className="text-blue-400">Keberangkatan</b>
               </div>
-              <p className="my-1">5 Maret 2023</p>
-              <b className="font-[600]">Soekarno Hatta - Terminal 1A Domestik</b>
+              <p className="my-1">{formatTimeToIndonesia(flightDetail?.departure_time)}</p>
+              <b className="font-[600]">{flightDetail?.fromAirport?.name}</b>
               <div className="text-sm">
                 <hr className="w-[95%] mx-auto my-3 " />
                 <div className="flex items-center gap-x-2">
                   <FontAwesomeIcon icon={faIcons} className="text-yellow-400" />
                   <div className="w-full">
                     <div className="font-bold">
-                      <h4>Jet Air - Economy</h4>
-                      <h5>JT- 203</h5>
+                      {flightDetail?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} -{' '}
+                      {flightDetail?.class === 'FIRSTCLASS' ? 'First Class' : 'Economy'}
                     </div>
+
+                    <b>{flightDetail?.whomAirplaneFlights?.airplane_code}</b>
                     <div>
                       <b>Informasi:</b>
-                      <p>Baggage 20 kg</p>
-                      <p>Cabin baggage 7kg</p>
+                      <p>{flightDetail?.whomAirplaneFlights?.baggage} kg</p>
+                      <p>{flightDetail?.whomAirplaneFlights?.cabin_baggage} kg</p>
                       <p>In Flight Entertainment</p>
                     </div>
                   </div>
@@ -458,37 +508,49 @@ export default function CheckoutBiodataPemesan() {
                 <hr className="w-[95%] mx-auto my-3 " />
                 <div>
                   <div className="flex justify-between">
-                    <h3 className="font-bold">21:10</h3>
+                    <h3 className="font-bold">{formatTimeToHM(flightDetail?.arrival_time)}</h3>
                     <b className="text-blue-400">Kedatangan</b>
                   </div>
-                  <h4>5 Maret 2023</h4>
-                  <h5 className="font-[600]">Melbourne International Airport</h5>
+                  <h4>{formatTimeToIndonesia(flightDetail?.arrival_time)}</h4>
+                  <h5 className="font-[600]">{flightDetail?.toAirport?.name}</h5>
                 </div>
                 <hr className="w-[95%] mx-auto my-3 " />
                 <div className="w-full">
                   <b>Rincian Harga</b>
-                  <div className="flex justify-between">
-                    <span>2 Orang Dewasa</span>
-                    <span>IDR 9.550.00</span>
+                  <div className={`flex justify-between ${!jumlahPenumpangDewasa && 'hidden'}`}>
+                    <div className="flex">
+                      <span className="w-2">{jumlahPenumpangDewasa} </span> Orang Dewasa{' '}
+                    </div>
+                    <span>IDR {hargaTiketDewasa.toLocaleString('id-ID')}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>1 Bayi</span>
+                  <div className={`flex justify-between ${!jumlahPenumpangAnak && 'hidden'}`}>
+                    <div className="flex">
+                      <span className="w-2">{jumlahPenumpangAnak}</span> Orang Anak{' '}
+                    </div>
+                    <span>IDR {hargaTiketAnak.toLocaleString('id-ID')}</span>
+                  </div>
+                  <div className={`flex justify-between ${!jumlahPenumpangBayi && 'hidden'}`}>
+                    <div className="flex">
+                      <span className="w-2">{jumlahPenumpangBayi}</span> Bayi{' '}
+                    </div>
                     <span>IDR 0</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Pajak</span>
-                    <span>IDR 300.000</span>
+                    <span>IDR {pajak.toLocaleString('id-ID')}</span>
                   </div>
                 </div>
                 <hr className="w-[95%] mx-auto my-3 " />
                 <div className="flex justify-between text-base">
                   <b>Total</b>
-                  <b className="text-secondary">IDR 9.850.000</b>
+                  <b className="text-secondary">
+                    IDR {(hargaTiketAnak + hargaTiketDewasa + pajak).toLocaleString('id-ID')}
+                  </b>
                 </div>
               </div>
-              <div className="bg-secondary text-white px-5 my-4 rounded-xl py-5">
+              <button className="bg-secondary text-white px-5 my-4 rounded-xl py-5 w-full">
                 <p className="text-base text-center">Lanjut bayar</p>
-              </div>
+              </button>
             </div>
           </div>
         </div>

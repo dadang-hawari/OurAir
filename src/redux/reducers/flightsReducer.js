@@ -5,6 +5,7 @@ const initialState = {
   flightsByCountry: null,
   flightsByCity: [],
   flightRecomendation: null,
+  flightDetail: null,
 }
 
 const flightLists = createSlice({
@@ -23,9 +24,12 @@ const flightLists = createSlice({
     setFlightRecomendation: (state, action) => {
       state.flightRecomendation = action.payload
     },
+    setFlightDetail:(state, action) => {
+      state.flightDetail= action.payload
+    }
   },
 })
 
-export const { setFligthLists, setFlightsByCountry, setFlightsByCity, setFlightRecomendation } =
+export const { setFligthLists, setFlightsByCountry, setFlightsByCity, setFlightRecomendation,setFlightDetail } =
   flightLists.actions
 export default flightLists.reducer

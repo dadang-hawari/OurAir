@@ -1,5 +1,5 @@
 import axios from "axios"
-import { setFlightDetail } from "../reducers/checkoutReducer"
+import { setFlightDetail } from "../reducers/flightsReducer"
 
 export const getFlightById = (id) => async (dispatch) => {
     try {
