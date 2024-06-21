@@ -1,47 +1,39 @@
-export const customStyles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.45)',
-  },
-  content: {
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
+const baseOverlay = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.45)',
 }
+
+const baseContent = {
+  backgroundColor: 'rgba(0, 0, 0, 0)',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+}
+
+export const customStyles = {
+  overlay: baseOverlay,
+  content: baseContent,
+}
+
 export const customStylesDestination = {
   overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    ...baseOverlay,
     overflow: 'hidden',
   },
   content: {
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    top: '50%',
-    left: '50%',
+    ...baseContent,
     overflow: 'auto',
-    transform: 'translate(-50%, -50%)',
     width: '90%',
     maxWidth: '700px',
   },
 }
+
 export const customStylesFilter = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.45)',
-  },
+  overlay: baseOverlay,
   content: {
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    ...baseContent,
     width: '100%',
     maxWidth: '800px',
   },

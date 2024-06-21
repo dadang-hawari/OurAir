@@ -11,15 +11,27 @@ import {
   faTimes,
 } from '@fortawesome/free-solid-svg-icons'
 import { SeatClass } from './SeatClass'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  setPenumpangAnak,
+  setPenumpangBayi,
+  setPenumpangDewasa,
+} from '../../redux/reducers/jadwalPenerbanganReducer'
 
 export const Passengers = () => {
   const [isModalOpenPassenger, setIsModalOpenPassenger] = useState(false)
-  const [adults, setAdults] = useState(1)
-  const [children, setChildren] = useState(0)
-  const [infants, setInfants] = useState(0)
+  const penumpang = useSelector((state) => state?.jadwalPenerbangan)
+  console.log('penumpang :>> ', penumpang)
+
+  const adults = penumpang?.jumlahPenumpang?.penumpangDewasa
+  const children = penumpang?.jumlahPenumpang?.penumpangAnak
+  const infants = penumpang?.jumlahPenumpang?.penumpangBayi
+
   const [tempAdults, setTempAdults] = useState(adults)
   const [tempChildren, setTempChildren] = useState(children)
   const [tempInfants, setTempInfants] = useState(infants)
+
+  const dispatch = useDispatch()
 
   const openModalPassenger = () => {
     setIsModalOpenPassenger(true)
@@ -29,18 +41,19 @@ export const Passengers = () => {
     setIsModalOpenPassenger(false)
   }
 
-  const handleIncrement = (setter, tempSetter, value) => {
+  const handleIncrement = (_, tempSetter, value) => {
     if (value < 9) tempSetter(value + 1)
   }
 
-  const handleDecrement = (setter, tempSetter, value) => {
+  const handleDecrement = (_, tempSetter, value) => {
+    if (_.type === 'jadwal-penerbangan/setPenumpangDewasa' && value === 1) return
     if (value > 0) tempSetter(value - 1)
   }
 
   const confirmPassenger = () => {
-    setAdults(tempAdults)
-    setChildren(tempChildren)
-    setInfants(tempInfants)
+    dispatch(setPenumpangBayi(tempInfants))
+    dispatch(setPenumpangAnak(tempChildren))
+    dispatch(setPenumpangDewasa(tempAdults))
     closeModalPassenger()
   }
 
@@ -53,8 +66,11 @@ export const Passengers = () => {
         className="border-none relative px-6"
       >
         <div className="text-center bg-white px-4 pb-4 pt-8 rounded-md relative">
-          <div className="absolute top-2 right-2 cursor-pointer" onClick={closeModalPassenger}>
-            <FontAwesomeIcon icon={faTimes} size="lg" />
+          <div
+            className="absolute top-0 right-0 cursor-pointer p-2 text-gray-500"
+            onClick={closeModalPassenger}
+          >
+            <FontAwesomeIcon icon={faTimes} />
           </div>
 
           <div className="flex flex-wrap justify-center">
@@ -66,7 +82,13 @@ export const Passengers = () => {
                 </span>
                 <div className="flex gap-x-2 items-center">
                   <button
-                    onClick={() => handleDecrement(setAdults, setTempAdults, tempAdults)}
+                    onClick={() =>
+                      handleDecrement(
+                        dispatch(setPenumpangDewasa(tempAdults)),
+                        setTempAdults,
+                        tempAdults
+                      )
+                    }
                     className="px-2 py-1 border"
                   >
                     <FontAwesomeIcon className="" icon={faMinus} />
@@ -75,7 +97,13 @@ export const Passengers = () => {
                     {tempAdults}
                   </span>
                   <button
-                    onClick={() => handleIncrement(setAdults, setTempAdults, tempAdults)}
+                    onClick={() =>
+                      handleIncrement(
+                        dispatch(setPenumpangDewasa(tempAdults)),
+                        setTempAdults,
+                        tempAdults
+                      )
+                    }
                     className="px-2 py-1 border"
                   >
                     <FontAwesomeIcon className="text-blue-600" icon={faPlus} />
@@ -93,7 +121,13 @@ export const Passengers = () => {
                 </span>
                 <div className="flex gap-x-2 items-center">
                   <button
-                    onClick={() => handleDecrement(setChildren, setTempChildren, tempChildren)}
+                    onClick={() =>
+                      handleDecrement(
+                        dispatch(setPenumpangAnak(tempChildren)),
+                        setTempChildren,
+                        tempChildren
+                      )
+                    }
                     className="px-2 py-1 border"
                   >
                     <FontAwesomeIcon icon={faMinus} />
@@ -102,7 +136,13 @@ export const Passengers = () => {
                     {tempChildren}
                   </span>
                   <button
-                    onClick={() => handleIncrement(setChildren, setTempChildren, tempChildren)}
+                    onClick={() =>
+                      handleIncrement(
+                        dispatch(setPenumpangAnak(tempChildren)),
+                        setTempChildren,
+                        tempChildren
+                      )
+                    }
                     className="px-2 py-1 border"
                   >
                     <FontAwesomeIcon className="text-blue-600" icon={faPlus} />
@@ -120,7 +160,13 @@ export const Passengers = () => {
                 </span>
                 <div className="flex gap-x-2 items-center">
                   <button
-                    onClick={() => handleDecrement(setInfants, setTempInfants, tempInfants)}
+                    onClick={() =>
+                      handleDecrement(
+                        dispatch(setPenumpangBayi(tempInfants)),
+                        setTempInfants,
+                        tempInfants
+                      )
+                    }
                     className="px-2 py-1 border"
                   >
                     <FontAwesomeIcon className="" icon={faMinus} />
@@ -129,7 +175,13 @@ export const Passengers = () => {
                     {tempInfants}
                   </span>
                   <button
-                    onClick={() => handleIncrement(setInfants, setTempInfants, tempInfants)}
+                    onClick={() =>
+                      handleIncrement(
+                        dispatch(setPenumpangBayi(tempInfants)),
+                        setTempInfants,
+                        tempInfants
+                      )
+                    }
                     className="px-2 py-1 border"
                   >
                     <FontAwesomeIcon className="text-blue-600" icon={faPlus} />
@@ -143,7 +195,7 @@ export const Passengers = () => {
 
             <div className="flex justify-end w-full">
               <button
-                className="bg-blue-600 text-white p-2 text-md px-5 mt-5 mb-2 font-[600] rounded-md"
+                className="bg-blue-600 text-white py-3 px-5 my-2 text-sm font-[600] rounded-md "
                 onClick={confirmPassenger}
               >
                 Simpan
@@ -159,7 +211,9 @@ export const Passengers = () => {
             onClick={openModalPassenger}
             className="text-left my-2 border p-3 font-[600] w-full"
           >
-            <span className="block w-[135.66px]">{adults + children + infants} Penumpang</span>
+            <span className="block w-[135.66px]">
+              {tempAdults + tempChildren + tempInfants} Penumpang
+            </span>
           </button>
         </div>
         <SeatClass />

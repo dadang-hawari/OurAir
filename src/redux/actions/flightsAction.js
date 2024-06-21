@@ -1,14 +1,16 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { setFlightsByCountry, setFligthLists } from '../reducers/flightsReducer'
-const loadingMessage = 'Mohon tunggu sebentar..'
-const toastIdWait = 'toasWait'
+import {
+  setFligthLists,
+  setFlightsByCity,
+  setFlightRecomendation,
+} from '../reducers/flightsReducer'
 
 export const getAllFlights = () => async (dispatch) => {
   try {
     const response = await axios.get(
       `${
-        import.meta.env.VITE_DOMAIN_API
+        import.meta.env.VITE_DOMAIN_API_DEV
       }/api/v1/flights/search-or-fetch-all-flight-from?page=1&limit=9999`
     )
     const data = response.data.data
@@ -21,16 +23,58 @@ export const getAllFlights = () => async (dispatch) => {
   }
 }
 
-export const getFlightByCityorCountry = (country) => async (dispatch) => {
+export const getFlightByCityorCountry =
+  (fromairport, toairport, kelas="Economy", startDate, endDate) => async (dispatch) => {
+    try {
+  
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_DOMAIN_API_DEV
+        }/api/v1/flights/search?fromairport=${fromairport}&toairport=${toairport}&class=${
+          kelas === 'First Class' ? 'firstclass' : kelas
+        }${startDate ? `&startDate=${startDate}` : ''}${endDate ? `&endDate=${endDate}` : ''}`
+      );
+      const data = response.data.data
+      if (response?.status === 200 || response?.status === 201) {
+        dispatch(setFlightsByCity(data))
+      }
+      console.log('response sss :>> ', response)
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+export const getFlightRecomendation = (country) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_DOMAIN_API}/api/v1/flights/search-city-or-country?country=${country}`
+      `${
+        import.meta.env.VITE_DOMAIN_API_DEV
+      }/api/v1/flights/recommendation?fromcountry=${country}&limit=${10}`
     )
     const data = response.data.data
     if (response.status === 200 || response.status === 201) {
-      dispatch(setFlightsByCountry(data))
+      dispatch(setFlightRecomendation(data))
     }
     console.log('response flight :>> ', data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getFlightsByCity = (city) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `${
+        import.meta.env.VITE_DOMAIN_API_DEV
+      }/api/v1/flights/search-city-or-country?city=${city}&limit=10`
+    )
+    const data = response.data.data
+    console.log('response', response)
+    alert('excute by city')
+    if (response.status === 200 || response.status === 201) {
+      dispatch(setFlightsByCity(data))
+    }
+    console.log('response bandara berdasarkan city :>> ', data)
   } catch (error) {
     console.log('error', error)
   }

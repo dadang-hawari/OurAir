@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import ReactModal from 'react-modal'
-import { customStyles } from '../../styles/customStyles'
+import { customStylesDestination } from '../../styles/customStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { setSeatClass } from '../../redux/reducers/jadwalPenerbanganReducer'
 
 export const SeatClass = () => {
   const [isModalOpenSeatClass, setIsModalOpenSeatClass] = useState(false)
-  const [selectedSeatClass, setSelectedSeatClass] = useState(null)
   const [tempSelectedSeatClass, setTempSelectedSeatClass] = useState(null)
+  const selectedSeatClass = useSelector((state) => state?.jadwalPenerbangan?.kelas)
+  const dispatch = useDispatch()
 
   const openModalSeatClass = () => {
     setIsModalOpenSeatClass(true)
@@ -20,69 +23,56 @@ export const SeatClass = () => {
 
   const selectSeatClass = (seatClass) => {
     setTempSelectedSeatClass(seatClass)
+    dispatch(setSeatClass(seatClass))
   }
 
   const confirmSeatClass = () => {
-    setSelectedSeatClass(tempSelectedSeatClass)
+    dispatch(setSeatClass(tempSelectedSeatClass))
     closeModalSeatClass()
   }
 
-  const seatClasses = [
-    { name: 'Economy', price: 4950000 },
-    { name: 'Premium Economy', price: 7550000 },
-    { name: 'Business', price: 29220000 },
-    { name: 'First Class', price: 87620000 },
-  ]
+  const seatClasses = [{ name: 'Economy' }, { name: 'Business' }, { name: 'First Class' }]
 
   return (
     <div className="flex-grow w-full">
       <ReactModal
         isOpen={isModalOpenSeatClass}
         onRequestClose={closeModalSeatClass}
-        style={customStyles}
-        className="border-none relative mx-10 overflow-hidden"
+        style={customStylesDestination}
+        className="border-none relative overflow-hidden max-w-[800px] px-4 w-full"
       >
-        <div className="text-center bg-white p-3 rounded-md relative">
+        <div className="text-center bg-white py-3 rounded-md relative">
           <div className="absolute top-2 right-2 cursor-pointer" onClick={closeModalSeatClass}>
-            <FontAwesomeIcon icon={faTimes} size="sm" />
+            <FontAwesomeIcon icon={faTimes} size="sm" className="text-gray-500" />
           </div>
-          <div className="flex flex-wrap gap-4 mt-3 justify-center">
+          <div className="flex flex-wrap  mt-5 justify-center w-full">
             {seatClasses.map((seatClass, index) => (
               <div key={index} className="w-full">
                 <hr className="mt-1" />
                 <button
-                  className={`hover:bg-blue-50  text-left ml-3 font-bold text-black p-1 rounded-md w-full ${
+                  className={`  text-left  font-bold text-black py-4 px-6 rounded-sm w-full ${
                     tempSelectedSeatClass?.name === seatClass.name
-                      ? 'bg-blue-500 text-white'
+                      ? 'bg-blue-500 text-white h-full'
                       : 'bg-white'
                   }`}
-                  onClick={() => selectSeatClass(seatClass)}
+                  onClick={() => {
+                    selectSeatClass(seatClass)
+                  }}
                 >
                   <div className="flex justify-between items-center">
-                    <div>
-                      {seatClass.name}
-                      <div
-                        className={`${
-                          tempSelectedSeatClass?.price === seatClass.price
-                            ? 'text-white'
-                            : 'text-blue-500'
-                        } text-left mt-1 text-sm`}
-                      >
-                        IDR {seatClass.price.toLocaleString()}
-                      </div>
-                    </div>
+                    <div>{seatClass.name}</div>
                     {tempSelectedSeatClass?.name === seatClass.name && (
-                      <FontAwesomeIcon icon={faCheckCircle} className=" h-5 text-green-600" />
+                      <FontAwesomeIcon icon={faCheckCircle} className=" h-5 text-[#73CA5C]" />
                     )}
                   </div>
                 </button>
               </div>
             ))}
           </div>
-          <hr className="mt-5" />
+          <hr />
           <div className="flex justify-end w-full mt-3">
             <button
-              className="bg-blue-600 text-white p-2 text-sm rounded-md"
+              className="bg-blue-600 text-white py-3 px-5 my-2 mr-4 text-sm font-[600] rounded-md "
               onClick={confirmSeatClass}
             >
               Simpan

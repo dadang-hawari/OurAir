@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { faArrowLeft, faCog, faPencil, faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Footer from './Footer'
 import Toast from '../components/common/Toast'
+import { updateUser } from '../redux/actions/authAction'
 
 function Header({ title }) {
   return (
@@ -69,9 +70,10 @@ export default function Profile() {
   const [imageFile, setImageFile] = useState(null)
   const [isEditing, setIsEditing] = useState(false)
 
-  const [name, onNameChange] = useInput(() => userData?.name || '')
+  const [name, onNameChange] = useInput(() => userData?.name)
   const [phone, onPhoneChange] = useInput(() => userData?.phone_number || '')
   const [email, onEmailChange] = useInput(() => userData?.email || '')
+  const dispatch = useDispatch()
 
   const onPictureChange = (e) => {
     const file = e.target.files[0]
@@ -95,6 +97,10 @@ export default function Profile() {
   const handleRemove = () => {
     setImageFile(null)
     setPreview('')
+  }
+
+  const handleSave = () => {
+    dispatch(updateUser(name, email, phone, token))
   }
 
   const handleSubmit = (e) => {
@@ -205,6 +211,7 @@ export default function Profile() {
                 disabled={!isEditing}
                 type="submit"
                 className="bg-primary border-2 border-primary text-white px-10 py-3 rounded-lg text-lg disabled:opacity-50"
+                onClick={handleSave}
               >
                 Simpan
               </button>

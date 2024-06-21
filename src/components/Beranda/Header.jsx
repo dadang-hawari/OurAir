@@ -4,10 +4,28 @@ import { DepartureReturn } from './DepartureReturn'
 import { ButtonSearch } from './ButtonSearch'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../Navbar'
+import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 export default function Header() {
   const navigate = useNavigate()
+  const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
+  const kotaKeberangkatan = jadwalPenerbangan?.departureCity
+  const kotaTujuan = jadwalPenerbangan?.arrivalCity
   const handleSearch = () => {
+    if (
+      kotaKeberangkatan.length === 0 ||
+      kotaKeberangkatan === 'Bandara Keberangkatan' ||
+      kotaTujuan.length === 0 ||
+      kotaTujuan === 'Bandara Tujuan'
+    ) {
+      toast('Mohon untuk memilih kota tujuan atau keberangkatan', {
+        className: 'toast-info',
+        toastId: 'toastInfo',
+      })
+      return
+    }
+
     navigate('/pilih-penerbangan', {
       state: {
         searchValue: 'JKT > MLB - 2 Penumpang - Economy',

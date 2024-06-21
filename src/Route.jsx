@@ -13,6 +13,10 @@ import CheckoutBiodataPemesanan from './pages/Checkout/CheckoutBiodataPemesanan'
 import Notification from './pages/Notification'
 import Tentang from './pages/Tentang'
 import MenungguPembayaran from './pages/Checkout/MenungguPembayaran'
+import PembayaranSukses from './pages/Checkout/PembayaranSukses'
+import SeatPicker from './components/SeatPicker'
+import ScrollToTop from './components/common/ScrollToTop'
+
 export default function Route() {
   const router = createBrowserRouter([
     {
@@ -20,7 +24,11 @@ export default function Route() {
       element: <Beranda />,
     },
     {
-      path: `/otp`,
+      path: '/seat-picker',
+      element: <SeatPicker />,
+    },
+    {
+      path: '/otp',
       element: <OTP />,
     },
     {
@@ -60,7 +68,11 @@ export default function Route() {
       element: <MenungguPembayaran />,
     },
     {
-      path: '/Notification',
+      path: '/pembayaran-sukses',
+      element: <PembayaranSukses />,
+    },
+    {
+      path: '/notification',
       element: <Notification />,
     },
     {
@@ -73,5 +85,9 @@ export default function Route() {
     },
   ])
 
-  return <RouterProvider router={router} />
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
+  )
 }
