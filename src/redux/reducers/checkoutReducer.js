@@ -45,14 +45,14 @@ const checkoutSlice = createSlice({
       const { id, date } = action.payload
       const penumpangIndex = state.penumpang.findIndex((p) => p.id === id)
       if (penumpangIndex >= 0) {
-        state.penumpang[penumpangIndex].tanggalLahir = date
+        state.penumpang[penumpangIndex].birth_date = date
       }
     },
     updateBerlakuSampai: (state, action) => {
       const { id, date } = action.payload
       const penumpangIndex = state.penumpang.findIndex((p) => p.id === id)
       if (penumpangIndex >= 0) {
-        state.penumpang[penumpangIndex].berlakuSampai = date
+        state.penumpang[penumpangIndex].document_expired = date
       }
     },
     // setSelectedSeatPenumpang: (state, action) => {
@@ -75,6 +75,13 @@ const checkoutSlice = createSlice({
     resetSelectedSeats: (state) => {
       state.selectedSeats = []
     },
+    assignSeatsToPassengers: (state, action) => {
+      const seats = action.payload
+      state.penumpang = state.penumpang.map((penumpang, index) => ({
+        ...penumpang,
+        seat_number: seats[index] || '',
+      }))
+    },
   },
 })
 
@@ -91,5 +98,6 @@ export const {
   removeSelectedSeat,
   resetSelectedSeats,
   setJumlahPenumpang,
+  assignSeatsToPassengers,
 } = checkoutSlice.actions
 export default checkoutSlice.reducer

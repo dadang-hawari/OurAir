@@ -13,6 +13,7 @@ import { data } from 'autoprefixer'
 import DatePicker from 'react-multi-date-picker'
 import SeatPicker from '../../components/SeatPicker'
 import {
+  assignSeatsToPassengers,
   resetSelectedSeats,
   setJumlahPenumpang,
   setPemesan,
@@ -26,14 +27,17 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getFlightById, postBooking } from '../../redux/actions/checkoutAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
+import { toast } from 'react-toastify'
+import Toast from '../../components/common/Toast'
 
 export default function CheckoutBiodataPemesan() {
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
   const flightLists = useSelector((state) => state?.flightLists)
   const flightDetail = flightLists?.flightDetail
   const flightSeats = flightLists?.flightSeats
+  console.log('flightSeats', flightSeats)
   const dataCheckout = useSelector((state) => state?.checkout)
-  const selectedSeats = dataCheckout
+  const selectedSeats = dataCheckout?.selectedSeats
 
   const flight_id = dataCheckout?.idFlight
   const pemesan = dataCheckout?.pemesan
@@ -59,9 +63,11 @@ export default function CheckoutBiodataPemesan() {
 
   const setDataPenumpang = () => {
     // percabangan if biar inputan nggak kereset jika misalnya tidak ada perubahan penumpang
+    // PR penumpang bayi
     if (
       (penumpangSaatIni?.penumpangDewasa === jumlahPenumpang?.penumpangDewasa &&
-        penumpangSaatIni?.penumpangAnak === jumlahPenumpang?.penumpangAnak) ||
+        penumpangSaatIni?.penumpangAnak === jumlahPenumpang?.penumpangAnak &&
+        penumpangSaatIni?.penumpangBayi === jumlahPenumpang?.penumpangBayi) ||
       jumlahPenumpang?.penumpangDewasa === null ||
       jumlahPenumpang?.penumpangDewasa === undefined
     )
@@ -74,15 +80,15 @@ export default function CheckoutBiodataPemesan() {
       penumpangBaru.push({
         id: `penumpang ${i + 1} - Dewasa`,
         title: 'Mr.',
-        namaLengkap: '',
-        namaKeluarga: '',
-        tanggalLahir: '',
-        kewarganegaraan: '',
-        ktpOrPasspor: '',
-        negaraPenerbit: 'Indonesia',
-        berlakuSampai: '',
-        flight_id: { flight_id },
-        category: 'Dewasa',
+        fullname: '',
+        surname: '',
+        birth_date: '',
+        nationality: '',
+        document: '',
+        country_publication: 'Indonesia',
+        document_expired: '',
+        ticket: { flight_id: flight_id },
+        category: 'adult',
         seat_number: '',
       })
     }
@@ -91,15 +97,15 @@ export default function CheckoutBiodataPemesan() {
       penumpangBaru.push({
         id: `penumpang ${penumpangDewasa + i + 1} - Anak`,
         title: 'Mr.',
-        namaLengkap: '',
-        namaKeluarga: '',
-        tanggalLahir: '',
-        kewarganegaraan: '',
-        ktpOrPasspor: '',
-        negaraPenerbit: 'Indonesia',
-        berlakuSampai: '',
-        flight_id: { flight_id },
-        category: 'Anak',
+        fullname: '',
+        surname: '',
+        birth_date: '',
+        nationality: '',
+        document: '',
+        country_publication: 'Indonesia',
+        document_expired: '',
+        ticket: { flight_id: flight_id },
+        category: 'child',
         seat_number: '',
       })
     }
@@ -133,6 +139,15 @@ export default function CheckoutBiodataPemesan() {
 
   const handleLanjutBayar = () => {
     console.log('dataCheckout', dataCheckout)
+    if (selectedSeats.length < jumlahPenumpangAnak + jumlahPenumpangDewasa) {
+      toast(`Mohon pastikan agar memilih seluruh kursi `, {
+        toastId: 'toastInfo',
+        className: 'toast-error',
+      })
+      return
+    }
+
+    dispatch(assignSeatsToPassengers(selectedSeats))
     dispatch(postBooking(dataCheckout?.penumpang))
     // navigate('/menunggu-pembayaran')
   }
@@ -293,7 +308,7 @@ export default function CheckoutBiodataPemesan() {
                         </div>
                       </div>
                       <div>
-                        <label className="font-bold" htmlFor={`namaLengkap-${penumpangData?.id}`}>
+                        <label className="font-bold" htmlFor={`fullname-${penumpangData?.id}`}>
                           Nama Lengkap
                           <span className="text-red-500 font-normal" title="Perlu diisi">
                             *
@@ -303,30 +318,30 @@ export default function CheckoutBiodataPemesan() {
                           type="text"
                           className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                           placeholder="Masukkan nama lengkap"
-                          id={`namaLengkap-${penumpangData?.id}`}
-                          name="namaLengkap"
-                          value={penumpangData?.namaLengkap}
+                          id={`fullname-${penumpangData?.id}`}
+                          name="fullname"
+                          value={penumpangData?.fullname}
                           onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                         />
                       </div>
                       <div>
-                        <label className="font-bold" htmlFor={`namaKeluarga-${penumpangData?.id}`}>
+                        <label className="font-bold" htmlFor={`surname-${penumpangData?.id}`}>
                           Nama Keluarga (opsional)
                         </label>
                         <input
                           type="text"
                           className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                           placeholder="Masukkan nama keluarga"
-                          id={`namaKeluarga-${penumpangData?.id}`}
-                          name="namaKeluarga"
-                          value={penumpangData?.namaKeluarga}
+                          id={`surname-${penumpangData?.id}`}
+                          name="surname"
+                          value={penumpangData?.surname}
                           onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                         />
                       </div>
                       <div className="relative">
                         <label
                           className="font-bold block"
-                          htmlFor={`tanggalLahir-${penumpangData?.id}`}
+                          htmlFor={`birth_date-${penumpangData?.id}`}
                         >
                           Tanggal Lahir
                           <span className="text-red-500 font-normal" title="Perlu diisi">
@@ -339,7 +354,7 @@ export default function CheckoutBiodataPemesan() {
                             format="YYYY-MM-DD"
                             showOtherDays
                             highlightToday={false}
-                            value={penumpangData?.tanggalLahir}
+                            value={penumpangData?.birth_date}
                             onChange={(date) => handleTanggalLahirChange(date, penumpangData?.id)}
                           />
                           <FontAwesomeIcon
@@ -349,10 +364,7 @@ export default function CheckoutBiodataPemesan() {
                         </div>
                       </div>
                       <div>
-                        <label
-                          className="font-bold"
-                          htmlFor={`kewarganegaraan-${penumpangData?.id}`}
-                        >
+                        <label className="font-bold" htmlFor={`nationality-${penumpangData?.id}`}>
                           Kewarganegaraan
                           <span className="text-red-500 font-normal" title="Perlu diisi">
                             *
@@ -362,14 +374,14 @@ export default function CheckoutBiodataPemesan() {
                           type="text"
                           className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                           placeholder="Masukkan Kewarganegaraan"
-                          id={`kewarganegaraan-${penumpangData?.id}`}
-                          name="kewarganegaraan"
-                          value={penumpangData?.kewarganegaraan}
+                          id={`nationality-${penumpangData?.id}`}
+                          name="nationality"
+                          value={penumpangData?.nationality}
                           onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                         />
                       </div>
                       <div>
-                        <label className="font-bold" htmlFor={`ktpOrPasspor-${penumpangData?.id}`}>
+                        <label className="font-bold" htmlFor={`document-${penumpangData?.id}`}>
                           KTP/Paspor
                           <span className="text-red-500 font-normal" title="Perlu diisi">
                             *
@@ -379,16 +391,16 @@ export default function CheckoutBiodataPemesan() {
                           type="text"
                           className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                           placeholder="Masukkan KTP/Paspor"
-                          id={`ktpOrPasspor-${penumpangData?.id}`}
-                          name="ktpOrPasspor"
-                          value={penumpangData?.ktpOrPasspor}
+                          id={`document-${penumpangData?.id}`}
+                          name="document"
+                          value={penumpangData?.document}
                           onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                         />
                       </div>
                       <div>
                         <label
                           className="font-bold"
-                          htmlFor={`negaraPenerbit-${penumpangData?.id}`}
+                          htmlFor={`country_publication-${penumpangData?.id}`}
                         >
                           Negara Penerbit
                           <span className="text-red-500 font-normal" title="Perlu diisi">
@@ -401,10 +413,10 @@ export default function CheckoutBiodataPemesan() {
                             className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
                           />
                           <select
-                            name="negaraPenerbit"
-                            id={`negaraPenerbit-${penumpangData?.id}`}
+                            name="country_publication"
+                            id={`country_publication-${penumpangData?.id}`}
                             className="w-full cursor-pointer border outline-none focus:border-secondary rounded-md h-10 appearance-none px-3 mt-1"
-                            value={penumpangData?.negaraPenerbit}
+                            value={penumpangData?.country_publication}
                             onChange={(e) => handlePenumpang(e, penumpangData?.id)}
                           >
                             <option value="Singapore">Singapore</option>
@@ -416,7 +428,7 @@ export default function CheckoutBiodataPemesan() {
                       <div className="relative">
                         <label
                           className="font-bold block"
-                          htmlFor={`berlakuSampai-${penumpangData?.id}`}
+                          htmlFor={`document_expired-${penumpangData?.id}`}
                         >
                           Berlaku
                           <span className="text-red-500 font-normal" title="Perlu diisi">
@@ -429,7 +441,7 @@ export default function CheckoutBiodataPemesan() {
                             showOtherDays
                             highlightToday={false}
                             format="YYYY-MM-DD"
-                            value={penumpangData?.berlakuSampai}
+                            value={penumpangData?.document_expired}
                             onChange={(date) => handleBerlakuSampaiChange(date, penumpangData?.id)}
                           />
                           <FontAwesomeIcon
@@ -554,6 +566,7 @@ export default function CheckoutBiodataPemesan() {
             </div>
           </div>
         </div>
+        <Toast />
       </div>
     </div>
   )

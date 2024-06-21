@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import '../styles/seatpicker.css'
 import {
   addSelectedSeat,
@@ -9,7 +9,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function SeatPicker() {
-  const [seats, setSeats] = useState([])
   const selectedSeats = useSelector((state) => state?.checkout?.selectedSeats)
   const dispatch = useDispatch()
   const flightDetail = useSelector((state) => state?.flightLists?.flightSeats)
@@ -18,7 +17,6 @@ export default function SeatPicker() {
   const jumlahPenumpangAnak = dataCheckout?.jumlahPenumpang?.penumpangAnak
   const jumlahPenumpangDewasa = dataCheckout?.jumlahPenumpang?.penumpangDewasa
   const penumpang = jumlahPenumpangAnak + jumlahPenumpangDewasa
-  console.log('selectedSeats', selectedSeats)
 
   const handleSeatClick = (seatId) => {
     const seat = availableSeats.flat().find((seat) => seat?.seatNumber === seatId)
