@@ -13,31 +13,37 @@ import { data } from 'autoprefixer'
 import DatePicker from 'react-multi-date-picker'
 import SeatPicker from '../../components/SeatPicker'
 import {
+  resetSelectedSeats,
   setJumlahPenumpang,
   setPemesan,
   setPenumpang,
+  setSelectedSeat,
   setUseCurrentEmail,
   updateBerlakuSampai,
   updatePenumpang,
   updateTanggalLahir,
 } from '../../redux/reducers/checkoutReducer'
-import { useLocation } from 'react-router-dom'
-import { getFlightById } from '../../redux/actions/checkoutAction'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { getFlightById, postBooking } from '../../redux/actions/checkoutAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
 
 export default function CheckoutBiodataPemesan() {
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
-  const flightDetail = useSelector((state) => state?.flightLists?.flightDetail)
+  const flightLists = useSelector((state) => state?.flightLists)
+  const flightDetail = flightLists?.flightDetail
+  const flightSeats = flightLists?.flightSeats
   const dataCheckout = useSelector((state) => state?.checkout)
-  const flightId = dataCheckout?.idFlight
+  const selectedSeats = dataCheckout
+
+  const flight_id = dataCheckout?.idFlight
   const pemesan = dataCheckout?.pemesan
   const penumpang = dataCheckout?.penumpang
   const useCurrentEmail = dataCheckout?.useCurrentEmail
+  const seatClass = flightDetail?.class
   const location = useLocation()
-  console.log('location', location)
 
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   const penumpangSaatIni = dataCheckout?.jumlahPenumpang
   const jumlahPenumpang = location?.state?.jumlahPenumpang
   const pajak =
@@ -51,10 +57,8 @@ export default function CheckoutBiodataPemesan() {
   const jumlahPenumpangDewasa = penumpangSaatIni?.penumpangDewasa
   const jumlahPenumpangBayi = penumpangSaatIni?.penumpangBayi
 
-  console.log('penumpang', penumpang)
-  console.log('pemesan', pemesan)
-
   const setDataPenumpang = () => {
+    // percabangan if biar inputan nggak kereset jika misalnya tidak ada perubahan penumpang
     if (
       (penumpangSaatIni?.penumpangDewasa === jumlahPenumpang?.penumpangDewasa &&
         penumpangSaatIni?.penumpangAnak === jumlahPenumpang?.penumpangAnak) ||
@@ -63,6 +67,7 @@ export default function CheckoutBiodataPemesan() {
     )
       return
     dispatch(setJumlahPenumpang(jumlahPenumpang))
+    dispatch(resetSelectedSeats())
     const { penumpangDewasa, penumpangAnak } = jumlahPenumpang ?? {}
     const penumpangBaru = []
     for (let i = 0; i < penumpangDewasa; i++) {
@@ -76,7 +81,9 @@ export default function CheckoutBiodataPemesan() {
         ktpOrPasspor: '',
         negaraPenerbit: 'Indonesia',
         berlakuSampai: '',
-        flightId,
+        flight_id: { flight_id },
+        category: 'Dewasa',
+        seat_number: '',
       })
     }
 
@@ -91,7 +98,9 @@ export default function CheckoutBiodataPemesan() {
         ktpOrPasspor: '',
         negaraPenerbit: 'Indonesia',
         berlakuSampai: '',
-        flightId,
+        flight_id: { flight_id },
+        category: 'Anak',
+        seat_number: '',
       })
     }
 
@@ -101,7 +110,7 @@ export default function CheckoutBiodataPemesan() {
   useEffect(() => {
     // Inisialisasi state penumpang berdasarkan jumlah penumpangSaatIni
     setDataPenumpang()
-    dispatch(getFlightById(flightId))
+    dispatch(getFlightById(flight_id))
   }, [penumpangSaatIni])
 
   const handlePenumpang = (e, id) => {
@@ -124,6 +133,8 @@ export default function CheckoutBiodataPemesan() {
 
   const handleLanjutBayar = () => {
     console.log('dataCheckout', dataCheckout)
+    dispatch(postBooking(dataCheckout?.penumpang))
+    // navigate('/menunggu-pembayaran')
   }
 
   return (
@@ -330,22 +341,10 @@ export default function CheckoutBiodataPemesan() {
                             highlightToday={false}
                             value={penumpangData?.tanggalLahir}
                             onChange={(date) => handleTanggalLahirChange(date, penumpangData?.id)}
-                            render={({ openCalendar, handleValueChange }) => (
-                              <div>
-                                <input
-                                  className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                                  id={`tanggalLahir-${penumpangData?.id}`}
-                                  name="tanggalLahir"
-                                  value={penumpangData?.tanggalLahir}
-                                  readOnly
-                                />
-                                <FontAwesomeIcon
-                                  icon={faCalendar}
-                                  className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
-                                  onClick={openCalendar} // Use openCalendar function here
-                                />
-                              </div>
-                            )}
+                          />
+                          <FontAwesomeIcon
+                            icon={faCalendar}
+                            className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
                           />
                         </div>
                       </div>
@@ -432,23 +431,10 @@ export default function CheckoutBiodataPemesan() {
                             format="YYYY-MM-DD"
                             value={penumpangData?.berlakuSampai}
                             onChange={(date) => handleBerlakuSampaiChange(date, penumpangData?.id)}
-                            render={({ openCalendar, handleValueChange }) => (
-                              <div className="relative">
-                                <input
-                                  className="calendar w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                                  id={`berlakuSampai-${penumpangData?.id}`}
-                                  name="berlakuSampai"
-                                  value={penumpangData?.berlakuSampai}
-                                  readOnly
-                                  onClick={openCalendar} // Attach the openCalendar function to handle click
-                                />
-                                <FontAwesomeIcon
-                                  icon={faCalendar}
-                                  className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
-                                  onClick={openCalendar} // Attach the openCalendar function here as well
-                                />
-                              </div>
-                            )}
+                          />
+                          <FontAwesomeIcon
+                            icon={faCalendar}
+                            className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
                           />
                         </div>
                       </div>
@@ -463,7 +449,12 @@ export default function CheckoutBiodataPemesan() {
               <b className="text-xl mb-3 block">Isi Data Penumpang</b>
               <div className="w-full text-gray-secondary">
                 <h2 className="bg-gray-700 text-white text-center rounded-t-md p-2 text-[600]">
-                  Economy - 72 Kursi Tersedia
+                  {seatClass === 'FIRSTCLASS'
+                    ? 'First Class'
+                    : seatClass === 'ECONOMY'
+                    ? 'Economy'
+                    : 'Business'}{' '}
+                  - {flightSeats?.totalAvailableSeats} Kursi Tersedia
                 </h2>
                 <div className="w-full p-3 flex flex-col gap-y-4">
                   <SeatPicker />
@@ -495,7 +486,11 @@ export default function CheckoutBiodataPemesan() {
                   <div className="w-full">
                     <div className="font-bold">
                       {flightDetail?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} -{' '}
-                      {flightDetail?.class === 'FIRSTCLASS' ? 'First Class' : 'Economy'}
+                      {seatClass === 'FIRSTCLASS'
+                        ? 'First Class'
+                        : seatClass === 'ECONOMY'
+                        ? 'Economy'
+                        : 'Business'}
                     </div>
 
                     <b>{flightDetail?.whomAirplaneFlights?.airplane_code}</b>

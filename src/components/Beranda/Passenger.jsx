@@ -46,6 +46,7 @@ export const Passengers = () => {
   }
 
   const handleDecrement = (_, tempSetter, value) => {
+    if (_.type === 'jadwal-penerbangan/setPenumpangDewasa' && value === 1) return
     if (value > 0) tempSetter(value - 1)
   }
 

@@ -82,3 +82,7 @@ div.calendar,
 div.rmdp-container {
   @apply w-full;
 }
+
+.rmdp-container input.rmdp-input {
+  @apply w-full block border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4;
+}

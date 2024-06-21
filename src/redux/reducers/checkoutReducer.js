@@ -55,6 +55,11 @@ const checkoutSlice = createSlice({
         state.penumpang[penumpangIndex].berlakuSampai = date
       }
     },
+    // setSelectedSeatPenumpang: (state, action) => {
+    //   const { id } = action.payload
+    //   const penumpangIndex = state.penumpang.findIndex((p) => p.id === id)
+    //   console.log('action selected seat', action)
+    // },
     setIdFlight: (state, action) => {
       state.idFlight = action.payload
     },

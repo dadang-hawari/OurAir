@@ -258,3 +258,34 @@ export const loginUser = (email, password, navigate) => async (dispatch) => {
 export const logout = () => async (dispatch) => {
   dispatch(logoutAction())
 }
+
+export const updateUser = (name, phone_number, email, token) => async () => {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/users/profile`,
+      {
+        name: name,
+        phone_number: phone_number,
+        email: email,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    console.log('response :>> ', response)
+    if (response?.status === 200 || response?.status === 201) {
+      alert('success')
+    }
+  } catch (error) {
+    toast.dismiss('toastLoading')
+
+    error?.response?.data?.errors[0]?.msg
+      ? toast(error?.response?.data.errors[0].msg, { className: 'toast-error' })
+      : toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
+          className: 'toast-error',
+        })
+    console.error('Error:', error)
+  }
+}

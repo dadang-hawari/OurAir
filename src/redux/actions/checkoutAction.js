@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { setFlightDetail } from '../reducers/flightsReducer'
+import { setFlightDetail, setFlightSeats } from '../reducers/flightsReducer'
 
 export const getFlightById = (id) => async (dispatch) => {
   try {
@@ -10,19 +10,19 @@ export const getFlightById = (id) => async (dispatch) => {
     const data = response.data.data
     if (response.status === 200 || response.status === 201) {
       dispatch(setFlightDetail(data))
+      dispatch(setFlightSeats(response.data.result[0]))
     }
-    console.log('response id :>> ', data)
+    console.log('data', data)
   } catch (error) {
     console.log(error)
   }
 }
 export const postBooking = (passenggers, navigate, token) => async () => {
   try {
+    console.log({ passenggers: passenggers })
     const response = await axios.post(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/flights/booking/create`,
-      {
-        passenggers,
-      },
+      {},
       {
         headers: {
           Autorization: `Bearer ${token}`,

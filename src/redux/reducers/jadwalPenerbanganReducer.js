@@ -38,6 +38,9 @@ const penerbanganSlice = createSlice({
       state.kelas = action.payload
     },
     setPenumpangDewasa: (state, action) => {
+      if (action.payload < 1) {
+        state.jumlahPenumpang.penumpangDewasa = 1
+      }
       state.jumlahPenumpang.penumpangDewasa = action.payload
     },
     setPenumpangAnak: (state, action) => {

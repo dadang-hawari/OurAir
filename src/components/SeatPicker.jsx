@@ -12,66 +12,17 @@ export default function SeatPicker() {
   const [seats, setSeats] = useState([])
   const selectedSeats = useSelector((state) => state?.checkout?.selectedSeats)
   const dispatch = useDispatch()
-
-  // Jumlah penumpang
-  const penumpang = 2
-  const namaPenumpang = {
-    penumpang1: {
-      nama: 'Denis',
-    },
-    penumpang2: {
-      nama: 'Dina',
-    },
-  }
-  // Data kursi dengan struktur baris dan kolom
-  const data = {
-    seats: [
-      [
-        { id: '1A', status: 'unavailable' },
-        { id: '1B', status: 'available' },
-        { id: '1C', status: 'available' },
-        { id: '1D', status: 'available' },
-        { id: '1E', status: 'unavailable' },
-        { id: '1F', status: 'available' },
-      ],
-      [
-        { id: '2A', status: 'available' },
-        { id: '2B', status: 'available' },
-        { id: '2C', status: 'available' },
-        { id: '2D', status: 'available' },
-        { id: '2E', status: 'available' },
-        { id: '2F', status: 'available' },
-      ],
-      [
-        { id: '3A', status: 'available' },
-        { id: '3B', status: 'available' },
-        { id: '3C', status: 'available' },
-        { id: '3D', status: 'available' },
-        { id: '3E', status: 'available' },
-        { id: '3F', status: 'available' },
-      ],
-      [
-        { id: '4A', status: 'available' },
-        { id: '4B', status: 'available' },
-        { id: '4C', status: 'available' },
-        { id: '4D', status: 'available' },
-        { id: '4E', status: 'available' },
-        { id: '4F', status: 'available' },
-      ],
-    ],
-  }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = data
-      setSeats(result.seats)
-    }
-    fetchData()
-  }, [])
+  const flightDetail = useSelector((state) => state?.flightLists?.flightSeats)
+  const availableSeats = flightDetail?.availableSeats
+  const dataCheckout = useSelector((state) => state?.checkout)
+  const jumlahPenumpangAnak = dataCheckout?.jumlahPenumpang?.penumpangAnak
+  const jumlahPenumpangDewasa = dataCheckout?.jumlahPenumpang?.penumpangDewasa
+  const penumpang = jumlahPenumpangAnak + jumlahPenumpangDewasa
+  console.log('selectedSeats', selectedSeats)
 
   const handleSeatClick = (seatId) => {
-    const seat = seats.flat().find((seat) => seat.id === seatId)
-    if (seat.status === 'unavailable') return
+    const seat = availableSeats.flat().find((seat) => seat?.seatNumber === seatId)
+    if (seat.isBooked) return
 
     if (selectedSeats.includes(seatId)) {
       // Jika kursi sudah dipilih, batalkan pilihan
@@ -119,19 +70,18 @@ export default function SeatPicker() {
           <div className="seat-heading">F</div>
         </div>
       </div>
-      {seats.map((row, rowIndex) => (
+      {availableSeats?.map((row, rowIndex) => (
         <div key={rowIndex} className="seat-row flex gap-x-1 items-center">
           {row.map((seat, i) => {
-            const seatIndex = selectedSeats.indexOf(seat.id)
-            const seatLabel =
-              seatIndex >= 0 ? `P${seatIndex + 1}` : seat.status === 'unavailable' ? 'X' : ''
+            const seatIndex = selectedSeats.indexOf(seat.seatNumber)
+            const seatLabel = seatIndex >= 0 ? `P${seatIndex + 1}` : seat.isBooked ? 'X' : ''
             return (
-              <React.Fragment key={seat.id}>
+              <React.Fragment key={seat.seatNumber}>
                 {' '}
                 {/* Add key here */}
                 {i === 3 && (
                   <h2
-                    key={`row-${rowIndex}-seat-${seat.id}`} // Add unique key here
+                    key={`row-${rowIndex}-seat-${seat.seatNumber}`} // Add unique key here
                     className={
                       'flex items-center justify-center w-4 h-9 mx-1 rounded-xl text-center text-gray-600  bg-gray-100  text-xs'
                     }
@@ -140,11 +90,11 @@ export default function SeatPicker() {
                   </h2>
                 )}
                 <div
-                  key={seat.id} // Key for the seat
-                  className={`seat ${seat.status} ${
-                    selectedSeats.includes(seat.id) ? 'selected' : ''
+                  key={seat.seatNumber} // Key for the seat
+                  className={`seat ${seat.isBooked === false ? 'available' : 'unavailable'} ${
+                    selectedSeats.includes(seat.seatNumber) ? 'selected' : ''
                   }`}
-                  onClick={() => handleSeatClick(seat.id)}
+                  onClick={() => handleSeatClick(seat.seatNumber)}
                 >
                   {seatLabel}
                 </div>
