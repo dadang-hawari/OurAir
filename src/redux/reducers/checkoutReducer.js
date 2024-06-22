@@ -14,12 +14,16 @@ const initialState = {
       emailPemesan: '',
     },
   },
+  transaction: null,
 }
 
 const checkoutSlice = createSlice({
   name: 'checkout',
   initialState,
   reducers: {
+    setTransaction: (state, action) => {
+      state.transaction = action.payload
+    },
     setPemesan: (state, action) => {
       const { name, value } = action.payload
       state.pemesan.data[name] = value
@@ -55,11 +59,6 @@ const checkoutSlice = createSlice({
         state.penumpang[penumpangIndex].document_expired = date
       }
     },
-    // setSelectedSeatPenumpang: (state, action) => {
-    //   const { id } = action.payload
-    //   const penumpangIndex = state.penumpang.findIndex((p) => p.id === id)
-    //   console.log('action selected seat', action)
-    // },
     setIdFlight: (state, action) => {
       state.idFlight = action.payload
     },
@@ -99,5 +98,6 @@ export const {
   resetSelectedSeats,
   setJumlahPenumpang,
   assignSeatsToPassengers,
+  setTransaction,
 } = checkoutSlice.actions
 export default checkoutSlice.reducer

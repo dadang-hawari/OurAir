@@ -12,11 +12,13 @@ export default function SeatPicker() {
   const selectedSeats = useSelector((state) => state?.checkout?.selectedSeats)
   const dispatch = useDispatch()
   const flightDetail = useSelector((state) => state?.flightLists?.flightSeats)
-  const availableSeats = flightDetail?.availableSeats
+  const availableSeats = flightDetail?.seats
   const dataCheckout = useSelector((state) => state?.checkout)
+  const pemesan = dataCheckout?.penumpang
   const jumlahPenumpangAnak = dataCheckout?.jumlahPenumpang?.penumpangAnak
   const jumlahPenumpangDewasa = dataCheckout?.jumlahPenumpang?.penumpangDewasa
   const penumpang = jumlahPenumpangAnak + jumlahPenumpangDewasa
+  console.log('flightDetail', flightDetail)
 
   const handleSeatClick = (seatId) => {
     const seat = availableSeats.flat().find((seat) => seat?.seatNumber === seatId)
@@ -34,6 +36,7 @@ export default function SeatPicker() {
       dispatch(resetSelectedSeats())
       dispatch(setSelectedSeat(seatId))
     }
+    console.log('pemesan', pemesan)
   }
 
   return (

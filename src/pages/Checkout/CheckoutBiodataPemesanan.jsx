@@ -35,17 +35,14 @@ export default function CheckoutBiodataPemesan() {
   const flightLists = useSelector((state) => state?.flightLists)
   const flightDetail = flightLists?.flightDetail
   const flightSeats = flightLists?.flightSeats
-  console.log('flightSeats', flightSeats)
   const dataCheckout = useSelector((state) => state?.checkout)
   const selectedSeats = dataCheckout?.selectedSeats
-
   const flight_id = dataCheckout?.idFlight
   const pemesan = dataCheckout?.pemesan
   const penumpang = dataCheckout?.penumpang
   const useCurrentEmail = dataCheckout?.useCurrentEmail
   const seatClass = flightDetail?.class
   const location = useLocation()
-
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const penumpangSaatIni = dataCheckout?.jumlahPenumpang
@@ -138,18 +135,20 @@ export default function CheckoutBiodataPemesan() {
   }
 
   const handleLanjutBayar = () => {
-    console.log('dataCheckout', dataCheckout)
     if (selectedSeats.length < jumlahPenumpangAnak + jumlahPenumpangDewasa) {
-      toast(`Mohon pastikan agar memilih seluruh kursi `, {
-        toastId: 'toastInfo',
-        className: 'toast-error',
-      })
+      toast(
+        `Mohon pastikan agar kursi Anda telah memilih ${
+          jumlahPenumpangAnak + jumlahPenumpangDewasa
+        } kursi`,
+        {
+          toastId: 'toastInfo',
+          className: 'toast-error',
+        }
+      )
       return
     }
-
     dispatch(assignSeatsToPassengers(selectedSeats))
-    dispatch(postBooking(dataCheckout?.penumpang))
-    // navigate('/menunggu-pembayaran')
+    dispatch(postBooking(navigate))
   }
 
   return (
@@ -473,14 +472,10 @@ export default function CheckoutBiodataPemesan() {
                 </div>
               </div>
             </div>
-
-            <div className="bg-secondary text-white px-5 my-4 rounded-xl py-4">
-              <p className="text-base text-center">Simpan</p>
-            </div>
           </div>
 
           {/* Detail Penerbangan */}
-          <div className="w-full md:max-w-[376px] mt-5">
+          <div className="w-full md:max-w-[376px] h-fit border p-4 ">
             <div className="w-full">
               <div className="flex justify-between mt-2">
                 <h2 className="font-bold text-xl">Detail Penerbangan</h2>

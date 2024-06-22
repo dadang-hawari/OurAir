@@ -1,16 +1,20 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight, faIcons } from '@fortawesome/free-solid-svg-icons'
 import Navbar from '../../components/Navbar'
+import Toast from '../../components/common/Toast'
+import { checkLocationState } from '../../utils/checkLocationState'
 
 export default function MenungguPembayaran() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
   const flightDetail = useSelector((state) => state?.flightLists?.flightDetail)
   const dataCheckout = useSelector((state) => state?.checkout)
+  const transaction = dataCheckout?.transaction
   const penumpangSaatIni = dataCheckout?.jumlahPenumpang
   const pajak =
     (penumpangSaatIni?.penumpangAnak + penumpangSaatIni?.penumpangDewasa) *
@@ -23,10 +27,13 @@ export default function MenungguPembayaran() {
   const jumlahPenumpangDewasa = penumpangSaatIni?.penumpangDewasa
   const jumlahPenumpangBayi = penumpangSaatIni?.penumpangBayi
 
+  useEffect(() => {
+    checkLocationState(location, navigate)
+  }, [])
   return (
     <>
       <Navbar />
-      <div className="max-w-5xl px-5 mx-auto mt-24">
+      <div className="max-w-5xl px-5 mx-auto mt-24 mb-10">
         <div className="text-xl cursor-default text-gray-400 flex items-center gap-x-2">
           <b className="text-black">Isi Data Diri</b>
           <FontAwesomeIcon icon={faChevronRight} className="text-sm text-black" />
@@ -34,7 +41,7 @@ export default function MenungguPembayaran() {
           <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
           <b>Selesai</b>
         </div>
-        <div className="text-sm mt-4 flex gap-8 flex-col md:flex-row w-full">
+        <div className="text-sm mt-4 flex gap-8 flex-col-reverse md:flex-row w-full">
           <div className="w-full md:max-w-[376px] mt-5 border p-4 rounded-md">
             <div className="w-full">
               <div className="flex justify-between mt-2">
@@ -110,19 +117,33 @@ export default function MenungguPembayaran() {
               </div>
             </div>
           </div>
-          <div>
-            <img src="/assets/images/ourair_logo.svg" alt="" className="w-40 ms-5" />
-            <div className="text-6xl font-bold text-[#13587B] animate-bounce tracking-widest ">
+          <div className="w-full text-center  mt-5 rounded-md ">
+            <img
+              src="/assets/images/ourair_logo.svg"
+              alt="Logo ourair"
+              className="w-40 h-auto mx-auto mt-10"
+            />
+            <div className="text-6xl mt-4 font-bold text-[#13587B] animate-bounce tracking-widest ">
               ....
             </div>
-            <div className=" font-[600] text-[#13587B] ">
-              <b>Menunggu pembayaran</b>
-              <p>Anda akan diarahkan ke halaman cetak tiket setelah melakukan pembayaran</p>
+            <div className="flex flex-col gap-y-5 text-base">
+              <div className=" font-[600] text-[#13587B] ">
+                <b className="text-2xl">Menunggu pembayaran</b>
+              </div>
+              <a>Silahkan ke tekan tombol berikut untuk menuju ke pembayaran</a>
+              <a
+                href={transaction?.payment_link}
+                target="_blank"
+                className="block bg-secondary w-fit py-3 px-5 mx-auto rounded-md text-white"
+              >
+                Menuju pembayaran
+              </a>
+              <p className="text-sm text-secondary text-[600]">
+                Anda akan diarahkan ke halaman cetak tiket setelah melakukan pembayaran
+              </p>
             </div>
-            <a href="https://google.com" target="_blank">
-              Silahkan ke link berikut untuk melakukan pembayaran
-            </a>
           </div>
+          <Toast />
         </div>
       </div>
     </>

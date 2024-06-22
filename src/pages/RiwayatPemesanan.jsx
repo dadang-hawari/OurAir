@@ -284,7 +284,7 @@ export default function RiwayatPemesanan() {
                       <h5 className="font-[600]">Melbourne International Airport</h5>
                     </div>
                     <hr className="w-[95%] mx-auto my-3" />
-                    <div className="w-[95%]">
+                    <div className="w-full">
                       <b>Rincian Harga</b>
                       <div className="flex justify-between">
                         <span>2 Orang Dewasa</span>
