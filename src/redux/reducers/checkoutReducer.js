@@ -8,10 +8,10 @@ const initialState = {
   jumlahPenumpang: null,
   pemesan: {
     data: {
-      namaLengkapPemesan: '',
-      namaKeluargaPemesan: '',
-      nomorTeleponPemesan: '',
-      emailPemesan: '',
+      fullname: '',
+      surname: '',
+      phone_number: '',
+      email: '',
     },
   },
   transaction: null,

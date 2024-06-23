@@ -23,15 +23,18 @@ export const getFlightById = (id) => async (dispatch) => {
 }
 export const postBooking = (navigate) => async (dispatch, getState) => {
   const token = getState()?.auth?.token
-  const flight_id = getState()?.checkout?.idFlight
-  const passengers = getState()?.checkout?.penumpang
+  const checkout = getState()?.checkout
+  const flight_id = checkout?.idFlight
+  const passengers = checkout?.penumpang
+  const baby = checkout?.jumlahPenumpang?.penumpangBayi
+  const booker = checkout?.pemesan?.data
   try {
     toast.loading('Mohon tunggu sebentar', {
       toastId: 'toastInfo',
     })
     const response = await axios.post(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/booking/create`,
-      { passengers: passengers, baby: 4 },
+      { passengers, baby, booker },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -67,10 +70,12 @@ export const postBooking = (navigate) => async (dispatch, getState) => {
     // Navigate if needed
     // navigate('/desired-path');
   } catch (error) {
+    toast.dismiss('toastInfo')
+    console.log('error.response.data.message', error.response.data.message)
     if (error?.response?.data?.message === 'Failed to authenticate token')
-      toast('Silahkan untuk melakukan login ulang', {
+      toast('Token expired, silahkan untuk melakukan login ulang', {
         className: 'toast-info',
-        toastId: 'toastInfo',
+        toastId: 'toast-info',
       })
     console.log(error)
   }

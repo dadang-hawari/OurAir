@@ -50,8 +50,7 @@ export default function PilihPenerbangan() {
 
   // Fungsi untuk mengubah format tanggal dari DD MMMM YYYY ke YYYY-MM-DD
   const convertDateFormat = (dateString) => {
-    if (dateString === 'Jadwal Kembali' || dateString==='Tanggal Berangkat') return
-alert('execute')
+    if (dateString === 'Jadwal Kembali' || dateString === 'Tanggal Berangkat') return
     const date = new Date(dateString)
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0') // Bulan dimulai dari 0, jadi tambahkan 1
@@ -101,14 +100,11 @@ alert('execute')
   }
 
   const handleClickPilih = (id) => {
-    dispatch(
-      setIdFlight(id)
-    )
+    dispatch(setIdFlight(id))
 
-    navigate("/checkout-pemesanan", {state: {jumlahPenumpang: jadwalPenerbangan?.jumlahPenumpang}} 
-    )
-     
-   
+    navigate('/checkout-pemesanan', {
+      state: { jumlahPenumpang: jadwalPenerbangan?.jumlahPenumpang },
+    })
   }
 
   const SkeletonLoading = ({ loop = 10 }) => {
@@ -133,8 +129,6 @@ alert('execute')
 
     return <>{skeletons}</>
   }
-
-
 
   return (
     <>

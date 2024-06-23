@@ -19,7 +19,7 @@ export default function MenungguPembayaran() {
   const pajak =
     (penumpangSaatIni?.penumpangAnak + penumpangSaatIni?.penumpangDewasa) *
     flightDetail?.ticket_price *
-    0.025
+    0.1
 
   const hargaTiketAnak = flightDetail?.ticket_price * penumpangSaatIni?.penumpangAnak
   const hargaTiketDewasa = flightDetail?.ticket_price * penumpangSaatIni?.penumpangDewasa
@@ -130,7 +130,7 @@ export default function MenungguPembayaran() {
               <div className=" font-[600] text-[#13587B] ">
                 <b className="text-2xl">Menunggu pembayaran</b>
               </div>
-              <a>Silahkan ke tekan tombol berikut untuk menuju ke pembayaran</a>
+              <a>Silahkan tekan tombol berikut untuk menuju ke pembayaran</a>
               <a
                 href={transaction?.payment_link}
                 target="_blank"

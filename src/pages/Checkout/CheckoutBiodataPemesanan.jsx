@@ -50,7 +50,7 @@ export default function CheckoutBiodataPemesan() {
   const pajak =
     (penumpangSaatIni?.penumpangAnak + penumpangSaatIni?.penumpangDewasa) *
     flightDetail?.ticket_price *
-    0.025
+    0.1
 
   const hargaTiketAnak = flightDetail?.ticket_price * penumpangSaatIni?.penumpangAnak
   const hargaTiketDewasa = flightDetail?.ticket_price * penumpangSaatIni?.penumpangDewasa
@@ -60,7 +60,6 @@ export default function CheckoutBiodataPemesan() {
 
   const setDataPenumpang = () => {
     // percabangan if biar inputan nggak kereset jika misalnya tidak ada perubahan penumpang
-    // PR penumpang bayi
     if (
       (penumpangSaatIni?.penumpangDewasa === jumlahPenumpang?.penumpangDewasa &&
         penumpangSaatIni?.penumpangAnak === jumlahPenumpang?.penumpangAnak &&
@@ -76,7 +75,7 @@ export default function CheckoutBiodataPemesan() {
     for (let i = 0; i < penumpangDewasa; i++) {
       penumpangBaru.push({
         id: `penumpang ${i + 1} - Dewasa`,
-        title: 'Mr.',
+        title: 'Mr',
         fullname: '',
         surname: '',
         birth_date: '',
@@ -135,9 +134,10 @@ export default function CheckoutBiodataPemesan() {
   }
 
   const handleLanjutBayar = () => {
+    console.log('dataCheckout', dataCheckout)
     if (selectedSeats.length < jumlahPenumpangAnak + jumlahPenumpangDewasa) {
       toast(
-        `Mohon pastikan agar kursi Anda telah memilih ${
+        `Mohon pastikan agar Anda telah memilih ${
           jumlahPenumpangAnak + jumlahPenumpangDewasa
         } kursi`,
         {
@@ -180,7 +180,7 @@ export default function CheckoutBiodataPemesan() {
                 </h2>
                 <div className="w-full p-3 flex flex-col gap-y-4">
                   <div>
-                    <label className="font-bold" htmlFor="namaLengkapPemesan">
+                    <label className="font-bold" htmlFor="fullname">
                       Nama Lengkap
                       <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
@@ -190,29 +190,29 @@ export default function CheckoutBiodataPemesan() {
                       type="text"
                       className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                       placeholder="Masukkan nama lengkap"
-                      id="namaLengkapPemesan"
-                      name="namaLengkapPemesan"
-                      value={pemesan.data.namaLengkapPemesan}
+                      id="fullname"
+                      name="fullname"
+                      value={pemesan.data.fullname}
                       onChange={handlePemesan}
                     />
                   </div>
 
                   <div>
-                    <label className="font-bold" htmlFor="namaKeluargaPemesan">
+                    <label className="font-bold" htmlFor="surname">
                       Nama Keluarga (opsional)
                     </label>
                     <input
                       type="text"
                       className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                       placeholder="Masukkan nama keluarga"
-                      id="namaKeluargaPemesan"
-                      name="namaKeluargaPemesan"
-                      value={pemesan.data.namaKeluargaPemesan}
+                      id="surname"
+                      name="surname"
+                      value={pemesan.data.surname}
                       onChange={handlePemesan}
                     />
                   </div>
                   <div>
-                    <label className="font-bold" htmlFor="nomorTeleponPemesan">
+                    <label className="font-bold" htmlFor="phone_number">
                       Nomor Telepon
                       <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
@@ -222,10 +222,10 @@ export default function CheckoutBiodataPemesan() {
                       type="number"
                       className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                       placeholder="Masukkan nomor telepon"
-                      id="nomorTeleponPemesan"
+                      id="phone_number"
                       min={0}
-                      name="nomorTeleponPemesan"
-                      value={pemesan.data.nomorTeleponPemesan}
+                      name="phone_number"
+                      value={pemesan.data.phone_number}
                       onChange={handlePemesan}
                     />
                   </div>
@@ -248,7 +248,7 @@ export default function CheckoutBiodataPemesan() {
                         ></div>
                       </button>
                     </div>
-                    <label className="font-bold" htmlFor="emailPemesan">
+                    <label className="font-bold" htmlFor="email">
                       Email
                       <span className="text-red-500 font-normal" title="Perlu diisi">
                         *
@@ -260,10 +260,10 @@ export default function CheckoutBiodataPemesan() {
                         useCurrentEmail ? 'cursor-default' : ''
                       }`}
                       placeholder="Contoh: kusuma@gmail.com"
-                      id="emailPemesan"
-                      name="emailPemesan"
+                      id="email"
+                      name="email"
                       readOnly={useCurrentEmail}
-                      value={useCurrentEmail ? emailnow : pemesan.data.emailPemesan}
+                      value={useCurrentEmail ? emailnow : pemesan.data.email}
                       onChange={handlePemesan}
                     />
                   </div>

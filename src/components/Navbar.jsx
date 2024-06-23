@@ -1,9 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import Logo from '/assets/images/logo.webp'
+import Logo from '/assets/images/logoFooter.webp'
+import LogoTwo from '/assets/images/logo.webp'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignInAlt, faList, faArrowLeft, faDoorOpen } from '@fortawesome/free-solid-svg-icons'
+import {
+  faSignInAlt,
+  faList,
+  faArrowLeft,
+  faDoorOpen,
+  faUser,
+  faChevronDown,
+} from '@fortawesome/free-solid-svg-icons'
 import { logout } from '../redux/actions/authAction'
 import iconFaBell from '/assets/images/fi_bell.svg'
 import iconFaUser from '/assets/images/fi_user.svg'
@@ -12,6 +20,7 @@ const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false)
   const [confirmLogout, setConfirmLogout] = useState(false)
   const [sidebarVisible, setSidebarVisible] = useState(false)
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const token = useSelector((state) => state.auth.token)
   const dispatch = useDispatch()
 
@@ -50,12 +59,16 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed top-2 left-0 right-0 z-10 bg-transparent p-4 transition-all`}>
-        <div className="container mx-auto flex justify-between items-center">
+      <nav
+        className={`fixed top-0 left-0 right-0 z-10 p-4 transiti-colors duration-500 ${
+          isSticky ? 'bg-white bg-opacity-40 backdrop-blur-sm shadow-md' : 'bg-transparent'
+        }`}
+      >
+        <div className="mx-auto flex justify-between items-center">
           {/* Logo */}
           <div className="text-black text-lg font-bold">
             <Link to="/">
-              <img src={Logo} alt="Logo" className="h-12" />
+              <img src={Logo} alt="Logo" className="h-12 w-auto" />
             </Link>
           </div>
 
@@ -72,10 +85,21 @@ const Navbar = () => {
                   <img src={iconFaBell} alt="faBell" className="px-2 h-6" />
                 </Link>
               </ul>
-              <ul>
+              <ul className="flex items-center gap-x-2 flex-row-reverse cursor-pointer">
                 <Link to="/profile">
-                  <img src={iconFaUser} alt="faUser" className="px-2 h-6" />
+                  <span className="bg-gray-300 block w-[30px] h-[30px] relative rounded-full">
+                    <FontAwesomeIcon
+                      icon={faUser}
+                      className="text-white absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2"
+                    />
+                  </span>
                 </Link>
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  className={`transition-transform duration-200 ${
+                    showProfileDropdown ? 'rotate-180' : 'rotate-0'
+                  }`}
+                />
               </ul>
             </div>
           ) : (

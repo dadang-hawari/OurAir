@@ -21,7 +21,7 @@ export default function Beranda() {
       {/* Destinasi Favorit */}
       <DestinasiFavorit />
       <Toast autoClose={3000} position="top-center" transition={Flip} margin="mt-0" />
-      {/* <Footer /> */}
+      <Footer />
     </div>
   )
 }

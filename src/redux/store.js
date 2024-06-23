@@ -9,13 +9,17 @@ import otpReducer from './reducers/otpReducers'
 import jadwalPenerbanganReducer from './reducers/jadwalPenerbanganReducer'
 import flightsReducer from './reducers/flightsReducer'
 import checkoutReducer from './reducers/checkoutReducer'
+import notifReducer from './reducers/notifReducer'
+import paymentHistoryReducer from './reducers/paymentHistoryReducer'
 
 const rootReducers = combineReducers({
   auth: authReducer,
   otp: otpReducer,
   jadwalPenerbangan: jadwalPenerbanganReducer,
   flightLists: flightsReducer,
-  checkout: checkoutReducer
+  checkout: checkoutReducer,
+  notification: notifReducer,
+  payment: paymentHistoryReducer,
 })
 
 const persistConfig = {
