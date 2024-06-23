@@ -4,52 +4,55 @@ import logoFooter from '../../public/assets/images/logoFooter.webp'
 const Footer = () => {
   return (
     <footer className="bg-white p-10">
-      <div className="flex flex-col md:flex-row justify-center space-x-52">
-        <div className="flex items-center text-black text-lg font-bold mt-9 mr-9 ">
-          <img src="/assets/images/logoFooter.webp" alt="" />
-        </div>
-        <div className="flex center items-center space-x-20">
-          <div className="mb-4 md:mb-0 mr-24">
-            <h3 className="text-3xl font-bold text-black mb-4">OurAir</h3>
-            <p>
-              <Link to="/login" className="text-lg">
+      <hr className="my-6 " />
+      <div className="flex flex-col md:flex-row justify-center flex-wrap ">
+        <div className="flex  items-center text-black text-lg font-bold mt-9 mr-9 "></div>
+        <div className="flex w-full flex-col justify-start sm:justify-between gap-5 sm:flex-row flex-wrap  max-w-5xl">
+          <h2 className="w-full xl:w-fit font-bold my-auto">
+            <span className="text-[#13587B] text-3xl">Our</span>
+            <span className="text-[#C87632] text-3xl">Air</span>
+          </h2>
+          <div className="mb-4 md:mb-0">
+            <h3 className="text-2xl font-bold text-black mb-4">Navigasi</h3>
+            <p className="my-2">
+              <Link to="/login" className="my-2 text-xs">
                 Beranda
               </Link>
             </p>
-            <p className="my-2 ">
-              <Link to="/login" className="text-lg ">
+            <p className="my-2">
+              <Link to="/login" className="my-2 text-xs ">
                 Tentang Kami
               </Link>
             </p>
             <p>
               {' '}
-              <Link to="/login" className="text-lg">
+              <Link to="/login" className="text-xs w-max block">
                 Semua Penerbangan
               </Link>
             </p>
           </div>
 
           <div className="mb-4 md:mb-0">
-            <h3 className="text-3xl font-bold text-black mb-4">Credits</h3>
+            <h3 className="text-2xl font-bold text-black mb-4">Credits</h3>
             <p>
               {' '}
-              <Link to="/login" className="text-lg">
+              <Link to="/login" className="text-xs">
                 Beranda
               </Link>
             </p>
-            <p>
-              <Link to="/login" className="text-lg">
+            <p className="my-2">
+              <Link to="/login" className="my-2 text-xs">
                 Tentang Kami
               </Link>
             </p>
-            <p>
-              <Link to="/login" className="text-lg">
+            <p className="my-2">
+              <Link to="/login" className="my-2 text-xs">
                 Semua Penerbangan
               </Link>
             </p>
           </div>
 
-          <div className="flex mt-9 mr-8 space-x-6">
+          <div className="flex mt-9 mr-8 gap-x-6">
             <a
               href="#"
               className="block  text-gray-900 transition-all duration-500 hover:text-indigo-600 "
@@ -99,7 +102,7 @@ const Footer = () => {
               className="text-gray-900 transition-all duration-500  hover:text-indigo-600"
             >
               <svg
-                className="1.688rem] h-6"
+                className="h-6"
                 viewBox="0 0 29 29"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +117,7 @@ const Footer = () => {
         </div>
       </div>
       <hr className="my-6 " />
-      <span className="text-lg text-gray-500 text-center block mt-6">
+      <span className="text-sm text-gray-500 text-center block mt-6">
         ©<a href="https://ourair.tech/">OurAir</a> 2024, All rights reserved.
       </span>
     </footer>

@@ -16,13 +16,22 @@ import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import ReactModal from 'react-modal'
 import { customStyles, customStylesFilter } from '../styles/customStyles'
+import { useDispatch, useSelector } from 'react-redux'
+import { getTransaction } from '../redux/actions/paymentHistoryAction'
 export default function RiwayatPemesanan() {
   const [search, setSearch] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [statusFilter, setStatusFilter] = useState('Semua Status')
+  const paymentHistory = useSelector((state) => state?.payment?.paymentHistory?.transaction)
+  console.log('transactionHistory', paymentHistory)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getTransaction())
+  }, [])
 
   ReactModal.setAppElement('#modal')
 
@@ -105,49 +114,61 @@ export default function RiwayatPemesanan() {
               />
             </form>
             {/* Sudah dibayar */}
-            <div className="rounded-xl mb-4 border h-fit w-full p-4 cursor-pointer hover:border-secondary">
-              <span className="bg-green-soft py-1 px-3 text-white rounded-full">Issued</span>
-              <div className="flex gap-x-5 my-4 justify-between w-full md:max-w-[468px] items-center">
-                <div className="flex gap-x-2 justify-center w-fit">
-                  <FontAwesomeIcon icon={faLocationDot} className="text-gray-primary pt-1" />
-                  <div>
-                    <h2 className="text-sm font-bold">Jakarta</h2>
-                    <div className="text-xs">
-                      <h3 className="w-max my-[3px]">5 Maret 2023</h3>
-                      <h3>19:10</h3>
+            {paymentHistory?.map((history, i) => (
+              <div className="rounded-xl mb-4 border h-fit w-full p-4 cursor-pointer hover:border-secondary">
+                <span
+                  className={`${
+                    history?.status ? 'bg-green-soft' : 'bg-red-primary'
+                  } py-1 px-3 text-white rounded-full`}
+                >
+                  {history?.status ? 'Issued' : 'Unpaid'}
+                </span>
+                <div className="flex gap-x-5 my-4 justify-between w-full md:max-w-[468px] items-center">
+                  <div className="flex gap-x-2 justify-center w-fit">
+                    <FontAwesomeIcon icon={faLocationDot} className="text-gray-primary pt-1" />
+                    <div>
+                      <h2 className="text-sm font-bold">
+                        {history?.flights?.fromAirport?.cityName}
+                      </h2>
+                      <div className="text-xs">
+                        <h3 className="w-max my-[3px]">5 Maret 2023</h3>
+                        <h3>19:10</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full text-center -mt-4">
+                    <h2 className="text-gray-600 text-xs pb-1 font-[600]">4h 0m</h2>
+                    <div className="w-full relative">
+                      <DirectionArrow />
+                    </div>
+                  </div>
+                  <div className="flex gap-x-2 justify-center w-fit">
+                    <FontAwesomeIcon icon={faLocationDot} className="text-gray-primary pt-1" />
+                    <div>
+                      <h2 className="text-sm font-bold">{history?.flights?.toAirport?.cityName}</h2>
+                      <div className="text-xs">
+                        <h3 className="w-max my-[3px]">5 Maret 2023</h3>
+                        <h3>19:10</h3>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="w-full text-center -mt-4">
-                  <h2 className="text-gray-600 text-xs pb-1 font-[600]">4h 0m</h2>
-                  <div className="w-full relative">
-                    <DirectionArrow />
+                <hr />
+                <div className="flex justify-between items-center mt-4">
+                  <div className="text-xs">
+                    <b>Kode Pemesanan:</b>
+                    <p className="text-xs">{(history?.midtrans_order_id).slice(9, 50)}</p>
                   </div>
-                </div>
-                <div className="flex gap-x-2 justify-center w-fit">
-                  <FontAwesomeIcon icon={faLocationDot} className="text-gray-primary pt-1" />
-                  <div>
-                    <h2 className="text-sm font-bold">Jakarta</h2>
-                    <div className="text-xs">
-                      <h3 className="w-max my-[3px]">5 Maret 2023</h3>
-                      <h3>19:10</h3>
-                    </div>
+                  <div className="text-xs">
+                    <b>Kelas:</b>
+                    <p className="text-xs">Economy</p>
                   </div>
+                  <h3 className="text-primary font-bold">
+                    IDR {(history?.total_price).toLocaleString('id-ID')}
+                  </h3>
                 </div>
               </div>
-              <hr />
-              <div className="flex justify-between items-center mt-4">
-                <div className="text-xs">
-                  <b>Kode Pemesanan:</b>
-                  <p className="text-xs">6723y2GHK</p>
-                </div>
-                <div className="text-xs">
-                  <b>Kelas:</b>
-                  <p className="text-xs">Economy</p>
-                </div>
-                <h3 className="text-primary font-bold">IDR 9.850.000</h3>
-              </div>
-            </div>
+            ))}
             {/* Belum dibayar */}
             <div className="rounded-xl border h-fit w-full p-4 cursor-pointer hover:border-secondary">
               <span className="bg-red-primary py-1 px-3 text-white rounded-full">Unpaid</span>
@@ -284,7 +305,7 @@ export default function RiwayatPemesanan() {
                       <h5 className="font-[600]">Melbourne International Airport</h5>
                     </div>
                     <hr className="w-[95%] mx-auto my-3" />
-                    <div className="w-[95%]">
+                    <div className="w-full">
                       <b>Rincian Harga</b>
                       <div className="flex justify-between">
                         <span>2 Orang Dewasa</span>
