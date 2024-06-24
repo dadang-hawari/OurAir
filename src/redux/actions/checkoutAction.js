@@ -78,5 +78,9 @@ export const postBooking = (navigate) => async (dispatch, getState) => {
         toastId: 'toast-info',
       })
     console.log(error)
+    toast(error?.response?.data?.errors[0]?.msg, {
+      toastId: 'toastError',
+      className: 'toast-error',
+    })
   }
 }

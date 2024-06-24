@@ -24,8 +24,7 @@ export const getAllFlights = () => async (dispatch) => {
 }
 
 export const getFlightByCityorCountry =
-  (fromairport, toairport, kelas = 'Economy', startDate, endDate) =>
-  async (dispatch) => {
+  (fromairport, toairport, kelas, startDate, endDate) => async (dispatch) => {
     try {
       console.log(
         'fromairport, toairport, kelas, startDate,endDate',
@@ -39,9 +38,10 @@ export const getFlightByCityorCountry =
       const response = await axios.get(
         `${
           import.meta.env.VITE_DOMAIN_API_DEV
-        }/api/v1/flights/search?fromairport=${fromairport}&toairport=${toairport}&class=${
-          kelas === 'First Class' ? 'firstclass' : kelas
-        }${startDate ? `&startDate=${startDate}` : ''}${endDate ? `&endDate=${endDate}` : ''}`
+        }/api/v1/flights/search?fromairport=${fromairport}&toairport=${toairport}` +
+          `${kelas ? `&class=${kelas === 'First Class' ? 'firstclass' : kelas}` : ''}` +
+          `${startDate ? `&startDate=${startDate}` : ''}` +
+          `${endDate ? `&endDate=${endDate}` : ''}`
       )
       const data = response.data.data
       if (response?.status === 200 || response?.status === 201) {

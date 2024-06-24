@@ -1,0 +1,124 @@
+{
+  "id": 11,
+  "midtrans_order_id": "order-id-node-1719141248",
+  "adult_price": 84940000,
+  "baby_price": 0,
+  "tax_price": 8494000,
+  "total_price": 93434000,
+  "created_at": "2024-06-23T11:14:07.507Z",
+  "status": false,
+  "payment_link": "https://app.sandbox.midtrans.com/snap/v4/redirection/b2d03ee3-85e9-4ccf-8462-13006a362415",
+  "booker_id": 11,
+  "total_baby": 2,
+  "flights": {
+    "class": "BUSINESS",
+    "whomAirplaneFlights": {
+      "airplane_code": "LH890",
+      "whomAirlinesAirplanes": {
+        "name": "Kenya Airways",
+        "airline_code": "KQ"
+      }
+    },
+    "departure_time": "2024-06-26T04:37:20.593Z",
+    "arrival_time": "2024-06-26T05:37:20.593Z",
+    "fromAirport": {
+      "name": "Ninoy Aquino Intl",
+      "cityCode": "MNL",
+      "cityName": "Manila",
+      "countryCode": "PH",
+      "countryName": "PHILIPPINES"
+    },
+    "toAirport": {
+      "name": "Nanyuan Arpt",
+      "cityCode": "BJS",
+      "cityName": "Beijing",
+      "countryCode": "CN",
+      "countryName": "CHINA"
+    }
+  },
+  "bookers": {
+    "id": 11,
+    "fullname": "jfdsajfda",
+    "surname": "jfkkdlsjk",
+    "phone_number": "99403824",
+    "email": "mohdadanghawari@gmail.com"
+  },
+  "tickets": [
+    {
+      "id": 15,
+      "user_id": 50002,
+      "passanger_id": 70015,
+      "transaction_id": 11,
+      "whomPassangerTicket": {
+        "id": 70015,
+        "title": "Mr",
+        "fullname": "tesjj",
+        "surname": "jtkls",
+        "birth_date": "2024-06-20T00:00:00.000Z",
+        "category": "adult",
+        "nationality": "fsdjlkdfj",
+        "document": "kjlfdlskjjk",
+        "country_publication": "Indonesia",
+        "document_expired": "2024-06-21T00:00:00.000Z",
+        "seat_number": "6D"
+      }
+    },
+    {
+      "id": 16,
+      "user_id": 50002,
+      "passanger_id": 70016,
+      "transaction_id": 11,
+      "whomPassangerTicket": {
+        "id": 70016,
+        "title": "Mr",
+        "fullname": "fdsjkldf",
+        "surname": "jflksdj",
+        "birth_date": "2024-06-18T00:00:00.000Z",
+        "category": "adult",
+        "nationality": "jfsdkj",
+        "document": "jfkldsj",
+        "country_publication": "Indonesia",
+        "document_expired": "2024-06-27T00:00:00.000Z",
+        "seat_number": "6E"
+      }
+    },
+    {
+      "id": 17,
+      "user_id": 50002,
+      "passanger_id": 70017,
+      "transaction_id": 11,
+      "whomPassangerTicket": {
+        "id": 70017,
+        "title": "Mr.",
+        "fullname": "fds jk",
+        "surname": "flfjldksjkj",
+        "birth_date": "2024-06-25T00:00:00.000Z",
+        "category": "child",
+        "nationality": "fdsfsdfsd",
+        "document": "238813",
+        "country_publication": "Indonesia",
+        "document_expired": "2024-06-23T00:00:00.000Z",
+        "seat_number": "6F"
+      }
+    },
+    {
+      "id": 18,
+      "user_id": 50002,
+      "passanger_id": 70018,
+      "transaction_id": 11,
+      "whomPassangerTicket": {
+        "id": 70018,
+        "title": "Mr.",
+        "fullname": "fsdsdfj",
+        "surname": "klfjdsklj",
+        "birth_date": "2024-06-28T00:00:00.000Z",
+        "category": "child",
+        "nationality": "fsdjdfslk",
+        "document": "lkjfdslkjdfs",
+        "country_publication": "Indonesia",
+        "document_expired": "2024-06-21T00:00:00.000Z",
+        "seat_number": "7D"
+      }
+    }
+  ]
+}
