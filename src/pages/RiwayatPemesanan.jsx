@@ -36,9 +36,11 @@ export default function RiwayatPemesanan() {
   const [filteredHistory, setFilteredHistory] = useState([])
   const detailPesanan = filteredHistory?.length > 0 ? filteredHistory[historyIndex] : null
   const [isLoading, setIsLoading] = useState(true)
+  const detailRef = useRef(null)
 
   const setDetail = (index) => {
     setHistoryIndex(index)
+    detailRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   const countPassengersByCategory = (tickets, category) => {
@@ -53,14 +55,27 @@ export default function RiwayatPemesanan() {
     })
   }, [])
   useEffect(() => {
-    // Filter paymentHistory based on search input
-    const filtered = paymentHistory?.filter(
-      (history) =>
-        history?.midtrans_order_id?.includes(search) ||
-        history?.flights?.fromAirport?.cityName?.toLowerCase().includes(search?.toLocaleLowerCase())
-    )
+    // Filter paymentHistory based on search input and status filter
+    const filtered = paymentHistory
+      ?.filter((history) => {
+        const matchesSearch =
+          history?.midtrans_order_id?.toLowerCase().includes(search.toLowerCase()) ||
+          history?.flights?.fromAirport?.cityName
+            ?.toLowerCase()
+            .includes(search?.toLocaleLowerCase())
+
+        const matchesStatus =
+          statusFilter === 'Semua Status' ||
+          (statusFilter === 'Sudah Dibayar' && history?.status) ||
+          (statusFilter === 'Belum Dibayar' && !history?.status && !isExpired(history)) ||
+          (statusFilter === 'Expired' && !history?.status && isExpired(history))
+
+        return matchesSearch && matchesStatus
+      })
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Sort by newest first
+
     setFilteredHistory(filtered)
-  }, [search, paymentHistory])
+  }, [search, paymentHistory, statusFilter])
 
   ReactModal.setAppElement('#modal')
 
@@ -70,6 +85,10 @@ export default function RiwayatPemesanan() {
     content: () => printRef.current,
     documentTitle: 'ticket.ourAir',
   })
+
+  const isExpired = (detailPesanan) => {
+    return (Date.now() - new Date(detailPesanan?.created_at)) / (1000 * 60 * 60) > 24
+  }
 
   const openModal = () => {
     setIsModalOpen(true)
@@ -125,20 +144,25 @@ export default function RiwayatPemesanan() {
                 <div
                   key={i}
                   onClick={() => setDetail(i)}
+                  id="listPesanan"
                   className={`rounded-xl mb-4 border h-fit w-full p-4 cursor-pointer hover:border-secondary ${
                     i === historyIndex && 'border-secondary'
                   }`}
                 >
                   <span
                     className={`${
-                      history?.status ? 'bg-green-soft' : 'bg-red-primary'
+                      history?.status
+                        ? 'bg-green-soft'
+                        : isExpired(history)
+                        ? 'bg-gray-400'
+                        : 'bg-red-primary'
                     } py-1 px-3 text-white rounded-full`}
                   >
                     {/* <span className="bg-gray-primary py-1 px-3 text-white rounded-full">
                       Expired
                     </span> */}
 
-                    {history?.status ? 'Issued' : 'Unpaid'}
+                    {history?.status ? 'Issued' : isExpired(history) ? 'Expired' : 'Unpaid'}
                   </span>
                   <div className="flex gap-x-5 my-4 justify-between w-full md:max-w-[468px] items-center">
                     <div className="flex gap-x-2 justify-center w-fit">
@@ -204,7 +228,9 @@ export default function RiwayatPemesanan() {
                 </div>
               ))
             ) : (
-              <div className={`text-center my-10`}>
+              <div
+                className={`text-center my-10 ${paymentHistory?.length === 0 ? 'hidden' : 'block'}`}
+              >
                 <div className="font-[600] text-sm text-center mb-5 text-secondary">
                   <div className="text-5xl">
                     <FontAwesomeIcon icon={faSearch} className="text-7xl" />
@@ -220,9 +246,11 @@ export default function RiwayatPemesanan() {
             <SkeletonDetailPesanan />
           ) : (
             <div
+              id="detailPesanan"
+              ref={detailRef}
               className={`${
                 paymentHistory?.length === 0 ? 'hidden' : 'block'
-              } w-full md:max-w-[376px]`}
+              } w-full md:max-w-[376px] `}
             >
               {/* Detail Pesanan */}
               {filteredHistory?.length === 0 ? (
@@ -235,10 +263,18 @@ export default function RiwayatPemesanan() {
                         <h2 className="font-bold text-xl">Detail Pesanan</h2>
                         <span
                           className={`${
-                            detailPesanan?.status ? 'bg-[#73CA5C]' : 'bg-red-primary'
+                            detailPesanan?.status
+                              ? 'bg-[#73CA5C]'
+                              : isExpired(detailPesanan)
+                              ? 'bg-gray-400'
+                              : 'bg-red-primary'
                           } py-1 px-3 text-white rounded-full`}
                         >
-                          {detailPesanan?.status ? 'Issued' : 'Unpaid'}
+                          {detailPesanan?.status
+                            ? 'Issued'
+                            : isExpired(detailPesanan)
+                            ? 'Expired'
+                            : 'Unpaid'}
                         </span>
                       </div>
                       <div className="my-2">
@@ -349,15 +385,26 @@ export default function RiwayatPemesanan() {
                       </div>
                     </div>
                   </div>
-                  <button
-                    onClick={handlePrint}
-                    className="mt-3 text-xl font-[600] bg-secondary hover:bg-blue-600 text-white rounded-md w-full h-[62px]"
-                  >
-                    Cetak Tiket
-                  </button>
-                  <button className="mt-3 text-xl font-[600] bg-red-primary text-white rounded-md w-full h-[62px]">
-                    Lanjut Bayar
-                  </button>
+
+                  {detailPesanan?.status ? (
+                    <button
+                      onClick={handlePrint}
+                      className="mt-3 text-xl font-[600] bg-secondary hover:bg-blue-600 text-white rounded-md w-full h-[62px]"
+                    >
+                      Cetak Tiket
+                    </button>
+                  ) : isExpired(detailPesanan) ? (
+                    <button className="mt-3 text-xl font-[600] bg-gray-400 cursor-default text-white rounded-md w-full h-[62px]">
+                      Expired
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => alert(detailPesanan?.payment_link)}
+                      className="mt-3 text-xl font-[600] bg-red-primary text-white rounded-md w-full h-[62px]"
+                    >
+                      Lanjut Bayar
+                    </button>
+                  )}
                 </div>
               ) : (
                 <SkeletonDetailPesanan />
@@ -451,14 +498,14 @@ export default function RiwayatPemesanan() {
             </li>
             <li
               className="px-4 cursor-pointer border-b py-4  hover:bg-secondary hover:font-bold hover:text-white"
-              onClick={() => setStatusFilter('Dibatalkan')}
+              onClick={() => setStatusFilter('Expired')}
             >
               <div className="flex justify-between font-[600]">
-                Dibatalkan
+                Expired
                 <span className="border-2 border-gray-300 rounded-full h-7 w-7 flex items-center justify-center text-green-500">
                   <FontAwesomeIcon
                     icon={faCheck}
-                    className={`${statusFilter === 'Dibatalkan' ? 'block' : 'hidden'}`}
+                    className={`${statusFilter === 'Expired' ? 'block' : 'hidden'}`}
                   />
                 </span>
               </div>

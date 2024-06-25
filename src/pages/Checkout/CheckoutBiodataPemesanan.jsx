@@ -171,13 +171,7 @@ export default function CheckoutBiodataPemesan() {
           <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
           <b>Selesai</b>
         </div>
-        {/* Alert */}
-        <div className="bg-red-primary text-white px-5 my-4 rounded-xl py-3">
-          <p className="text-base text-center">Selesaikan dalam 00:15:00</p>
-        </div>
-        <div className="bg-green-soft text-white px-5 rounded-xl py-3">
-          <p className="text-base text-center">Data Anda berhasil tersmipan!</p>
-        </div>
+
         <div className="text-sm mt-4 flex gap-8 flex-col md:flex-row w-full">
           <div className="w-full">
             {/* Isi Data Pemesan */}

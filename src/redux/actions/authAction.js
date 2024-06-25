@@ -195,8 +195,8 @@ export const forgotPassword = (email) => async () => {
         email,
       }
     )
-    console.log('response :>> ', response)
-    if (response?.status === 201) {
+
+    if (response?.status === 201 || response?.status === 200) {
       toast.dismiss(toastIdWait)
       toast(`Link reset password telah dikirimkan ke email ${email}`, {
         className: 'success-toast',
@@ -211,7 +211,6 @@ export const forgotPassword = (email) => async () => {
         : toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
             className: 'toast-error',
           })
-    console.error('Error:', error)
   }
 }
 

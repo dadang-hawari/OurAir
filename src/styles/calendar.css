@@ -1,5 +1,5 @@
 div.rmdp-wrapper {
-  @apply rounded-xl;
+  @apply rounded-xl select-none;
 }
 div.rmdp-wrapper .rmdp-day.rmdp-today span {
   @apply bg-secondary;

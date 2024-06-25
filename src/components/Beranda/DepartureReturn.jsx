@@ -43,7 +43,7 @@ export const DepartureReturn = () => {
         <FontAwesomeIcon icon={faChevronRight} className="text-gray-400" />
       )
     return (
-      <button type="button" className="p-1" onClick={onClick}>
+      <button type="button" className="p-1 " onClick={onClick}>
         {chevron}
       </button>
     )
@@ -146,6 +146,7 @@ export const DepartureReturn = () => {
                   range={isReturn}
                   showOtherDays
                   disableYearPicker
+                  disableMonthPicker
                   highlightToday={false}
                   format="DD MMMM YYYY"
                   weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
