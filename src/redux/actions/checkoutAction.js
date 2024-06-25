@@ -10,13 +10,14 @@ import { toast } from 'react-toastify'
 export const getFlightById = (id) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/flights/search-by-id?id=${id}`
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/flights/search-by-id?id=${id}`
     )
     const data = response.data.data
     if (response.status === 200 || response.status === 201) {
       dispatch(setFlightDetail(data))
       dispatch(setFlightSeats(response.data.result[0]))
     }
+    console.log('response', response)
   } catch (error) {
     console.log(error)
   }
@@ -33,7 +34,7 @@ export const postBooking = (navigate) => async (dispatch, getState) => {
       toastId: 'toastInfo',
     })
     const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/booking/create`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/booking/create`,
       { passengers, baby, booker },
       {
         headers: {

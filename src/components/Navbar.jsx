@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useResolvedPath } from 'react-router-dom'
 import Logo from '/assets/images/logoFooter.webp'
-import LogoTwo from '/assets/images/logo.webp'
+import LogoTwo from '/assets/images/Group 101.webp'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faSignInAlt,
   faList,
   faArrowLeft,
-  faDoorOpen,
   faUser,
   faChevronDown,
   faBell,
   faXmark,
-  faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
 import { logout } from '../redux/actions/authAction'
@@ -30,8 +28,11 @@ const Navbar = () => {
   const [showNotification, setShowNotifcation] = useState(false)
   const token = useSelector((state) => state.auth.token)
   const notification = useSelector((state) => state?.notification?.notification?.notifications)
+  const maxNotificationToShow = notification?.slice(0, 6)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const path = useResolvedPath().pathname
+  const [width, setWidth] = useState('')
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,7 +56,7 @@ const Navbar = () => {
   const handleConfirmLogout = () => {
     dispatch(logout())
     setConfirmLogout(false)
-    setSidebarVisible(false) // Menutup sidebar
+    setSidebarVisible(false)
   }
 
   const handleCancelLogout = () => {
@@ -87,6 +88,21 @@ const Navbar = () => {
     navigate('/riwayat-pemesanan')
   }
 
+  const handleResize = () => {
+    setWidth(window.innerWidth)
+  }
+
+  const windowListener = () => {
+    window.addEventListener('resize', handleResize)
+  }
+
+  useEffect(() => {
+    windowListener()
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   useEffect(() => {
     getNotificationList()
   }, [])
@@ -100,9 +116,13 @@ const Navbar = () => {
       >
         <div className="mx-auto flex justify-between items-center">
           {/* Logo */}
-          <div className="text-black text-lg font-bold">
+          <div className={`text-black text-lg font-bold  `}>
             <Link to="/">
-              <img src={Logo} alt="Logo" className="h-12 w-auto" />
+              <img
+                src={path === '/' && !isSticky && width > 780 ? LogoTwo : Logo}
+                alt="Logo"
+                className="h-12 w-auto"
+              />
             </Link>
           </div>
 
@@ -123,7 +143,7 @@ const Navbar = () => {
                 </button>
                 {showNotification && (
                   <div
-                    className={`absolute bg-white bg-opacity-90 p-5 text-xs shadow-md rounded-md top-10  right-1 w-[300px] sm:w-200px md:w-[400px] ${
+                    className={`absolute bg-white p-5 text-xs shadow-md rounded-md top-10 -right-10  w-[250px] sm:right-1 mini:w-[300px] sm:w-200px md:w-[400px] ${
                       !notification?.isRead && 'bg-gray-100'
                     }`}
                   >
@@ -132,7 +152,7 @@ const Navbar = () => {
                       className="absolute right-2 top-2 cursor-pointer"
                       onClick={handleNotificationDropdown}
                     />
-                    {notification?.map((notification, i) => (
+                    {maxNotificationToShow?.map((notification, i) => (
                       <>
                         <div key={i} className="my-2 cursor-pointer" onClick={navigateToRiwayat}>
                           <div className="flex text-[10px] text-[#8A8A8A] ">
@@ -181,7 +201,7 @@ const Navbar = () => {
                   />
                 </div>
                 {showProfileDropdown && (
-                  <div className="absolute bg-white bg-opacity-90 p-5 shadow-md rounded-md w-fit px-10 top-10 right-1 ">
+                  <div className="absolute bg-white p-5 transition-all shadow-md rounded-md w-fit px-10 top-10 right-1 ">
                     <Link to="/profile">Profile</Link>
                     <div className="text-red-400 my-1 cursor-pointer" onClick={handleLogout}>
                       Logout
@@ -212,6 +232,7 @@ const Navbar = () => {
           sidebarVisible ? 'bg-black bg-opacity-50' : 'pointer-events-none'
         }`}
       >
+        <div className="w-full h-full" onClick={sideBar}></div>
         <div
           className={`fixed right-0 top-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
             sidebarVisible ? 'translate-x-0' : 'translate-x-full'

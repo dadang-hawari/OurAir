@@ -16,7 +16,7 @@ export const registUser = (phone_number, name, email, password, navigate) => asy
     toast.loading(loadingMessage, {
       toastId: toastIdWait,
     })
-    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/signup`, {
+    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/signup`, {
       phone_number,
       name,
       email,
@@ -58,7 +58,7 @@ export const verifyOTP = (email, otp, navigate) => async (dispatch) => {
     })
 
     const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/verify-email-token`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/verify-email-token`,
       {
         email,
         otp,
@@ -98,7 +98,7 @@ export const sendVerifyOtp = (email) => async () => {
     })
     console.log('email :>> ', email)
     const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/try-send-email`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/try-send-email`,
       {
         email,
       }
@@ -121,7 +121,7 @@ export const sendVerifyOtp = (email) => async () => {
 export const resetPassword = (token, password, navigate) => async () => {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/reset-password-do-login`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/reset-password-do-login`,
       {
         password,
       },
@@ -159,7 +159,7 @@ export const authGoogleUser = (token, navigate) => async (dispatch) => {
         Authorization: `Bearer ${token}`,
       },
     })
-    console.log('import.meta.env.VITE_DOMAIN_API_DEV :>> ', import.meta.env.VITE_DOMAIN_API_DEV)
+    console.log('import.meta.env.VITE_DOMAIN_API :>> ', import.meta.env.VITE_DOMAIN_API)
     console.log('response :>> ', response)
     const data = response?.data.data
     if (response?.status === 200) {
@@ -190,7 +190,7 @@ export const forgotPassword = (email) => async () => {
     })
 
     const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/forgot-password-send-email`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/forgot-password-send-email`,
       {
         email,
       }
@@ -219,7 +219,7 @@ export const loginUser = (email, password, navigate) => async (dispatch) => {
     toast.loading(loadingMessage, {
       toastId: toastIdWait,
     })
-    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/signin`, {
+    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/signin`, {
       email,
       password,
     })
@@ -261,7 +261,7 @@ export const logout = () => async (dispatch) => {
 export const updateUser = (name, phone_number, email, token) => async () => {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/users/profile`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/users/profile`,
       {
         name: name,
         phone_number: phone_number,

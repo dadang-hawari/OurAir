@@ -39,7 +39,7 @@ export default function Header() {
         <img
           src="/assets/images/header_background.webp"
           alt="Pantai"
-          className="w-full h-[362px] xl:h-auto 2xl:max-h-96 select-none   object-cover absolute"
+          className="w-full h-[362px] xl:h-auto 2xl:max-h-96 select-none object-cover absolute"
         />
         <div className="absolute top-72 max-w-5xl w-11/12 h-fit px-4 pt-4 pb-6 md:p-6 xl:p-8 rounded-xl border bg-white left-1/2 -translate-x-1/2">
           <div>

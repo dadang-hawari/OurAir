@@ -26,7 +26,6 @@ export const getTransaction = () => async (dispatch, state) => {
         className: 'toast-error',
         toastId: ' toast-error',
       })
-    } else toast(error?.response?.data?.message)
-    toast('tes')
+    } else toast(error?.response?.data?.message[0])
   }
 }

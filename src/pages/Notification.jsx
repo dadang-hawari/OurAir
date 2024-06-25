@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faBell } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowLeft,
+  faBell,
+  faEyeDropperEmpty,
+  faMessage,
+} from '@fortawesome/free-solid-svg-icons'
 import iconFaFilter from '../../public/assets/images/fi_filter.svg'
 import { useEffect } from 'react'
 import { getNotification } from '../redux/actions/notificationAction'
@@ -48,29 +53,35 @@ const Notification = () => {
       <Header title="Notifikasi" />
       <div className="max-w-screen-lg mx-auto ">
         <ul className="space-y-4">
-          {notification?.map((notification) => (
-            <li key={notification.id} className="w-full border-b last:border-b-0">
-              <div className="flex justify-between  p-4 hover:bg-gray-50 items-center">
-                <div className="flex items-center gap-x-5 flex-grow w-full">
-                  <FontAwesomeIcon
-                    icon={faBell}
-                    className="h-5 text-white self-center  bg-accent rounded-full  p-1"
-                  />
-                  <div>
-                    <h2 className="font-semibold text-gray-400">{notification.title}</h2>
-                    <p className="text-black">{notification.message}</p>
-                    {/* {notification.details && (
+          {notification?.length > 0 ? (
+            notification?.map((notification) => (
+              <li key={notification.id} className="w-full border-b last:border-b-0">
+                <div className="flex justify-between  p-4 hover:bg-gray-50 items-center">
+                  <div className="flex items-center gap-x-5 flex-grow w-full">
+                    <FontAwesomeIcon
+                      icon={faBell}
+                      className="h-5 text-white self-center  bg-accent rounded-full  p-1"
+                    />
+                    <div>
+                      <h2 className="font-semibold text-gray-400">{notification.title}</h2>
+                      <p className="text-black">{notification.message}</p>
+                      {/* {notification.details && (
                       <p className="text-gray-400">{notification.details}</p>
                     )} */}
+                    </div>
+                  </div>
+                  <div className="text-sm text-gray-500 mb-6 w-80">
+                    {`${formatTimeToIndonesia(notification.created_at)}  
+                    ${formatTimeToHM(notification.created_at)}`}
                   </div>
                 </div>
-                <div className="text-sm text-gray-500 mb-6 w-80">
-                  {`${formatTimeToIndonesia(notification.created_at)}  
-                    ${formatTimeToHM(notification.created_at)}`}
-                </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            ))
+          ) : (
+            <div className="text-center text-secondary text-xl">
+              <FontAwesomeIcon icon={faBell} /> Notifikasi Kosong.....
+            </div>
+          )}
         </ul>
       </div>
       {/* <Footer /> */}
