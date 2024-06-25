@@ -96,7 +96,7 @@ export default function PilihPenerbangan() {
     setSelectedFilter('Harga Termurah')
     const sortedFlights = [...listFlights].sort((a, b) => a.ticket_price - b.ticket_price)
     setFilteredFlights(sortedFlights)
-    closeModal() // Close the modal after applying filter
+    closeModal()
   }
 
   const handleClickPilih = (id) => {

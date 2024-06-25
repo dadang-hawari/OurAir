@@ -47,6 +47,7 @@ export default function CheckoutBiodataPemesan() {
   const navigate = useNavigate()
   const penumpangSaatIni = dataCheckout?.jumlahPenumpang
   const jumlahPenumpang = location?.state?.jumlahPenumpang
+  const [email, setEmail] = useState(useCurrentEmail ? emailnow : pemesan.data.email)
   const pajak =
     (penumpangSaatIni?.penumpangAnak + penumpangSaatIni?.penumpangDewasa) *
     flightDetail?.ticket_price *
@@ -75,7 +76,7 @@ export default function CheckoutBiodataPemesan() {
     for (let i = 0; i < penumpangDewasa; i++) {
       penumpangBaru.push({
         id: `penumpang ${i + 1} - Dewasa`,
-        title: 'Mr',
+        title: 'Mr.',
         fullname: '',
         surname: '',
         birth_date: '',
@@ -110,6 +111,10 @@ export default function CheckoutBiodataPemesan() {
   }
 
   useEffect(() => {
+    setEmail(useCurrentEmail ? emailnow : pemesan.data.email)
+  }, [useCurrentEmail, emailnow, pemesan.data.email])
+
+  useEffect(() => {
     // Inisialisasi state penumpang berdasarkan jumlah penumpangSaatIni
     setDataPenumpang()
     dispatch(getFlightById(flight_id))
@@ -129,8 +134,9 @@ export default function CheckoutBiodataPemesan() {
   }
 
   const handlePemesan = (e) => {
-    const { name, value } = e.target
+    let { name, value } = e.target
     dispatch(setPemesan({ name, value }))
+    console.log('name, value', name, value)
   }
 
   const handleLanjutBayar = () => {
@@ -150,7 +156,10 @@ export default function CheckoutBiodataPemesan() {
     dispatch(assignSeatsToPassengers(selectedSeats))
     dispatch(postBooking(navigate))
   }
-
+  const handleToggle = () => {
+    dispatch(setUseCurrentEmail(!useCurrentEmail))
+    handlePemesan({ target: { name: 'email', value: email } })
+  }
   return (
     <div>
       <Navbar />
@@ -162,13 +171,7 @@ export default function CheckoutBiodataPemesan() {
           <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
           <b>Selesai</b>
         </div>
-        {/* Alert */}
-        <div className="bg-red-primary text-white px-5 my-4 rounded-xl py-3">
-          <p className="text-base text-center">Selesaikan dalam 00:15:00</p>
-        </div>
-        <div className="bg-green-soft text-white px-5 rounded-xl py-3">
-          <p className="text-base text-center">Data Anda berhasil tersmipan!</p>
-        </div>
+
         <div className="text-sm mt-4 flex gap-8 flex-col md:flex-row w-full">
           <div className="w-full">
             {/* Isi Data Pemesan */}
@@ -233,7 +236,7 @@ export default function CheckoutBiodataPemesan() {
                     <div className="flex mb-2 justify-between">
                       <p>Gunakan email saat ini?</p>
                       <button
-                        onClick={() => dispatch(setUseCurrentEmail(!useCurrentEmail))}
+                        onClick={handleToggle}
                         id="useCurrentEmail"
                         name="useCurrentEmail"
                         aria-label="Toggle Email Saat Ini"

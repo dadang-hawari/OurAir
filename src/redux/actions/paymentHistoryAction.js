@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { setPaymentHistory } from '../reducers/paymentHistoryReducer'
+import { toast } from 'react-toastify'
 
 export const getTransaction = () => async (dispatch, state) => {
   try {
@@ -19,6 +20,13 @@ export const getTransaction = () => async (dispatch, state) => {
     console.log('data', data)
     console.log('state', state()?.payment?.paymentHistory)
   } catch (error) {
-    console.log(error)
+    console.log('error?.response?.data?.message', error?.response?.status)
+    if (error?.response?.status === 401) {
+      toast('Token expired, silahkan login kembali', {
+        className: 'toast-error',
+        toastId: ' toast-error',
+      })
+    } else toast(error?.response?.data?.message)
+    toast('tes')
   }
 }

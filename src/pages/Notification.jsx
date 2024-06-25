@@ -6,6 +6,7 @@ import iconFaFilter from '../../public/assets/images/fi_filter.svg'
 import { useEffect } from 'react'
 import { getNotification } from '../redux/actions/notificationAction'
 import { useDispatch, useSelector } from 'react-redux'
+import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
 
 function Header({ title }) {
   return (
@@ -40,23 +41,6 @@ const Notification = () => {
     dispatch(getNotification())
   }, [])
 
-  const Notifications = [
-    {
-      id: 1,
-      title: 'Promosi',
-      message: 'Dapatkan Potongan 50% Tiket!',
-      details: 'Syarat dan ketentuan berlaku!',
-      time: '20 Maret, 14:04',
-    },
-    {
-      id: 2,
-      title: 'Notifikasi',
-      message:
-        'Terdapat perubahan pada jadwal penerbangan kode booking 45GT6. Cek jadwal perjalanan Anda disini!',
-      time: '5 Maret, 14:04',
-    },
-  ]
-
   return (
     //  PR IF MESSAGE TITLE === BOOKING SUCCESSFULL SAAT USER KLIK ARAHIN KE HALAMAN RIWAYAT PESANAN
     <div className="mt-10 space-y-10">
@@ -80,7 +64,10 @@ const Notification = () => {
                     )} */}
                   </div>
                 </div>
-                <span className="text-sm text-gray-500 mb-6">{notification.created_at}</span>
+                <div className="text-sm text-gray-500 mb-6 w-80">
+                  {`${formatTimeToIndonesia(notification.created_at)}  
+                    ${formatTimeToHM(notification.created_at)}`}
+                </div>
               </div>
             </li>
           ))}
