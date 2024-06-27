@@ -23,9 +23,11 @@ import { customStylesFilter } from '../styles/customStyles'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFlightByCityorCountry, getFlightsByCity } from '../redux/actions/flightsAction'
 import { PenerbanganNotFound } from '../components/HasilCariPenerbangan/PenerbanganNotFound'
+import Toast from '../components/common/Toast'
 import { checkLocationState } from '../utils/checkLocationState'
 import { setIdFlight, setJumlahPenumpang } from '../redux/reducers/checkoutReducer'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
+import { toast } from 'react-toastify'
 
 export default function PilihPenerbangan() {
   const location = useLocation()
@@ -40,6 +42,12 @@ export default function PilihPenerbangan() {
   const kotaTujuan = jadwalPenerbangan?.arrivalCity
   const tanggalBerangkat = jadwalPenerbangan?.tanggalBerangkatKembali[0]
   const tanggalKembali = jadwalPenerbangan?.tanggalBerangkatKembali[1]
+  const jumlahPenumpang = jadwalPenerbangan?.jumlahPenumpang
+  const childAndAdult = jumlahPenumpang?.penumpangDewasa + jumlahPenumpang?.penumpangAnak
+  const message =
+    'Mohon maaf, jumlah kursi di maskapai ini kurang dari jumlah penumpang yang telah dipilih.'
+  const toastId = 'toastInfo'
+  const toastClass = 'toast-info'
 
   const kelas = jadwalPenerbangan?.kelas
 
@@ -99,14 +107,20 @@ export default function PilihPenerbangan() {
     closeModal()
   }
 
-  const handleClickPilih = (id) => {
+  const handleClickPilih = (id, availableSeats) => {
+    if (childAndAdult > availableSeats) {
+      toast(message, {
+        toastId,
+        className: toastClass,
+      })
+      return
+    }
     dispatch(setIdFlight(id))
-
     navigate('/checkout-pemesanan', {
-      state: { jumlahPenumpang: jadwalPenerbangan?.jumlahPenumpang },
+      state: { jumlahPenumpang: jadwalPenerbangan?.jumlahPenumpang, flight_id: id },
     })
   }
-
+  console.log('jadwalPenerbangan', jadwalPenerbangan)
   const SkeletonLoading = ({ loop = 10 }) => {
     const skeletons = Array.from({ length: loop })?.map((_, index) => (
       <div key={index} className="border animate-pulse w-full rounded-xl px-3 pt-4 pb-5 h-fit mb-4">
@@ -259,12 +273,19 @@ export default function PilihPenerbangan() {
                 listFlights?.map((flight, i) => (
                   <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={i}>
                     <div className="flex items-center">
-                      <FontAwesomeIcon
-                        icon={faIcons}
-                        className="ps-1 mr-1 text-yellow-300 text-xs font-[600]"
+                      <img
+                        src="/assets/images/brand_airlines.webp"
+                        alt="logo_airlines"
+                        height="20"
+                        width="20"
                       />{' '}
-                      <h4 className="font-[600]">
-                        {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name}
+                      <h4 className="font-[600] ms-2 text-xs">
+                        {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} -{' '}
+                        {flight?.class === 'FIRSTCLASS'
+                          ? 'First Class'
+                          : flight?.class === 'ECONOMY'
+                          ? 'Economy'
+                          : 'Business'}
                       </h4>
                     </div>
                     <div className="flex gap-x-10 items-center text-sm">
@@ -297,8 +318,8 @@ export default function PilihPenerbangan() {
                           IDR {flight?.ticket_price?.toLocaleString('id-ID')}
                         </b>
                         <button
-                          className="bg-secondary text-white max-w-[100px] w-full rounded-full py-1"
-                          onClick={() => handleClickPilih(flight?.id)}
+                          className="bg-secondary text-white max-w-[100px] w-full rounded-full py-2"
+                          onClick={() => handleClickPilih(flight?.id, flight?.availableSeats)}
                         >
                           Pilih
                         </button>
@@ -307,7 +328,10 @@ export default function PilihPenerbangan() {
                           onClick={() => toggleDetailVisibility(flight?.id)}
                         >
                           <FontAwesomeIcon
-                            icon={activeDetailId === flight?.id ? faChevronUp : faChevronDown}
+                            icon={faChevronDown}
+                            className={`transition-transform duration-300 ${
+                              activeDetailId === flight?.id ? 'rotate-0' : 'rotate-180'
+                            }`}
                           />{' '}
                           Detail
                         </button>
@@ -323,7 +347,6 @@ export default function PilihPenerbangan() {
                       <h4 className="font-bold text-primary my-2">Detail Penerbangan</h4>
                       <div className="flex justify-between text-sm">
                         <b className="text-base">{formatTimeToHM(flight?.departure_time)}</b>
-
                         <b className="text-soft-blue">Keberangkatan</b>
                       </div>
                       <p className="my-1">{formatTimeToIndonesia(flight?.departure_time)}</p>
@@ -332,10 +355,16 @@ export default function PilihPenerbangan() {
                         <hr className="w-1/2 mx-auto my-4" />
                         <b className="block">
                           {flight?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} -{' '}
-                          {flight?.class === 'FIRSTCLASS' ? 'First Class' : 'Economy'}
+                          {flight?.class === 'FIRSTCLASS'
+                            ? 'First Class'
+                            : flight?.class === 'ECONOMY'
+                            ? 'Economy'
+                            : 'Business'}
                         </b>
 
                         <b>{flight?.whomAirplaneFlights?.airplane_code}</b>
+                        <b className="block">{flight?.availableSeats} Kursi tersedia </b>
+
                         <div className="relative">
                           <FontAwesomeIcon
                             icon={faIcons}
@@ -345,6 +374,7 @@ export default function PilihPenerbangan() {
                           <ul className="flex flex-col">
                             <li>{flight?.whomAirplaneFlights?.baggage} kg</li>
                             <li>{flight?.whomAirplaneFlights?.cabin_baggage} kg</li>
+
                             <li>In Flight Entertainment</li>
                           </ul>
                         </div>
@@ -365,6 +395,7 @@ export default function PilihPenerbangan() {
             </div>
           )}
         </div>
+        <Toast margin="mt-10" autoClose={5000} />
       </div>
     </>
   )

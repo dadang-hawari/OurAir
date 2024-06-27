@@ -15,6 +15,7 @@ const initialState = {
     },
   },
   transaction: null,
+  donation: 80000,
 }
 
 const checkoutSlice = createSlice({

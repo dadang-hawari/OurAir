@@ -1,5 +1,5 @@
 div.Toastify__toast {
-  @apply font-[inherit] text-sm max-h-1 mx-auto sm:max-w-fit right-0 text-center;
+  @apply font-[inherit] text-sm  mx-auto sm:max-w-fit right-0 text-center;
 }
 div.success-toast {
   @apply text-white bg-green-400 rounded-xl h-fit  px-5 flex items-center min-w-36;

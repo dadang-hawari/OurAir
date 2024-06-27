@@ -11,7 +11,7 @@
 }
 
 .seat.available {
-  @apply text-white bg-gray-500;
+  @apply text-white bg-gray-600;
 }
 
 .seat.unavailable {
@@ -22,5 +22,5 @@
 }
 
 .seat.selected {
-  @apply bg-primary;
+  @apply bg-secondary;
 }

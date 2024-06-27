@@ -11,7 +11,7 @@ import { setNotification } from '../reducers/notifReducer'
 export const getNotification = () => async (dispatch, getState) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_DOMAIN_API}/api/v1/notification/notifications?page=1&limit=5`,
+      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/notification/notifications?page=1&limit=5`,
       {
         headers: {
           Authorization: `Bearer ${getState()?.auth?.token}`,

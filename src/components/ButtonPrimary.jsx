@@ -1,10 +1,13 @@
-export default function ButtonPrimary({ onClick, text, className }) {
+export default function ButtonPrimary({ onClick, text, className, isDisabled = false }) {
   return (
     <button
       onClick={onClick}
-      className={`bg-blue-500 text-white max-w-[568px] w-full h-[48px] rounded-2xl hover:bg-secondary transition-colors ${className}`}
+      disabled={isDisabled}
+      className={`${
+        isDisabled ? 'cursor-default' : ' hover:bg-secondary'
+      } bg-blue-500 text-white max-w-[568px] w-full h-[48px] rounded-2xl transition-colors ${className}`}
     >
       {text}
     </button>
-  );
+  )
 }

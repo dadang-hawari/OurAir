@@ -15,6 +15,7 @@ import SeatPicker from '../../components/SeatPicker'
 import {
   assignSeatsToPassengers,
   resetSelectedSeats,
+  setIdFlight,
   setJumlahPenumpang,
   setPemesan,
   setPenumpang,
@@ -29,6 +30,7 @@ import { getFlightById, postBooking } from '../../redux/actions/checkoutAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
 import { toast } from 'react-toastify'
 import Toast from '../../components/common/Toast'
+import BackToTop from '../../components/common/BackToTop'
 
 export default function CheckoutBiodataPemesan() {
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
@@ -46,6 +48,7 @@ export default function CheckoutBiodataPemesan() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const penumpangSaatIni = dataCheckout?.jumlahPenumpang
+  console.log('penumpangSaatIni', penumpangSaatIni)
   const jumlahPenumpang = location?.state?.jumlahPenumpang
   const [email, setEmail] = useState(useCurrentEmail ? emailnow : pemesan.data.email)
   const pajak =
@@ -58,6 +61,11 @@ export default function CheckoutBiodataPemesan() {
   const jumlahPenumpangAnak = penumpangSaatIni?.penumpangAnak
   const jumlahPenumpangDewasa = penumpangSaatIni?.penumpangDewasa
   const jumlahPenumpangBayi = penumpangSaatIni?.penumpangBayi
+  const message =
+    'Mohon maaf, jumlah kursi di maskapai ini kurang dari jumlah penumpang yang telah dipilih. Silahkan melakukan ulang maskapai penerbangan'
+  const toastId = 'toastInfo'
+  const toastClass = 'toast-info'
+  console.log('penumpang', penumpang)
 
   const setDataPenumpang = () => {
     // percabangan if biar inputan nggak kereset jika misalnya tidak ada perubahan penumpang
@@ -67,8 +75,12 @@ export default function CheckoutBiodataPemesan() {
         penumpangSaatIni?.penumpangBayi === jumlahPenumpang?.penumpangBayi) ||
       jumlahPenumpang?.penumpangDewasa === null ||
       jumlahPenumpang?.penumpangDewasa === undefined
-    )
+    ) {
+      // Function buat mastiin flight id nya keupdate jika misalnya user memilih flight yang berbeda walaupun tidak ada perubahan penumpang
+      updateFlightIdInPenumpangBaru()
       return
+    }
+
     dispatch(setJumlahPenumpang(jumlahPenumpang))
     dispatch(resetSelectedSeats())
     const { penumpangDewasa, penumpangAnak } = jumlahPenumpang ?? {}
@@ -120,6 +132,15 @@ export default function CheckoutBiodataPemesan() {
     dispatch(getFlightById(flight_id))
   }, [penumpangSaatIni])
 
+  const updateFlightIdInPenumpangBaru = () => {
+    // Mengupdate flight_id pada setiap penumpang di penumpangBaru
+    const updatedPenumpang = penumpang?.map((penumpang) => ({
+      ...penumpang,
+      ticket: { flight_id: flight_id },
+    }))
+    dispatch(setPenumpang(updatedPenumpang))
+  }
+
   const handlePenumpang = (e, id) => {
     const { name, value } = e.target
     dispatch(updatePenumpang({ id, name, value }))
@@ -140,7 +161,55 @@ export default function CheckoutBiodataPemesan() {
   }
 
   const handleLanjutBayar = () => {
-    console.log('dataCheckout', dataCheckout)
+    if (
+      !pemesan.data.fullname?.trim() ||
+      !pemesan.data.phone_number.trim() ||
+      !pemesan.data.email.trim()
+    ) {
+      toast('Mohon lengkapi semua data diri pemesan yang perlu diisi.', {
+        toastId: 'toastError',
+        className: 'toast-error',
+      })
+      return
+    }
+
+    for (const penumpangData of penumpang) {
+      const { fullname, birth_date, nationality, document, document_expired } = penumpangData
+
+      if (
+        !fullname.trim() ||
+        !birth_date.trim() ||
+        !nationality.trim() ||
+        !document.trim() ||
+        !document_expired.trim()
+      ) {
+        // Display toast for the first found error
+        if (!fullname) {
+          toast(`Mohon lengkapi nama lengkap untuk ${penumpangData.id}`, {
+            className: 'toast-error',
+          })
+        } else if (!birth_date) {
+          toast(`Mohon isi tanggal lahir untuk ${penumpangData.id}`, {
+            className: 'toast-error',
+          })
+        } else if (!nationality) {
+          toast(`Mohon isi kewarganegaraan untuk ${penumpangData.id}`, {
+            className: 'toast-error',
+          })
+        } else if (!document) {
+          toast(`Mohon isi nomor dokumen untuk ${penumpangData.id}`, {
+            className: 'toast-error',
+          })
+        } else if (!document_expired) {
+          toast(`Mohon isi tanggal kadaluarsa dokumen untuk ${penumpangData.id}`, {
+            className: 'toast-error',
+          })
+        }
+
+        return // Stop further processing upon finding the first error
+      }
+    }
+
     if (selectedSeats.length < jumlahPenumpangAnak + jumlahPenumpangDewasa) {
       toast(
         `Mohon pastikan agar Anda telah memilih ${
@@ -153,6 +222,11 @@ export default function CheckoutBiodataPemesan() {
       )
       return
     }
+
+    toast(message, {
+      toastId,
+      className: toastClass,
+    })
     dispatch(assignSeatsToPassengers(selectedSeats))
     dispatch(postBooking(navigate))
   }
@@ -175,6 +249,7 @@ export default function CheckoutBiodataPemesan() {
         <div className="text-sm mt-4 flex gap-8 flex-col md:flex-row w-full">
           <div className="w-full">
             {/* Isi Data Pemesan */}
+            {/* Isi Data Pemesan */}
             <div className="border rounded-md h-fit p-5 w-full">
               <b className="text-xl mb-3 block">Isi Data Pemesan</b>
               <div className="w-full text-gray-secondary">
@@ -194,6 +269,7 @@ export default function CheckoutBiodataPemesan() {
                       className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                       placeholder="Masukkan nama lengkap"
                       id="fullname"
+                      required
                       name="fullname"
                       value={pemesan.data.fullname}
                       onChange={handlePemesan}
@@ -226,7 +302,7 @@ export default function CheckoutBiodataPemesan() {
                       className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                       placeholder="Masukkan nomor telepon"
                       id="phone_number"
-                      min={0}
+                      required
                       name="phone_number"
                       value={pemesan.data.phone_number}
                       onChange={handlePemesan}
@@ -240,6 +316,7 @@ export default function CheckoutBiodataPemesan() {
                         id="useCurrentEmail"
                         name="useCurrentEmail"
                         aria-label="Toggle Email Saat Ini"
+                        type="button"
                         className={`w-10 h-5 flex items-center rounded-full transition-colors duration-300 cursor-pointer ${
                           useCurrentEmail ? 'bg-accent' : 'bg-gray-300'
                         }`}
@@ -258,7 +335,8 @@ export default function CheckoutBiodataPemesan() {
                       </span>
                     </label>
                     <input
-                      type="text"
+                      type="email"
+                      required
                       className={`w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4 ${
                         useCurrentEmail ? 'cursor-default' : ''
                       }`}
@@ -273,6 +351,7 @@ export default function CheckoutBiodataPemesan() {
                 </div>
               </div>
             </div>
+
             {/* Isi Data Penumpang */}
             <div className="border rounded-md h-fit my-8 p-5 w-full">
               <b className="text-xl mb-3 block">Isi Data Penumpang</b>
@@ -492,7 +571,12 @@ export default function CheckoutBiodataPemesan() {
               <div className="text-sm">
                 <hr className="w-[95%] mx-auto my-3 " />
                 <div className="flex items-center gap-x-2">
-                  <FontAwesomeIcon icon={faIcons} className="text-yellow-400" />
+                  <img
+                    src="/assets/images/brand_airlines.webp"
+                    alt="brand airlined"
+                    height="20"
+                    width="20"
+                  />
                   <div className="w-full">
                     <div className="font-bold">
                       {flightDetail?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} -{' '}
@@ -564,6 +648,7 @@ export default function CheckoutBiodataPemesan() {
             </div>
           </div>
         </div>
+        <BackToTop />
         <Toast />
       </div>
     </div>

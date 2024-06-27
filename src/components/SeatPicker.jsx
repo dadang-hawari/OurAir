@@ -42,7 +42,7 @@ export default function SeatPicker() {
   return (
     <div className="seat-picker overflow-x-auto">
       <div className="w-full">
-        <h2 className="font-[600]">Keterangan</h2>
+        <h2 className="font-bold">Keterangan</h2>
         <div className="flex items-center">
           <div className="seat  unavailable-info ">X</div>
           <p>Kursi tidak tidak tersedia</p>

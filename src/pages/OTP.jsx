@@ -7,7 +7,7 @@ import { decrementTimerOtp, resetTimerOtp, setOtpSentTime } from '../redux/reduc
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import Toast from '../components/common/Toast'
-import { toast } from 'react-toastify'
+import { Bounce, toast } from 'react-toastify'
 
 import { checkLocationState } from '../utils/checkLocationState'
 import { sendVerifyOtp, verifyOTP } from '../redux/actions/authAction'
@@ -21,6 +21,7 @@ export default function OTP() {
   const navigate = useNavigate()
   const [otp, setOtp] = useState('')
   const [isTimerActive, setIsTimerActive] = useState(timer > 0)
+  const [isLoading, setIsLoading] = useState(false)
 
   const checkEmail = () => {
     if (!email) navigate('/login')
@@ -86,7 +87,10 @@ export default function OTP() {
       })
       return
     }
-    dispatch(verifyOTP(email, otp, navigate))
+    setIsLoading(true)
+    dispatch(verifyOTP(email, otp, navigate)).then(() => {
+      setIsLoading(false)
+    })
     console.log('OTP yang dimasukkan:', otp)
   }
 
@@ -94,7 +98,7 @@ export default function OTP() {
     <div className="mx-auto mt-28 md:mt-4 p-5">
       <div className="max-w-md mx-auto text-center relative">
         <Link
-          to="/daftar"
+          to="/login"
           className="absolute -top-12 left-0 md:-left-12 p-2 text-accent flex items-center gap-2"
         >
           <FontAwesomeIcon icon={faChevronLeft} className="w-2 h-auto " />
@@ -124,9 +128,9 @@ export default function OTP() {
             )}
           </div>
 
-          <ButtonPrimary onClick={handleSubmit} text="Simpan" />
+          <ButtonPrimary onClick={handleSubmit} isDisabled={isLoading} text="Simpan" />
         </div>
-        <Toast />
+        <Toast autoClose={4000} transition={Bounce} />
       </div>
     </div>
   )

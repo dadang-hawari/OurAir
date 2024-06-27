@@ -86,26 +86,3 @@ div.ReactModal__Content.ReactModal__Content--after-open {
 .ReactModal__Content {
   @apply w-fit border-none;
 }
-
-/* Tambahkan ke dalam file CSS Anda */
-.notification-enter {
-  transform: scale(0.9);
-  opacity: 0;
-}
-
-.notification-enter-active {
-  transform: scale(1);
-  opacity: 1;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.notification-exit {
-  transform: scale(1);
-  opacity: 1;
-}
-
-.notification-exit-active {
-  transform: scale(0.9);
-  opacity: 0;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}

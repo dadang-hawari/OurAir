@@ -19,6 +19,7 @@ import iconFaBell from '/assets/images/fi_bell.svg'
 import iconFaUser from '/assets/images/fi_user.svg'
 import { getNotification } from '../redux/actions/notificationAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
+import { io } from 'socket.io-client'
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false)
@@ -28,7 +29,7 @@ const Navbar = () => {
   const [showNotification, setShowNotifcation] = useState(false)
   const token = useSelector((state) => state.auth.token)
   const notification = useSelector((state) => state?.notification?.notification?.notifications)
-  const maxNotificationToShow = notification?.slice(0, 6)
+  const maxNotificationToShow = notification?.slice(0, 3)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const path = useResolvedPath().pathname
@@ -36,7 +37,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
+      if (window.scrollY > 25) {
         setIsSticky(true)
       } else {
         setIsSticky(false)
@@ -54,7 +55,7 @@ const Navbar = () => {
   }
 
   const handleConfirmLogout = () => {
-    dispatch(logout())
+    dispatch(logout(navigate))
     setConfirmLogout(false)
     setSidebarVisible(false)
   }
@@ -98,6 +99,7 @@ const Navbar = () => {
 
   useEffect(() => {
     windowListener()
+    handleResize()
     return () => {
       window.removeEventListener('resize', handleResize)
     }
@@ -107,12 +109,26 @@ const Navbar = () => {
     getNotificationList()
   }, [])
 
+  useEffect(() => {
+    const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`) // Replace 'http://your-server-url' with your actual server URL
+
+    // Socket.IO event listeners and logic here
+    socket.on('transaction-update', (data) => {
+      // Show pop up notification with the received data
+      console.log('data from backend:', data)
+    })
+
+    return () => {
+      socket.disconnect() // Disconnect the socket when the component unmounts
+    }
+  }, [])
+
   return (
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-10 p-4 transiti-colors duration-500 select-none ${
-          isSticky ? 'bg-white bg-opacity-40 backdrop-blur-sm shadow-md' : 'bg-transparent'
-        }`}
+          path !== '/' && 'shadow-md bg-white bg-opacity-40 backdrop-blur-sm'
+        } ${isSticky ? 'bg-white bg-opacity-40 backdrop-blur-sm shadow-md ' : 'bg-transparent'}`}
       >
         <div className="mx-auto flex justify-between items-center">
           {/* Logo */}
@@ -215,7 +231,7 @@ const Navbar = () => {
               <ul>
                 <Link
                   to="/login"
-                  className="bg-white hover:bg-gray-100 text-gray-900 py-2 px-5 w-28 rounded-xl flex items-center"
+                  className="bg-white border border-gray-300 hover:bg-gray-100 text-gray-900 py-2 px-5 w-28 rounded-xl flex items-center"
                 >
                   <FontAwesomeIcon icon={faSignInAlt} className="h-4 w-3 mr-2" />
                   Masuk

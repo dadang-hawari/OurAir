@@ -17,9 +17,11 @@ export default function MenungguPembayaran() {
   const location = useLocation()
   const [isLoading, setIsLoading] = useState(true)
 
+  const isExpired = (detailPesanan) => {
+    return (Date.now() - new Date(detailPesanan?.created_at)) / (1000 * 60 * 60) > 24
+  }
   const paymentHistory = useSelector((state) => state?.payment?.paymentHistory?.transaction)
-  console.log('paymentHistory', paymentHistory)
-  const sortPaymentHistory = [...(paymentHistory || [])].sort(
+  const sortPaymentHistory = [...(paymentHistory || [])]?.sort(
     (a, b) => new Date(b.created_at) - new Date(a.created_at)
   )
   const countPassengersByCategory = (tickets, category) => {
@@ -39,9 +41,6 @@ export default function MenungguPembayaran() {
     content: () => printRef.current,
     documentTitle: 'ticket.ourAir',
   })
-  const isExpired = (detailPesanan) => {
-    return (Date.now() - new Date(detailPesanan?.created_at)) / (1000 * 60 * 60) > 24
-  }
 
   const getTransactionData = () => {
     const interval = setInterval(() => {
@@ -67,8 +66,11 @@ export default function MenungguPembayaran() {
           <b className="text-black">Isi Data Diri</b>
           <FontAwesomeIcon icon={faChevronRight} className="text-sm text-black" />
           <b className="text-black">Bayar</b>
-          <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
-          <b>Selesai</b>
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            className={`text-sm  ${detailPesanan?.status && 'text-black'}`}
+          />
+          <b className={`${detailPesanan?.status && 'text-black'}`}>Selesai</b>
         </div>
         <div className="text-sm mt-4 flex gap-8 flex-col-reverse md:flex-row w-full">
           {isLoading ? (
@@ -79,6 +81,7 @@ export default function MenungguPembayaran() {
                 <div className="w-full">
                   <div className="flex justify-between mt-2">
                     <h2 className="font-bold text-xl">Detail Pesanan</h2>
+
                     <span
                       className={`${
                         detailPesanan?.status
@@ -94,6 +97,10 @@ export default function MenungguPembayaran() {
                         ? 'Expired'
                         : 'Unpaid'}
                     </span>
+                  </div>
+                  <div>
+                    {formatTimeToIndonesia(detailPesanan?.created_at)}{' '}
+                    {formatTimeToHM(detailPesanan?.created_at)}
                   </div>
                   <div className="my-2">
                     Kode Pemesanan:{' '}
@@ -201,26 +208,6 @@ export default function MenungguPembayaran() {
                   </div>
                 </div>
               </div>
-
-              {detailPesanan?.status ? (
-                <button
-                  onClick={handlePrint}
-                  className="mt-3 text-xl font-[600] bg-secondary hover:bg-blue-600 text-white rounded-md w-full h-[62px]"
-                >
-                  Cetak Tiket
-                </button>
-              ) : isExpired(detailPesanan) ? (
-                <button className="mt-3 text-xl font-[600] bg-gray-400 cursor-default text-white rounded-md w-full h-[62px]">
-                  Expired
-                </button>
-              ) : (
-                <button
-                  onClick={() => alert(detailPesanan?.payment_link)}
-                  className="mt-3 text-xl font-[600] bg-red-primary text-white rounded-md w-full h-[62px]"
-                >
-                  Lanjut Bayar
-                </button>
-              )}
             </div>
           )}
 
