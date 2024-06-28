@@ -1,12 +1,7 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { setEmail } from '../reducers/otpReducers'
-import {
-  setIsLoggedIn,
-  setToken,
-  setUserData,
-  logout as logoutAction,
-} from '../reducers/authReducer'
+import { setIsLoggedIn, setToken, setUserData, logout as logoutAction } from '../reducers/authReducer'
 
 const loadingMessage = 'Mohon tunggu sebentar..'
 const toastIdWait = 'toasWait'
@@ -16,7 +11,7 @@ export const registUser = (phone_number, name, email, password, navigate) => asy
     toast.loading(loadingMessage, {
       toastId: toastIdWait,
     })
-    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/signup`, {
+    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/signup`, {
       phone_number,
       name,
       email,
@@ -35,11 +30,9 @@ export const registUser = (phone_number, name, email, password, navigate) => asy
   } catch (error) {
     toast.dismiss(toastIdWait)
     console.log(error)
-    if (error?.response?.status === 409)
-      toast.info('Akun ini sudah terdatar', { toastId: 'toastInfo' })
+    if (error?.response?.status === 409) toast.info('Akun ini sudah terdatar', { toastId: 'toastInfo' })
     else if (error?.response?.data?.errors[0])
-      error?.response?.data?.errors[0]?.msg ===
-      'Phone number must be between 10 and 15 characters long'
+      error?.response?.data?.errors[0]?.msg === 'Phone number must be between 10 and 15 characters long'
         ? toast('Panjang nomor hp harus antara 10 hingga 15 karakter', {
             className: 'toast-error',
             toastId: 'toastError',
@@ -61,13 +54,10 @@ export const verifyOTP = (email, otp, navigate) => async (dispatch) => {
       toastId: toastIdWait,
     })
 
-    const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/verify-email-token`,
-      {
-        email,
-        otp,
-      }
-    )
+    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/verify-email-token`, {
+      email,
+      otp,
+    })
 
     console.log('response :>> ', response)
     if (response?.status === 201) {
@@ -108,12 +98,9 @@ export const sendVerifyOtp = (email) => async () => {
       toastId: toastIdWait,
     })
     console.log('email :>> ', email)
-    const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/try-send-email`,
-      {
-        email,
-      }
-    )
+    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/try-send-email`, {
+      email,
+    })
 
     console.log('response :>> ', response)
     if (response?.status === 201) {
@@ -135,7 +122,7 @@ export const sendVerifyOtp = (email) => async () => {
 export const resetPassword = (token, password, navigate) => async () => {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/reset-password-do-login`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/reset-password-do-login`,
       {
         password,
       },
@@ -172,15 +159,12 @@ export const resetPassword = (token, password, navigate) => async () => {
 
 export const authGoogleUser = (token, navigate) => async (dispatch) => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/who-am-i`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-    console.log('import.meta.env.VITE_DOMAIN_API_DEV :>> ', import.meta.env.VITE_DOMAIN_API_DEV)
+    const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/who-am-i`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    console.log('import.meta.env.VITE_DOMAIN_API :>> ', import.meta.env.VITE_DOMAIN_API)
     console.log('response :>> ', response)
     const data = response?.data.data
     if (response?.status === 200) {
@@ -214,12 +198,9 @@ export const forgotPassword = (email, navigate) => async () => {
       toastId: toastIdWait,
     })
 
-    const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/forgot-password-send-email`,
-      {
-        email,
-      }
-    )
+    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/forgot-password-send-email`, {
+      email,
+    })
 
     if (response?.status === 201 || response?.status === 200) {
       toast.dismiss(toastIdWait)
@@ -231,8 +212,7 @@ export const forgotPassword = (email, navigate) => async () => {
     }
   } catch (error) {
     toast.dismiss(toastIdWait)
-    if (error?.response?.status === 404)
-      toast.info('Akun ini belum terdatar', { toastId: 'toastInfo' })
+    if (error?.response?.status === 404) toast.info('Akun ini belum terdatar', { toastId: 'toastInfo' })
     else
       error?.response?.data?.errors[0]?.msg
         ? toast(error?.response?.data.errors[0].msg, {
@@ -251,7 +231,7 @@ export const loginUser = (email, password, navigate) => async (dispatch) => {
     toast.loading(loadingMessage, {
       toastId: toastIdWait,
     })
-    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/signin`, {
+    const response = await axios.post(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/signin`, {
       email,
       password,
     })
@@ -315,7 +295,7 @@ export const logout = (navigate) => async (dispatch) => {
 export const updateUser = (name, phone_number, email, token) => async () => {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/users/profile`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/users/profile`,
       {
         name: name,
         phone_number: phone_number,
@@ -346,14 +326,11 @@ export const updateUser = (name, phone_number, email, token) => async () => {
 
 export const validateUser = (token, navigate) => async (dispatch) => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/who-am-i`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/who-am-i`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
   } catch (error) {
     navigate('/', {
       state: {
@@ -369,5 +346,30 @@ export const validateUser = (token, navigate) => async (dispatch) => {
           className: 'toast-error',
           toastId: 'toastError',
         })
+  }
+}
+export const getUsersProfile = (token, navigate) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/who-am-i`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    console.log('import.meta.env.VITE_DOMAIN_API :>> ', import.meta.env.VITE_DOMAIN_API)
+    console.log('response :>> ', response)
+    const data = response?.data.data
+    if (response?.status === 200) {
+      dispatch(setUserData(data))
+      dispatch(setToken(token))
+      dispatch(setIsLoggedIn(true))
+    }
+  } catch (error) {
+    console.log(error)
+    error?.response?.data?.errors[0]?.msg
+      ? toast(error?.response?.data.errors[0].msg, { className: 'toast-error' })
+      : toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
+          className: 'toast-error',
+        })
+    console.error('Error:', error)
   }
 }
