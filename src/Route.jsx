@@ -16,6 +16,7 @@ import MenungguPembayaran from './pages/Checkout/MenungguPembayaran'
 import PembayaranSukses from './pages/Checkout/PembayaranSukses'
 import SeatPicker from './components/SeatPicker'
 import ScrollToTop from './components/common/ScrollToTop'
+import NotFound from './components/NotFound'
 
 export default function Route() {
   const router = createBrowserRouter([
@@ -82,6 +83,10 @@ export default function Route() {
     {
       path: '/tentang',
       element: <Tentang />,
+    },
+    {
+      path: '*', // Rute wildcard untuk halaman NotFound
+      element: <NotFound />,
     },
   ])
 
