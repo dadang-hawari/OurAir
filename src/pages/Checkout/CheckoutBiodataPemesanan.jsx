@@ -240,9 +240,10 @@ export default function CheckoutBiodataPemesan() {
     dispatch(assignSeatsToPassengers(selectedSeats))
     setIsLoading(true)
     dispatch(setPage('checkout'))
-    dispatch(postBooking(navigate, isUserDonate, { checkout: 'checkout' })).then(() =>
+    dispatch(postBooking(navigate, isUserDonate)).then(() => {
       setIsLoading(false)
-    )
+      alert('false')
+    })
   }
   const handleToggle = () => {
     dispatch(setUseCurrentEmail(!useCurrentEmail))

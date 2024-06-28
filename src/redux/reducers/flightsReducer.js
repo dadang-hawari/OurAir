@@ -7,13 +7,15 @@ const initialState = {
   flightRecomendation: null,
   flightDetail: null,
   flightSeats: [],
+  isLoading: false,
+  filteredFlights: [], // Add this to manage the filtered flights
 }
 
 const flightLists = createSlice({
   name: 'flights',
   initialState,
   reducers: {
-    setFligthLists: (state, action) => {
+    setFlightLists: (state, action) => {
       state.allFlights = action.payload
     },
     setFlightsByCountry: (state, action) => {
@@ -31,15 +33,14 @@ const flightLists = createSlice({
     setFlightSeats: (state, action) => {
       state.flightSeats = action.payload
     },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload
+    },
+    setFilteredFlights: (state, action) => {
+      state.filteredFlights = action.payload
+    },
   },
 })
 
-export const {
-  setFlightSeats,
-  setFligthLists,
-  setFlightsByCountry,
-  setFlightsByCity,
-  setFlightRecomendation,
-  setFlightDetail,
-} = flightLists.actions
+export const { setFlightSeats, setFlightLists, setFlightsByCountry, setFlightsByCity, setIsLoading, setFlightRecomendation, setFlightDetail, setFilteredFlights } = flightLists.actions
 export default flightLists.reducer

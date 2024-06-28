@@ -4,6 +4,7 @@ import {
   setFligthLists,
   setFlightsByCity,
   setFlightRecomendation,
+  setFlightDetail,
 } from '../reducers/flightsReducer'
 
 export const getAllFlights = () => async (dispatch) => {
@@ -24,21 +25,13 @@ export const getAllFlights = () => async (dispatch) => {
 }
 
 export const getFlightByCityorCountry =
-  (fromairport, toairport, kelas, startDate, endDate) => async (dispatch) => {
+  (fromairport, toairport, kelas, startDate, endDate, limit, page = 1) =>
+  async (dispatch) => {
     try {
-      console.log(
-        'fromairport, toairport, kelas, startDate,endDate',
-        fromairport,
-        toairport,
-        kelas,
-        startDate,
-        endDate
-      )
-
       const response = await axios.get(
         `${
           import.meta.env.VITE_DOMAIN_API_DEV
-        }/api/v1/flights/search?fromairport=${fromairport}&toairport=${toairport}` +
+        }/api/v1/flights/search?fromairport=${fromairport}&toairport=${toairport}&limit=${limit}&page=${page}` +
           `${kelas ? `&class=${kelas === 'First Class' ? 'firstclass' : kelas}` : ''}` +
           `${startDate ? `&startDate=${startDate}` : ''}` +
           `${endDate ? `&endDate=${endDate}` : ''}`
@@ -46,6 +39,7 @@ export const getFlightByCityorCountry =
       const data = response.data.data
       if (response?.status === 200 || response?.status === 201) {
         dispatch(setFlightsByCity(data))
+        dispatch(setFlightDetail(response?.data))
       }
       console.log('response sss :>> ', response)
     } catch (error) {

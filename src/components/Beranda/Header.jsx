@@ -7,21 +7,18 @@ import Navbar from '../Navbar'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
-
+import mainBackground from '/assets/images/header_background.webp'
+import smBackground from '/assets/images/header-sm.webp'
 export default function Header() {
   const navigate = useNavigate()
   const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
   const kotaKeberangkatan = jadwalPenerbangan?.departureCity
   const kotaTujuan = jadwalPenerbangan?.arrivalCity
-  const [imageSrc, setImageSrc] = useState('/assets/images/header-background.webp')
+  const [width, setWidth] = useState(1280)
 
   const handleBackground = () => {
     const handleResize = () => {
-      if (window.innerWidth < 1250) {
-        setImageSrc('/assets/images/header-sm.webp')
-      } else {
-        setImageSrc('/assets/images/header_background.webp')
-      }
+      setWidth(window.innerWidth)
     }
 
     handleResize()
@@ -60,7 +57,7 @@ export default function Header() {
       <Navbar />
       <div className="h-86 relative">
         <img
-          src={imageSrc}
+          src={width < 1250 ? smBackground : mainBackground}
           alt="Pantai"
           className="w-full h-[362px] xl:h-auto 2xl:max-h-96 select-none object-cover "
         />
