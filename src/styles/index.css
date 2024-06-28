@@ -20,7 +20,7 @@
   @apply bg-[#aaacb3];
 }
 ::-webkit-scrollbar-track {
-  @apply bg-gray-300;
+  @apply bg-gray-200;
 
   border: 0px none #ffffff;
   border-radius: 3px;

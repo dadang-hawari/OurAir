@@ -7,34 +7,43 @@ import { faChevronRight, faCircleCheck, faIcons } from '@fortawesome/free-solid-
 import Navbar from '../../components/Navbar'
 import Toast from '../../components/common/Toast'
 import { checkLocationState } from '../../utils/checkLocationState'
-import { getTransaction } from '../../redux/actions/paymentHistoryAction'
+import { getTransaction, getTransactionById } from '../../redux/actions/paymentHistoryAction'
 import { useReactToPrint } from 'react-to-print'
 import SkeletonDetailPesanan from '../../components/RiwayatPesanan/SkeletonDetailPesanan'
+import { Bounce } from 'react-toastify'
+import { setTransactionId } from '../../redux/reducers/checkoutReducer'
 
 export default function MenungguPembayaran() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const [isLoading, setIsLoading] = useState(true)
+  const riwayat = location
+  const waitingTransaction = useSelector((state) => state?.payment?.waitingTransaction)
+  const page = useSelector((state) => state?.otp?.page)
+  console.log('page', page)
+
+  console.log('riwayat', riwayat)
 
   const isExpired = (detailPesanan) => {
     return (Date.now() - new Date(detailPesanan?.created_at)) / (1000 * 60 * 60) > 24
   }
-  const paymentHistory = useSelector((state) => state?.payment?.paymentHistory?.transaction)
-  const sortPaymentHistory = [...(paymentHistory || [])]?.sort(
-    (a, b) => new Date(b.created_at) - new Date(a.created_at)
-  )
+
   const countPassengersByCategory = (tickets, category) => {
     return tickets?.filter((ticket) => ticket?.whomPassangerTicket?.category === category)?.length
   }
 
-  const detailPesanan = paymentHistory?.length > 0 ? sortPaymentHistory[0] : null
+  const detailPesanan = waitingTransaction?.transaction
   const adultCount = countPassengersByCategory(detailPesanan?.tickets, 'adult')
   const childCount = countPassengersByCategory(detailPesanan?.tickets, 'child')
 
   const dataCheckout = useSelector((state) => state?.checkout)
-  const transaction = dataCheckout?.transaction
+  const transactionId = dataCheckout?.transactionId
+  const transaction = dataCheckout?.transaction?.transaction?.id
+  console.log('waitingTransaction', waitingTransaction)
 
+  console.log('detailPesanan', detailPesanan)
+  console.log('transaction', transaction)
   const printRef = useRef()
 
   const handlePrint = useReactToPrint({
@@ -42,20 +51,21 @@ export default function MenungguPembayaran() {
     documentTitle: 'ticket.ourAir',
   })
 
-  const getTransactionData = () => {
-    const interval = setInterval(() => {
-      dispatch(getTransaction()).then(() => {
-        setIsLoading(false)
-      })
-    }, 5000) // Interval 5 detik
+  // const getTransactionData = () => {
+  //   const interval = setInterval(() => {
+  //     dispatch(getTransaction()).then(() => {
+  //       setIsLoading(false)
+  //     })
+  //   }, 5000) // Interval 5 detik
 
-    return () => clearInterval(interval)
-  }
+  //   return () => clearInterval(interval)
+  // }
 
   useEffect(() => {
     checkLocationState(location, navigate)
-    getTransactionData()
-    // Membersihkan interval ketika komponen di-unmount
+    dispatch(getTransaction())
+    setTransactionId(transactionId)
+    dispatch(getTransactionById(transactionId)).then(() => setIsLoading(false))
   }, [dispatch]) // Pastikan untuk menambahkan dispatch sebagai dependency
 
   return (
@@ -89,7 +99,7 @@ export default function MenungguPembayaran() {
                           : isExpired(detailPesanan)
                           ? 'bg-gray-400'
                           : 'bg-red-primary'
-                      } py-1 px-3 text-white rounded-full`}
+                      } py-1 px-3 text-white rounded-full h-fit`}
                     >
                       {detailPesanan?.status
                         ? 'Issued'
@@ -98,12 +108,12 @@ export default function MenungguPembayaran() {
                         : 'Unpaid'}
                     </span>
                   </div>
-                  <div>
+                  <div className="mt-2">
                     {formatTimeToIndonesia(detailPesanan?.created_at)}{' '}
                     {formatTimeToHM(detailPesanan?.created_at)}
                   </div>
-                  <div className="my-2">
-                    Kode Pemesanan:{' '}
+                  <div className="mb-2 mt-1">
+                    Kode Bayar :{' '}
                     <span className="text-secondary font-bold">
                       {detailPesanan?.midtrans_order_id?.slice(9, 50)}
                     </span>
@@ -193,6 +203,12 @@ export default function MenungguPembayaran() {
                         <span>{detailPesanan?.total_baby} Bayi</span>
                         <span>IDR 0</span>
                       </div>
+                      <div
+                        className={`${!detailPesanan?.donation && 'hidden'} flex justify-between`}
+                      >
+                        <span>Donasi</span>
+                        <span>IDR {detailPesanan?.donation?.toLocaleString('id-ID')}</span>
+                      </div>
                       <div className="flex justify-between">
                         <span>Pajak</span>
                         <span>IDR {detailPesanan?.tax_price?.toLocaleString('id-ID')}</span>
@@ -239,7 +255,7 @@ export default function MenungguPembayaran() {
                   </div>
                   <a>Silahkan tekan tombol berikut untuk menuju ke pembayaran</a>
                   <a
-                    href={transaction?.payment_link}
+                    href={detailPesanan?.payment_link}
                     target="_blank"
                     className="block bg-secondary w-fit py-3 px-5 mx-auto rounded-md text-white"
                   >
@@ -252,7 +268,7 @@ export default function MenungguPembayaran() {
               </div>
             )}
           </div>
-          <Toast />
+          <Toast margin="mt-16" transition={Bounce} />
         </div>
       </div>
     </>

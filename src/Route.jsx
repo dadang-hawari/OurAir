@@ -5,7 +5,7 @@ import Login from './pages/Login'
 import LupaPassword from './pages/LupaPassword'
 import GantiPassword from './pages/GantiPassword'
 import Daftar from './pages/Daftar'
-import PilihPenerbangan from './pages/PilihPenerbangan'
+import CariPenerbangan from './pages/CariPenerbangan'
 import Profile from './pages/Profile'
 import LoadingGoogle from './components/LoadingGoogle'
 import RiwayatPemesanan from './pages/RiwayatPemesanan'
@@ -52,8 +52,8 @@ export default function Route() {
       element: <LoadingGoogle />,
     },
     {
-      path: '/pilih-penerbangan',
-      element: <PilihPenerbangan />,
+      path: '/cari-penerbangan',
+      element: <CariPenerbangan />,
     },
     {
       path: '/riwayat-pemesanan',

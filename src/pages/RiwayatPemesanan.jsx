@@ -14,18 +14,20 @@ import {
 
 import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { useState, useRef, useEffect } from 'react'
 import ReactModal from 'react-modal'
 import { customStyles, customStylesFilter } from '../styles/customStyles'
 import { useDispatch, useSelector } from 'react-redux'
-import { getTransaction } from '../redux/actions/paymentHistoryAction'
+import { getTransaction, getTransactionById } from '../redux/actions/paymentHistoryAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
 import SkeletonDetailPesanan from '../components/RiwayatPesanan/SkeletonDetailPesanan'
 import DirectionArrow from '../components/RiwayatPesanan/DirectionArrow'
 import SkeletonListPesanan from '../components/RiwayatPesanan/SkeletonListPesanan'
 import { ToastContainer } from 'react-toastify'
+import { setTransactionId } from '../redux/reducers/checkoutReducer'
+import { setPage } from '../redux/reducers/otpReducers'
 export default function RiwayatPemesanan() {
   const [search, setSearch] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -36,6 +38,7 @@ export default function RiwayatPemesanan() {
   const [filteredHistory, setFilteredHistory] = useState([])
   const detailPesanan = filteredHistory?.length > 0 ? filteredHistory[historyIndex] : null
   const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate()
   const detailRef = useRef(null)
 
   const setDetail = (index) => {
@@ -92,6 +95,12 @@ export default function RiwayatPemesanan() {
 
   const closeModal = () => {
     setIsModalOpen(false)
+  }
+
+  const handleLanjutBayar = (id) => {
+    dispatch(setPage('riwayat'))
+    dispatch(setTransactionId(id))
+    navigate('/menunggu-pembayaran')
   }
 
   return (
@@ -404,6 +413,14 @@ export default function RiwayatPemesanan() {
                             <span>Pajak</span>
                             <span>IDR {detailPesanan?.tax_price?.toLocaleString('id-ID')}</span>
                           </div>
+                          <div
+                            className={`${
+                              !detailPesanan?.donation && 'hidden'
+                            } flex justify-between`}
+                          >
+                            <span>Donasi</span>
+                            <span>IDR {detailPesanan?.donation?.toLocaleString('id-ID')}</span>
+                          </div>
                         </div>
                         <hr className="w-[95%] mx-auto my-3" />
                         <div className="flex justify-between text-base">
@@ -429,7 +446,7 @@ export default function RiwayatPemesanan() {
                     </button>
                   ) : (
                     <button
-                      onClick={() => alert(detailPesanan?.payment_link)}
+                      onClick={() => handleLanjutBayar(detailPesanan?.id)}
                       className="mt-3 text-xl font-[600] bg-red-primary text-white rounded-md w-full h-[62px]"
                     >
                       Lanjut Bayar

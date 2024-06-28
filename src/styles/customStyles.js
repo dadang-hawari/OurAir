@@ -34,7 +34,7 @@ export const customStylesFilter = {
   overlay: baseOverlay,
   content: {
     ...baseContent,
-    width: '100%',
+    width: '90%',
     maxWidth: '800px',
   },
 }

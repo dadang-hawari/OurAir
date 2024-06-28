@@ -9,11 +9,13 @@ import {
   faBox,
   faChevronDown,
   faChevronUp,
+  faClock,
   faDollar,
   faIcons,
   faLeftRight,
   faSuitcase,
   faSuitcaseRolling,
+  faTimeline,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart'
@@ -22,14 +24,17 @@ import ReactModal from 'react-modal'
 import { customStylesFilter } from '../styles/customStyles'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFlightByCityorCountry, getFlightsByCity } from '../redux/actions/flightsAction'
-import { PenerbanganNotFound } from '../components/HasilCariPenerbangan/PenerbanganNotFound'
+import { PenerbanganNotFound } from '../components/CariPenerbangan/PenerbanganNotFound'
+import { SkeletonLoading } from '../components/CariPenerbangan/SkeletonLoading'
 import Toast from '../components/common/Toast'
 import { checkLocationState } from '../utils/checkLocationState'
 import { setIdFlight, setJumlahPenumpang } from '../redux/reducers/checkoutReducer'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
 import { toast } from 'react-toastify'
+import BackToTopButton from '../components/common/BackToTop'
+import { DateList } from '../components/CariPenerbangan/DateList'
 
-export default function PilihPenerbangan() {
+export default function CariPenerbangan() {
   const location = useLocation()
   const navigate = useNavigate()
   const data = location?.state?.searchValue
@@ -82,6 +87,7 @@ export default function PilihPenerbangan() {
       setIsLoading(false)
     })
   }
+
   const tanggalKeberangkatan = jadwalPenerbangan?.tanggalBerangkatKembali[0]
   const tanggalSampai = jadwalPenerbangan?.tanggalBerangkatKembali[1]
   const [isLoading, setIsLoading] = useState(true)
@@ -93,18 +99,9 @@ export default function PilihPenerbangan() {
   const closeModal = () => {
     setIsModalOpen(false)
   }
-  const [filteredFlights, setFilteredFlights] = useState(listFlights)
 
   const toggleDetailVisibility = (id) => {
     setActiveDetailId((prevId) => (prevId === id ? null : id))
-  }
-
-  // Filter flights by lowest price
-  const filterByLowestPrice = () => {
-    setSelectedFilter('Harga Termurah')
-    const sortedFlights = [...listFlights].sort((a, b) => a.ticket_price - b.ticket_price)
-    setFilteredFlights(sortedFlights)
-    closeModal()
   }
 
   const handleClickPilih = (id, availableSeats) => {
@@ -121,28 +118,8 @@ export default function PilihPenerbangan() {
     })
   }
   console.log('jadwalPenerbangan', jadwalPenerbangan)
-  const SkeletonLoading = ({ loop = 10 }) => {
-    const skeletons = Array.from({ length: loop })?.map((_, index) => (
-      <div key={index} className="border animate-pulse w-full rounded-xl px-3 pt-4 pb-5 h-fit mb-4">
-        <div className="flex items-center mt-2">
-          <div className="h-4 w-44 bg-gray-300 rounded-xl"></div>
-        </div>
-        <div className="flex mt-2 gap-x-8">
-          <div className="w-full">
-            <div className="h-4 w-full bg-gray-300 rounded-xl mt-4 mb-3"></div>
-            <div className="h-4 w-full bg-gray-300 rounded-xl"></div>
-          </div>
-          <div>
-            <div className="h-4 w-24 bg-gray-300 rounded-xl"></div>
-            <div className="h-4 w-24 bg-gray-300 my-3 rounded-xl"></div>
-            <div className="h-4 w-24 bg-gray-300 rounded-xl"></div>
-          </div>
-        </div>
-      </div>
-    ))
 
-    return <>{skeletons}</>
-  }
+  const tanggalSekarang = '01-03-2023'
 
   return (
     <>
@@ -157,44 +134,8 @@ export default function PilihPenerbangan() {
           <b className="font-[600]">{data}</b>
         </div>
         {/* list tanggal */}
-        <div className="text-sm flex justify-between my-5 overflow-x-auto">
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-          <div className="text-center max-w-24 h-11 py-1 px-4 cursor-pointer rounded-md hover:bg-blue-500 hover:text-white">
-            <b>Senin</b>
-            <p className="text-gray-400 text-xs">01/03/2023</p>
-          </div>
-        </div>
+        <DateList />
+
         {/* Filter */}
         <div className="text-right">
           <button
@@ -224,7 +165,7 @@ export default function PilihPenerbangan() {
               </div>
               <ul className="flex flex-col ">
                 <li
-                  onClick={filterByLowestPrice}
+                  // onClick={filterByLowestPrice}
                   className="px-4 cursor-pointer border-b py-4  hover:bg-secondary hover:font-bold hover:text-white"
                 >
                   <b>Harga</b> - Termurah
@@ -253,13 +194,13 @@ export default function PilihPenerbangan() {
           <div className="w-48 flex flex-col gap-y-2 cursor-default shadow-shadow-c-primary p-4 rounded-xl h-fit">
             <h2 className="font-[600]">Filter</h2>
             <h3>
-              <FontAwesomeIcon icon={faBox} className="mr-1 text-gray-300" /> Transit
+              <FontAwesomeIcon icon={faClock} className=" w-4 text-gray-300" /> Transit
             </h3>
             <h3 className="border-t border-b py-2">
-              <FontAwesomeIcon icon={faHeart} className="mr-[2px] text-gray-300" /> Fasilitas
+              <FontAwesomeIcon icon={faHeart} className="w-4 text-gray-300" /> Fasilitas
             </h3>
             <h3>
-              <FontAwesomeIcon icon={faDollar} className="ps-1 mr-1 text-gray-300 " /> Harga
+              <FontAwesomeIcon icon={faDollar} className=" w-4 text-gray-300 " /> Harga
             </h3>
           </div>
           {/* Hasil Pencarian */}
@@ -396,6 +337,7 @@ export default function PilihPenerbangan() {
           )}
         </div>
         <Toast margin="mt-10" autoClose={5000} />
+        <BackToTopButton />
       </div>
     </>
   )

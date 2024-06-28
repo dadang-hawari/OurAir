@@ -23,14 +23,14 @@ export const getFlightById = () => async (dispatch, state) => {
     console.log(error)
   }
 }
-export const postBooking = (navigate) => async (dispatch, getState) => {
+export const postBooking = (navigate, isUserDonate, checkout) => async (dispatch, getState) => {
   const token = getState()?.auth?.token
   const checkout = getState()?.checkout
   const flight_id = checkout?.idFlight
   const passengers = checkout?.penumpang
   const baby = checkout?.jumlahPenumpang?.penumpangBayi
   const booker = checkout?.pemesan?.data
-  const donation = checkout?.donation
+  const donation = isUserDonate ? parseInt(checkout?.donation) : 0
   console.log('donation', donation)
   try {
     toast.loading('Mohon tunggu sebentar', {
@@ -56,6 +56,7 @@ export const postBooking = (navigate) => async (dispatch, getState) => {
       navigate('/menunggu-pembayaran', {
         state: {
           success: 'Pemesanan berhasil dilakukan',
+          checkout,
         },
       })
     } else if (response.status === 200) {

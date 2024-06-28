@@ -6,12 +6,35 @@ import { useNavigate } from 'react-router-dom'
 import Navbar from '../Navbar'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { useEffect, useState } from 'react'
 
 export default function Header() {
   const navigate = useNavigate()
   const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
   const kotaKeberangkatan = jadwalPenerbangan?.departureCity
   const kotaTujuan = jadwalPenerbangan?.arrivalCity
+  const [imageSrc, setImageSrc] = useState('/assets/images/header-background.webp')
+
+  const handleBackground = () => {
+    const handleResize = () => {
+      if (window.innerWidth < 1250) {
+        setImageSrc('/assets/images/header-sm.webp')
+      } else {
+        setImageSrc('/assets/images/header_background.webp')
+      }
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }
+
+  useEffect(() => {
+    handleBackground()
+  }, [])
   const handleSearch = () => {
     if (
       kotaKeberangkatan.length === 0 ||
@@ -26,7 +49,7 @@ export default function Header() {
       return
     }
 
-    navigate('/pilih-penerbangan', {
+    navigate('/cari-penerbangan', {
       state: {
         searchValue: 'JKT > MLB - 2 Penumpang - Economy',
       },
@@ -37,9 +60,9 @@ export default function Header() {
       <Navbar />
       <div className="h-86 relative">
         <img
-          src="/assets/images/header_background.webp"
+          src={imageSrc}
           alt="Pantai"
-          className="w-full h-[362px] xl:h-auto 2xl:max-h-96 select-none object-cover absolute"
+          className="w-full h-[362px] xl:h-auto 2xl:max-h-96 select-none object-cover "
         />
         <div className="absolute top-72 max-w-5xl w-11/12 h-fit px-4 pt-4 pb-6 md:p-6 xl:p-8 rounded-xl border bg-white left-1/2 -translate-x-1/2">
           <div>

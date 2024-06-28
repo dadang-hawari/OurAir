@@ -5,6 +5,7 @@ const initialState = {
   timerOtp: 60,
   email: null,
   otpSentTime: null,
+  page: null,
 }
 
 const otpSlice = createSlice({
@@ -23,10 +24,13 @@ const otpSlice = createSlice({
     setEmail: (state, action) => {
       state.email = action.payload
     },
+    setPage: (state, action) => {
+      state.page
+    },
   },
 })
 
-export const { setOtpSentTime, decrementTimerOtp, resetTimerOtp, setEmail } =
+export const { setOtpSentTime, decrementTimerOtp, resetTimerOtp, setEmail, setPage } =
   otpSlice.actions
 
 export default otpSlice.reducer

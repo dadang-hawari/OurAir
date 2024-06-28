@@ -13,6 +13,10 @@ import {
   faBell,
   faXmark,
   faChevronRight,
+  faChevronLeft,
+  faClockRotateLeft,
+  faCircleInfo,
+  faHouse,
 } from '@fortawesome/free-solid-svg-icons'
 import { logout } from '../redux/actions/authAction'
 import iconFaBell from '/assets/images/fi_bell.svg'
@@ -81,7 +85,7 @@ const Navbar = () => {
   }
 
   const getNotificationList = () => {
-    dispatch(getNotification())
+    if (token) dispatch(getNotification(navigate))
   }
 
   const navigateToRiwayat = () => {
@@ -132,7 +136,7 @@ const Navbar = () => {
       >
         <div className="mx-auto flex justify-between items-center">
           {/* Logo */}
-          <div className={`text-black text-lg font-bold  `}>
+          <div className={`text-lg font-bold  `}>
             <Link to="/">
               <img
                 src={path === '/' && !isSticky && width > 780 ? LogoTwo : Logo}
@@ -147,20 +151,19 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
               <ul>
                 <button onClick={sideBar}>
-                  <FontAwesomeIcon icon={faList} className="px-2 h-5 mt-1" />
+                  <FontAwesomeIcon icon={faList} className=" h-5 mt-1 text-gray-900" />
                 </button>
               </ul>
               <ul className="relative">
                 <button className="relative" onClick={handleNotificationDropdown}>
-                  <img src={iconFaBell} alt="faBell" className="px-2 h-6" />
+                  <img src={iconFaBell} alt="faBell" className="px-2 h-6 mt-1 w-10" />
                   <div
-                    className={`${''} absolute right-3 top-0 bg-red-600 h-2 w-2 rounded-full`}
+                    className={`${''} absolute right-3 top-1 bg-red-600 h-2 w-2 rounded-full`}
                   ></div>
                 </button>
                 {showNotification && (
                   <div
-                    className={`absolute bg-white p-5 text-xs shadow-md rounded-md top-10 -right-10  w-[250px] sm:right-1 mini:w-[300px] sm:w-200px md:w-[400px] ${
-                      !notification?.isRead && 'bg-gray-100'
+                    className={`absolute bg-white p-5 text-xs shadow-md rounded-md top-10 -right-10  w-[250px] sm:right-1 mini:w-[300px] sm:w-200px md:w-[400px] 
                     }`}
                   >
                     <FontAwesomeIcon
@@ -170,7 +173,14 @@ const Navbar = () => {
                     />
                     {maxNotificationToShow?.map((notification, i) => (
                       <>
-                        <div key={i} className="my-2 cursor-pointer" onClick={navigateToRiwayat}>
+                        <div
+                          key={i}
+                          className={`my-2 cursor-pointer 
+                          
+                          ${!notification?.isRead && 'bg-gray-100'}
+                          `}
+                          onClick={navigateToRiwayat}
+                        >
                           <div className="flex text-[10px] text-[#8A8A8A] ">
                             <div className="bg-secondary rounded-full h-5 w-5 px-2 flex items-center justify-center">
                               <FontAwesomeIcon icon={faBell} className="text-white h-3 w-3 " />
@@ -182,7 +192,16 @@ const Navbar = () => {
                                   notification?.created_at
                                 )} ${formatTimeToHM(notification?.created_at)}`}</span>
                               </div>
-                              <div className="text-base text-black">{notification?.message}</div>
+                              <div className="text-sm text-gray-900">{notification?.message}</div>
+                              <Link
+                                to={notification?.link}
+                                target="_blank"
+                                className={`${
+                                  notification?.link ? '' : 'hidden'
+                                } text-xs text-blue-400`}
+                              >
+                                Link Pembayaran Tiket Pesawat
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -196,7 +215,7 @@ const Navbar = () => {
                   </div>
                 )}
               </ul>
-              <ul className="flex items-center gap-x-2 flex-row-reverse cursor-pointer relative">
+              <ul className="flex items-center gap-x-2 flex-row-reverse  relative">
                 <div
                   className="flex items-center gap-x-2 flex-row-reverse cursor-pointer"
                   onClick={handleProfileDropdown}
@@ -211,7 +230,7 @@ const Navbar = () => {
                   </button>
                   <FontAwesomeIcon
                     icon={faChevronDown}
-                    className={`transition-transform duration-200 text-gray-700 ${
+                    className={`transition-transform duration-200 text-gray-900 ${
                       showProfileDropdown ? 'rotate-180' : 'rotate-0'
                     }`}
                   />
@@ -219,7 +238,7 @@ const Navbar = () => {
                 {showProfileDropdown && (
                   <div className="absolute bg-white p-5 transition-all shadow-md rounded-md w-fit px-10 top-10 right-1 ">
                     <Link to="/profile">Profile</Link>
-                    <div className="text-red-400 my-1 cursor-pointer" onClick={handleLogout}>
+                    <div className="text-red-400 mt-1 cursor-pointer" onClick={handleLogout}>
                       Logout
                     </div>
                   </div>
@@ -257,23 +276,44 @@ const Navbar = () => {
           <div className="p-6">
             <button
               onClick={sideBar}
-              className="flex items-center mt-4 px-2 py-2 text-black hover:text-blue-500 rounded-lg"
+              className="flex items-center mt-4  py-2 text-base text-gray-700 hover:text-blue-500 rounded-lg"
             >
-              <FontAwesomeIcon icon={faArrowLeft} className=" h-5 mr-2" />
+              <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
               Kembali
             </button>
 
             {/* Menu */}
-            <div className="flex flex-col mt-4">
-              <Link to="/profile" className="text-black hover:text-blue-500 mb-4">
-                Profile
+            <div className="flex flex-col gap-3 mt-4 ">
+              <Link
+                to="/"
+                className={`hover:text-blue-500 text-base ${
+                  path === '/' ? 'cursor-default text-blue-500' : 'text-gray-700'
+                }`}
+              >
+                <FontAwesomeIcon icon={faHouse} className="mr-2" />
+                Beranda
               </Link>
-              <Link to="/about" className="text-black hover:text-blue-500 mb-4">
+              <hr />
+              <Link
+                to="/riwayat-pemesanan"
+                className={`hover:text-blue-500 text-base ${
+                  path === '/riwayat-pemesanan' ? 'cursor-default text-blue-500' : 'text-gray-700'
+                }`}
+              >
+                <FontAwesomeIcon icon={faClockRotateLeft} className="mr-2" />
+                Riwayat Pesanan
+              </Link>
+              <hr />
+              <Link
+                to="/about"
+                className={`hover:text-blue-500 ${
+                  path === '/tentang' ? 'cursor-default text-blue-500' : 'text-gray-700'
+                }`}
+              >
+                <FontAwesomeIcon icon={faCircleInfo} className="mr-2" />
                 Tentang kami
               </Link>
-              <button onClick={handleLogout} className=" py-2  ">
-                <span className="text-lg hover:text-red-500">Keluar</span>
-              </button>
+              <hr />
             </div>
           </div>
         </div>

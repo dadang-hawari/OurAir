@@ -7,6 +7,8 @@ import {
   faChevronDown,
   faChevronRight,
   faIcons,
+  faQuestion,
+  faQuestionCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { data } from 'autoprefixer'
@@ -15,6 +17,7 @@ import SeatPicker from '../../components/SeatPicker'
 import {
   assignSeatsToPassengers,
   resetSelectedSeats,
+  setDonation,
   setIdFlight,
   setJumlahPenumpang,
   setPemesan,
@@ -25,12 +28,13 @@ import {
   updatePenumpang,
   updateTanggalLahir,
 } from '../../redux/reducers/checkoutReducer'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getFlightById, postBooking } from '../../redux/actions/checkoutAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
 import { toast } from 'react-toastify'
 import Toast from '../../components/common/Toast'
 import BackToTop from '../../components/common/BackToTop'
+import { setPage } from '../../redux/reducers/otpReducers'
 
 export default function CheckoutBiodataPemesan() {
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
@@ -42,11 +46,14 @@ export default function CheckoutBiodataPemesan() {
   const flight_id = dataCheckout?.idFlight
   const pemesan = dataCheckout?.pemesan
   const penumpang = dataCheckout?.penumpang
+  const donasi = dataCheckout?.donation
   const useCurrentEmail = dataCheckout?.useCurrentEmail
+  const [isUserDonate, setIsUserDonate] = useState(false)
   const seatClass = flightDetail?.class
   const location = useLocation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [isHovered, setIsHovered] = useState(false)
   const penumpangSaatIni = dataCheckout?.jumlahPenumpang
   console.log('penumpangSaatIni', penumpangSaatIni)
   const jumlahPenumpang = location?.state?.jumlahPenumpang
@@ -55,6 +62,8 @@ export default function CheckoutBiodataPemesan() {
     (penumpangSaatIni?.penumpangAnak + penumpangSaatIni?.penumpangDewasa) *
     flightDetail?.ticket_price *
     0.1
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const hargaTiketAnak = flightDetail?.ticket_price * penumpangSaatIni?.penumpangAnak
   const hargaTiketDewasa = flightDetail?.ticket_price * penumpangSaatIni?.penumpangDewasa
@@ -129,7 +138,8 @@ export default function CheckoutBiodataPemesan() {
   useEffect(() => {
     // Inisialisasi state penumpang berdasarkan jumlah penumpangSaatIni
     setDataPenumpang()
-    dispatch(getFlightById(flight_id))
+    setIsLoading(true)
+    dispatch(getFlightById(flight_id)).then(() => setIsLoading(false))
   }, [penumpangSaatIni])
 
   const updateFlightIdInPenumpangBaru = () => {
@@ -152,6 +162,10 @@ export default function CheckoutBiodataPemesan() {
 
   const handleBerlakuSampaiChange = (date, id) => {
     dispatch(updateBerlakuSampai({ id, date: date.format('YYYY-MM-DD') }))
+  }
+
+  const handleDonasi = (e) => {
+    dispatch(setDonation(e.target.value))
   }
 
   const handlePemesan = (e) => {
@@ -197,7 +211,7 @@ export default function CheckoutBiodataPemesan() {
             className: 'toast-error',
           })
         } else if (!document) {
-          toast(`Mohon isi nomor dokumen untuk ${penumpangData.id}`, {
+          toast(`Mohon isi nomor KTP/Paspor untuk ${penumpangData.id}`, {
             className: 'toast-error',
           })
         } else if (!document_expired) {
@@ -223,17 +237,25 @@ export default function CheckoutBiodataPemesan() {
       return
     }
 
-    toast(message, {
-      toastId,
-      className: toastClass,
-    })
     dispatch(assignSeatsToPassengers(selectedSeats))
-    dispatch(postBooking(navigate))
+    setIsLoading(true)
+    dispatch(setPage('checkout'))
+    dispatch(postBooking(navigate, isUserDonate, { checkout: 'checkout' })).then(() =>
+      setIsLoading(false)
+    )
   }
   const handleToggle = () => {
     dispatch(setUseCurrentEmail(!useCurrentEmail))
-    handlePemesan({ target: { name: 'email', value: email } })
+    if (useCurrentEmail !== true) handlePemesan({ target: { name: 'email', value: emailnow } })
+    else {
+      handlePemesan({ target: { name: 'email', value: email } })
+    }
   }
+
+  const handleToggleDonation = () => {
+    setIsUserDonate(!isUserDonate)
+  }
+
   return (
     <div>
       <Navbar />
@@ -539,7 +561,7 @@ export default function CheckoutBiodataPemesan() {
 
             {/* Kursi */}
             <div className="border rounded-md h-fit my-8 p-5 w-full">
-              <b className="text-xl mb-3 block">Isi Data Penumpang</b>
+              <b className="text-xl mb-3 block">Pilih Kursi</b>
               <div className="w-full text-gray-secondary">
                 <h2 className="bg-gray-700 text-white text-center rounded-t-md p-2 text-[600]">
                   {seatClass === 'FIRSTCLASS'
@@ -605,6 +627,95 @@ export default function CheckoutBiodataPemesan() {
                   <h4>{formatTimeToIndonesia(flightDetail?.arrival_time)}</h4>
                   <h5 className="font-[600]">{flightDetail?.toAirport?.name}</h5>
                 </div>
+                <hr className="w-[95%] mx-auto mt-3 mb-2 " />
+                <div
+                  className="relative py-1 w-fit mb-2  pt-2"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  <span className="cursor-default font-600 bg-secondary text-white rounded-full py-1 px-2 text-xs">
+                    Apa itu SDGs?
+                  </span>
+                  <div
+                    className={` ${
+                      isHovered ? 'opacity-100   ' : 'opacity-0 scale-0 '
+                    } transition-all  w-56 mini:w-80 py-5 absolute overflow-auto md:left-0 xl:right-0 bottom-8  bg-white text-gray-700  shadow-[0_0_5px_0_rgb(0,0,0,0.3)] px-2 rounded-md`}
+                  >
+                    <b>Berdonasi untuk Sustainable Development Goals (SDGs)</b>
+                    <p className="text-[12px] my-2">
+                      SDGs adalah serangkaian tujuan global yang ditetapkan oleh PBB di tahun 2015.
+                      Bertujuan untuk mengakhiri kemiskinan, kelaparan, meningkatkan kualitas
+                      pendidikan dan memastikan bahwa semua orang memiliki kesempatan untuk hidup
+                      sejahtera dan damai. Dengan setiap donasi Anda, Anda turut berkontribusi dalam
+                      upaya global untuk mencapai Sustainable Development Goals (SDGs).
+                    </p>
+                    <Link to="google.com" className="text-blue-400 text-xs" target="_blank">
+                      Baca selengkapnya<span className="tracking-wider">...</span>{' '}
+                    </Link>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center w-full">
+                  <span className="font-[600]">Donasi untuk SDGs</span>
+                  <button
+                    onClick={handleToggleDonation}
+                    id="useCurrentEmail"
+                    name="useCurrentEmail"
+                    aria-label="Toggle Email Saat Ini"
+                    type="button"
+                    className={`w-10 h-5 flex items-center rounded-full transition-colors duration-300 cursor-pointer ${
+                      isUserDonate ? 'bg-accent' : 'bg-gray-300'
+                    }`}
+                  >
+                    <div
+                      className={`bg-white w-5 h-5 rounded-full shadow-lg transform transition-transform ${
+                        isUserDonate ? 'translate-x-full' : 'translate-x-0'
+                      }`}
+                    ></div>
+                  </button>
+                </div>
+                <div
+                  id="donation"
+                  className={`transition-all duration-500 ${isUserDonate ? 'block' : 'hidden'}`}
+                >
+                  <label
+                    htmlFor="donasi"
+                    className={`transition-all duration-500 ${
+                      isUserDonate ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[-20px]'
+                    }`}
+                  >
+                    Jumlah yang ingin didonasikan
+                  </label>
+                  <div
+                    className={`relative transition-all duration-500 ${
+                      isUserDonate ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[-20px]'
+                    }`}
+                  >
+                    <select
+                      id="donationAmount"
+                      name="donationAmount"
+                      aria-label="Pilih Jumlah Donasi"
+                      onChange={handleDonasi}
+                      value={donasi}
+                      className="w-full border outline-none cursor-pointer focus:border-secondary rounded-md ps-1 mt-1 py-3"
+                    >
+                      <option value="10000">Rp 10.000</option>
+                      <option value="20000">Rp 20.000</option>
+                      <option value="50000">Rp 50.000</option>
+                      <option value="100000">Rp 100.000</option>
+                      <option value="200000">Rp 200.000</option>
+                      <option value="500000">Rp 500.000</option>
+                      <option value="1000000">Rp 1.000.000</option>
+                    </select>
+                  </div>
+                  <p
+                    className={`text-xs mt-2 text-gray-600 transition-all duration-500 ${
+                      isUserDonate ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[-20px]'
+                    }`}
+                  >
+                    Minimal donasi adalah Rp 10.000, maksimal Rp. 1.000.000
+                  </p>
+                </div>
+
                 <hr className="w-[95%] mx-auto my-3 " />
                 <div className="w-full">
                   <b>Rincian Harga</b>
@@ -628,19 +739,32 @@ export default function CheckoutBiodataPemesan() {
                   </div>
                   <div className="flex justify-between">
                     <span>Pajak</span>
-                    <span>IDR {pajak.toLocaleString('id-ID')}</span>
+                    <span>IDR {pajak?.toLocaleString('id-ID')}</span>
+                  </div>
+                  <div className={`flex justify-between ${!isUserDonate && 'hidden'}`}>
+                    <span>Donasi</span>
+                    <span>IDR {donasi ? parseInt(donasi).toLocaleString('id-ID') : '10.000'}</span>
                   </div>
                 </div>
                 <hr className="w-[95%] mx-auto my-3 " />
-                <div className="flex justify-between text-base">
-                  <b>Total</b>
-                  <b className="text-secondary">
-                    IDR {(hargaTiketAnak + hargaTiketDewasa + pajak).toLocaleString('id-ID')}
-                  </b>
-                </div>
               </div>
+
+              <div className="flex justify-between text-base">
+                <b>Total</b>
+                <b className="text-secondary">
+                  IDR{' '}
+                  {(
+                    hargaTiketAnak +
+                    hargaTiketDewasa +
+                    pajak +
+                    (isUserDonate ? donasi : 0)
+                  ).toLocaleString('id-ID')}
+                </b>
+              </div>
+
               <button
                 onClick={handleLanjutBayar}
+                disabled={isLoading}
                 className="bg-secondary text-white text-base text-center px-5 my-4 rounded-xl py-5 w-full"
               >
                 Lanjut bayar
@@ -649,7 +773,7 @@ export default function CheckoutBiodataPemesan() {
           </div>
         </div>
         <BackToTop />
-        <Toast />
+        <Toast margin="mt-16" />
       </div>
     </div>
   )

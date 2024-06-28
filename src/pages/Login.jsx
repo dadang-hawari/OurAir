@@ -23,10 +23,10 @@ const Login = () => {
   const location = useLocation()
 
   const checkEmptyFields = () => {
-    if (email.length > 0) {
+    if (email?.length > 0) {
       setEmailError('')
     }
-    if (password.length > 0) {
+    if (password?.length > 0) {
       setPasswordError('')
     }
   }
@@ -62,7 +62,7 @@ const Login = () => {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
+    if (!emailRegex?.test(email)) {
       setEmailError('Masukkan Email yang valid')
       return
     }
