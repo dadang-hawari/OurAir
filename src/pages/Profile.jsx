@@ -92,17 +92,21 @@ export default function Profile() {
     setPreview('')
   }
 
-  const handleSave = () => {
-    dispatch(updateUser(name, email, phone, token))
-  }
   const usersProfile = () => {
     dispatch(getUsersProfile(token))
     console.log('getUsersProfile', getUsersProfile)
   }
+  const handleSave = () => {
+    dispatch(updateUser(name, email, phone, token))
+    usersProfile()
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    usersProfile()
+
+    dispatch(updateUser(name, email, phone, token)).then(() => {
+      usersProfile()
+    })
     // Handle API / Redux dispatch
     setIsEditing(false)
     console.log(`${name} - ${phone} - ${email}`)
