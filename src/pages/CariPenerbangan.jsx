@@ -26,7 +26,7 @@ export default function CariPenerbangan() {
   const data = location?.state?.searchValue
   const [activeDetailId, setActiveDetailId] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedFilter, setSelectedFilter] = useState('Harga Termurah')
+  const [selectedFilter, setSelectedFilter] = useState('Sortir Berdasarkan')
 
   console.log(
     'state?.flightLists',
@@ -36,10 +36,13 @@ export default function CariPenerbangan() {
   const listFlights = flights?.flightsByCity?.flights
   const flightDetail = flights?.flightDetail
   const totalPages = flightDetail?.totalPages
+  console.log('flightDetail', flightDetail)
   const [currentPage, setCurrentPage] = useState(1)
   const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
   const kotaKeberangkatan = jadwalPenerbangan?.departureCity
   const kotaTujuan = jadwalPenerbangan?.arrivalCity
+  const kotaKeberangkatanCode = jadwalPenerbangan?.departureCityCode
+  const kotaTujuanCode = jadwalPenerbangan?.arrivalCityCode
   const tanggalBerangkat = jadwalPenerbangan?.tanggalBerangkatKembali[0]
   const tanggalKembali = jadwalPenerbangan?.tanggalBerangkatKembali[1]
   const jumlahPenumpang = jadwalPenerbangan?.jumlahPenumpang
@@ -48,8 +51,9 @@ export default function CariPenerbangan() {
   const toastId = 'toastInfo'
   const toastClass = 'toast-info'
   const isLoading = useSelector((state) => state?.flightLists?.isLoading)
-
   const dispatch = useDispatch()
+  console.log('jadwalPenerbangan', jadwalPenerbangan)
+  const [sortedFlights, setSortedFlights] = useState([])
 
   const kelas = jadwalPenerbangan?.kelas
   const handlePrev = () => {
@@ -79,19 +83,14 @@ export default function CariPenerbangan() {
     }
     return pageNumbers
   }
-
-  useEffect(() => {
-    checkLocationState(location, navigate)
-    getFlights()
-  }, [currentPage])
-
-  const getFlights = () => {
+  const getFlights = async () => {
     dispatch(setIsLoading(true))
     const formattedTanggalBerangkat = convertDateFormat(tanggalBerangkat)
     const formattedTanggalKembali = convertDateFormat(tanggalKembali)
-    dispatch(getFlightByCityorCountry(kotaKeberangkatan, kotaTujuan, kelas?.name, formattedTanggalBerangkat, formattedTanggalKembali)).then(() => {
-      dispatch(setIsLoading(false))
-    })
+    console.log('currentPage', currentPage)
+    dispatch(getFlightByCityorCountry(kotaKeberangkatan, kotaTujuan, kelas?.name, formattedTanggalBerangkat, formattedTanggalKembali, 10, currentPage)).then(() => dispatch(setIsLoading(false)))
+    // setSortedFlights([...listFlights])
+    setSortedFlights(listFlights)
   }
 
   const openModal = () => {
@@ -103,6 +102,44 @@ export default function CariPenerbangan() {
 
   const toggleDetailVisibility = (id) => {
     setActiveDetailId((prevId) => (prevId === id ? null : id))
+  }
+
+  console.log('listFlights', listFlights)
+  console.log('sortedFlights', sortedFlights)
+
+  const handleFilter = (filter = 'Harga Termurah') => {
+    closeModal()
+    setSelectedFilter(filter)
+    setSortedFlights([...listFlights]) // Create a copy of listFlights
+
+    switch (filter) {
+      case 'Harga Termurah':
+        setSortedFlights(sortedFlights.sort((a, b) => a.ticket_price - b.ticket_price))
+        break
+      case 'Durasi Terpendek':
+        setSortedFlights(
+          sortedFlights.sort((a, b) => {
+            const durationA = (new Date(a.arrival_time) - new Date(a.departure_time)) / (1000 * 60 * 60)
+            const durationB = (new Date(b.arrival_time) - new Date(b.departure_time)) / (1000 * 60 * 60)
+            return durationA - durationB
+          })
+        )
+        break
+      case 'Keberangkatan Paling Awal':
+        setSortedFlights(sortedFlights.sort((a, b) => new Date(a.departure_time) - new Date(b.departure_time)))
+        break
+      case 'Keberangkatan Paling Akhir':
+        setSortedFlights(sortedFlights.sort((a, b) => new Date(b.departure_time) - new Date(a.departure_time)))
+        break
+      case 'Kedatangan Paling Awal':
+        setSortedFlights(sortedFlights.sort((a, b) => new Date(a.arrival_time) - new Date(b.arrival_time)))
+        break
+      case 'Kedatangan Paling Akhir':
+        setSortedFlights(sortedFlights.sort((a, b) => new Date(b.arrival_time) - new Date(a.arrival_time)))
+        break
+      default:
+        break
+    }
   }
 
   const handleClickPilih = (id, availableSeats) => {
@@ -118,7 +155,23 @@ export default function CariPenerbangan() {
       state: { jumlahPenumpang: jadwalPenerbangan?.jumlahPenumpang, flight_id: id },
     })
   }
-  console.log('jadwalPenerbangan', jadwalPenerbangan)
+
+  useEffect(() => {
+    checkLocationState(location, navigate)
+    getFlights()
+  }, [currentPage])
+  useEffect(() => {
+    if (listFlights) {
+      setSortedFlights([...listFlights])
+    }
+  }, [listFlights])
+  useEffect(() => {
+    if (isLoading && listFlights) {
+      setSortedFlights([...listFlights])
+    }
+  }, [isLoading, listFlights])
+
+  ReactModal.setAppElement('#modal')
 
   return (
     <>
@@ -130,7 +183,7 @@ export default function CariPenerbangan() {
           <Link to="/" id="back" aria-label="tombol kembali" className="px-5 flex items-center">
             <FontAwesomeIcon icon={faArrowLeft} className="h-5" />
           </Link>
-          <b className="font-[600]">{data}</b>
+          <b className="font-[600]">{`${kotaKeberangkatanCode} > ${kotaTujuanCode} ${kelas ? '- ' + kelas?.name : ''}`}</b>
         </div>
         {/* list tanggal */}
         <DateList />
@@ -143,30 +196,32 @@ export default function CariPenerbangan() {
           </button>
 
           <ReactModal isOpen={isModalOpen} onRequestClose={closeModal} style={customStylesFilter} className="border-none absolute top-7 overflow-hidden">
-            <div className="bg-white rounded-xl">
+            <div className="bg-white rounded-xl pb-10">
               <div className="text-right">
                 <button id="close" aria-label="close button" className="text-gray-400 p-3" onClick={closeModal}>
                   <FontAwesomeIcon icon={faXmark} className="text-xl" />
                 </button>
               </div>
-              <ul className="flex flex-col">
-                <li onClick={() => handleFilterSelect('Harga Termurah')} className="px-4 cursor-pointer border-b py-4 hover:bg-secondary hover:font-bold hover:text-white">
+              <ul className="flex flex-col ">
+                <li className={`px-4 cursor-pointer border-b py-4  ${selectedFilter === 'Harga Termurah' ? 'hover:bg-secondary bg-secondary text-white' : 'hover:bg-gray-200'}`} onClick={() => handleFilter('Harga Termurah')}>
                   <b>Harga</b> - Termurah
                 </li>
-                <li onClick={() => handleFilterSelect('Durasi Terpendek')} className="px-4 cursor-pointer border-b py-4 hover:bg-secondary hover:font-bold hover:text-white">
+                <li className={`px-4 cursor-pointer border-b py-4  ${selectedFilter === 'Durasi Terpendek' ? 'hover:bg-secondary bg-secondary text-white' : 'hover:bg-gray-200'}`} onClick={() => handleFilter('Durasi Terpendek')}>
                   <b>Durasi</b> - Terpendek
                 </li>
-                <li onClick={() => handleFilterSelect('Keberangkatan Paling Awal')} className="px-4 cursor-pointer border-b py-4 hover:bg-secondary hover:font-bold hover:text-white">
-                  <b>Keberangkatan</b> - Paling Awal
+                <li className={`px-4 cursor-pointer border-b py-4  ${selectedFilter === 'Keberangkatan Paling Awal' ? 'hover:bg-secondary bg-secondary text-white' : 'hover:bg-gray-200'}`} onClick={() => handleFilter('Keberangkatan Paling Awal')}>
+                  <b>Keberangkatan </b> - Paling Awal
                 </li>
-                <li onClick={() => handleFilterSelect('Keberangkatan Paling Akhir')} className="px-4 cursor-pointer border-b py-4 hover:bg-secondary hover:font-bold hover:text-white">
+                <li className={`px-4 cursor-pointer border-b py-4  ${selectedFilter === 'Keberangkatan Paling Akhir' ? 'hover:bg-secondary bg-secondary text-white' : 'hover:bg-gray-200'}`} onClick={() => handleFilter('Keberangkatan Paling Akhir')}>
                   <b>Keberangkatan</b> - Paling Akhir
                 </li>
+                <li className={`px-4 cursor-pointer border-b py-4  ${selectedFilter === 'Kedatangan Paling Awal' ? 'hover:bg-secondary bg-secondary text-white' : 'hover:bg-gray-200'}`} onClick={() => handleFilter('Kedatangan Paling Awal')}>
+                  <b>Kedatangan </b> - Paling Awal
+                </li>
+                <li className={`px-4 cursor-pointer border-b py-4  ${selectedFilter === 'Kedatangan Paling Akhir' ? 'hover:bg-secondary bg-secondary text-white' : 'hover:bg-gray-200'}`} onClick={() => handleFilter('Kedatangan Paling Akhir')}>
+                  <b>Kedatangan</b> - Paling Akhir
+                </li>
               </ul>
-
-              <div className="text-right">
-                <button className="my-3 mr-3 font-[600] text-white bg-accent py-3 px-10 rounded-xl">Pilih</button>
-              </div>
             </div>
           </ReactModal>
         </div>
@@ -192,7 +247,7 @@ export default function CariPenerbangan() {
           ) : (
             <div className="flex flex-col gap-y-4 w-full">
               {listFlights?.length > 0 ? (
-                listFlights?.map((flight, i) => (
+                sortedFlights?.map((flight, i) => (
                   <div className="border w-full rounded-xl px-3 pt-4 pb-5 h-fit" key={i}>
                     <div className="flex items-center">
                       <img src="/assets/images/brand_airlines.webp" alt="logo_airlines" height="20" width="20" />{' '}

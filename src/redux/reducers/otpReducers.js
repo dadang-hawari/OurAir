@@ -25,12 +25,11 @@ const otpSlice = createSlice({
       state.email = action.payload
     },
     setPage: (state, action) => {
-      state.page
+      state.page = action.payload
     },
   },
 })
 
-export const { setOtpSentTime, decrementTimerOtp, resetTimerOtp, setEmail, setPage } =
-  otpSlice.actions
+export const { setOtpSentTime, decrementTimerOtp, resetTimerOtp, setEmail, setPage } = otpSlice.actions
 
 export default otpSlice.reducer
