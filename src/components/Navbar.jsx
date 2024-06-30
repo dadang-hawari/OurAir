@@ -8,7 +8,7 @@ import { faSignInAlt, faList, faArrowLeft, faUser, faChevronDown, faBell, faXmar
 import { logout } from '../redux/actions/authAction'
 import iconFaBell from '/assets/images/fi_bell.svg'
 import iconFaUser from '/assets/images/fi_user.svg'
-import { getNotification } from '../redux/actions/notificationAction'
+import { getNotification, getNotificationById } from '../redux/actions/notificationAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
 import { io } from 'socket.io-client'
 
@@ -20,6 +20,7 @@ const Navbar = () => {
   const [showNotification, setShowNotifcation] = useState(false)
   const token = useSelector((state) => state.auth.token)
   const notification = useSelector((state) => state?.notification?.notification?.notifications)
+  const hasUnreadNotifications = notification?.some((notif) => !notif.is_read)
   const maxNotificationToShow = notification?.slice(0, 3)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -75,8 +76,9 @@ const Navbar = () => {
     if (token) dispatch(getNotification(navigate))
   }
 
-  const navigateToRiwayat = () => {
+  const navigateToRiwayat = (id) => {
     setShowNotifcation(false)
+    dispatch(getNotificationById(id, navigate))
     navigate('/riwayat-pemesanan')
   }
 
@@ -136,11 +138,11 @@ const Navbar = () => {
               <ul className="relative">
                 <button className="relative" onClick={handleNotificationDropdown}>
                   <img src={iconFaBell} alt="faBell" className="px-2 h-6 mt-1 w-10" />
-                  <div className={`${''} absolute right-3 top-1 bg-red-600 h-2 w-2 rounded-full`}></div>
+                  <div className={`${hasUnreadNotifications && 'bg-red-600'} absolute right-3 top-1  h-2 w-2 rounded-full`}></div>
                 </button>
                 {showNotification && (
                   <div
-                    className={`absolute bg-white p-5 text-xs shadow-md rounded-md top-10 -right-10  w-[250px] sm:right-1 mini:w-[300px] sm:w-200px md:w-[400px] 
+                    className={`absolute bg-white pt-7 text-xs shadow-md rounded-md top-10 -right-10  w-[250px] sm:right-1 mini:w-[300px] sm:w-200px md:w-[400px] 
                     }`}
                   >
                     <FontAwesomeIcon icon={faXmark} className="absolute right-2 top-2 cursor-pointer" onClick={handleNotificationDropdown} />
@@ -148,17 +150,17 @@ const Navbar = () => {
                       <>
                         <div
                           key={i}
-                          className={`my-2 cursor-pointer 
+                          className={`  pt-1 cursor-pointer px-4
                           
-                          ${!notification?.isRead && 'bg-gray-100'}
+                          ${!notification?.is_read && 'bg-gray-100'}
                           `}
-                          onClick={navigateToRiwayat}
+                          onClick={() => navigateToRiwayat(notification?.id)}
                         >
-                          <div className="flex text-[10px] text-[#8A8A8A] ">
+                          <div className="flex text-[10px] py-2  text-[#8A8A8A] w-full ">
                             <div className="bg-secondary rounded-full h-5 w-5 px-2 flex items-center justify-center">
                               <FontAwesomeIcon icon={faBell} className="text-white h-3 w-3 " />
                             </div>
-                            <div className="ml-4 ">
+                            <div className="ml-4 w-full ">
                               <div className="flex w-full justify-between">
                                 <span>{notification?.title}</span>
                                 <span>{`${formatTimeToIndonesia(notification?.created_at)} ${formatTimeToHM(notification?.created_at)}`}</span>
@@ -174,7 +176,7 @@ const Navbar = () => {
                       </>
                     ))}
 
-                    <Link to={'/notification'} className="text-blue-400 mt-2 py-1 block w-fit">
+                    <Link to={'/notification'} className="text-blue-400 mt-2 pt-3 pb-4 block w-fit px-4 ">
                       Lihat semua notifikasi <FontAwesomeIcon icon={faChevronRight} />
                     </Link>
                   </div>

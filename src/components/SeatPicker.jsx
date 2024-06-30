@@ -74,8 +74,6 @@ export default function SeatPicker() {
             const seatLabel = seatIndex >= 0 ? `P${seatIndex + 1}` : seat.isBooked ? 'X' : ''
             return (
               <React.Fragment key={seat.seatNumber}>
-                {' '}
-                {/* Add key here */}
                 {i === 3 && (
                   <h2
                     key={`row-${rowIndex}-seat-${seat.seatNumber}`} // Add unique key here

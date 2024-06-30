@@ -15,6 +15,7 @@ import { toast } from 'react-toastify'
 import Toast from '../../components/common/Toast'
 import BackToTop from '../../components/common/BackToTop'
 import { setPage } from '../../redux/reducers/otpReducers'
+import { customStylesDestination } from '../../styles/customStyles'
 
 export default function CheckoutBiodataPemesan() {
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
@@ -47,10 +48,13 @@ export default function CheckoutBiodataPemesan() {
   const jumlahPenumpangAnak = penumpangSaatIni?.penumpangAnak
   const jumlahPenumpangDewasa = penumpangSaatIni?.penumpangDewasa
   const jumlahPenumpangBayi = penumpangSaatIni?.penumpangBayi
+  const isLoggedin = useSelector((state) => state?.auth?.isLoggedin)
   const message = 'Mohon maaf, jumlah kursi di maskapai ini kurang dari jumlah penumpang yang telah dipilih. Silahkan melakukan ulang maskapai penerbangan'
   const toastId = 'toastInfo'
   const toastClass = 'toast-info'
   console.log('penumpang', penumpang)
+
+  if (!isLoggedin) document.body.style.overflowY = 'hidden'
 
   const setDataPenumpang = () => {
     // percabangan if biar inputan nggak kereset jika misalnya tidak ada perubahan penumpang
@@ -198,7 +202,6 @@ export default function CheckoutBiodataPemesan() {
     dispatch(setPage('checkout'))
     dispatch(postBooking(navigate, isUserDonate)).then(() => {
       setIsLoading(false)
-      alert('false')
     })
   }
   const handleToggle = () => {
@@ -216,6 +219,9 @@ export default function CheckoutBiodataPemesan() {
   console.log('donasi', donasi)
   return (
     <div>
+      <ReactModal isOpen={!isLoggedin} style={customStylesDestination} className="border-none absolute top-7 w-full">
+        <div className="bg-white w-full rounded-md relative pt-3"></div>
+      </ReactModal>
       <Navbar />
       <div className="max-w-5xl px-5 mx-auto mt-24">
         <div className="text-xl cursor-default text-gray-400 flex items-center gap-x-2">
