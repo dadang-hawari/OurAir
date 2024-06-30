@@ -1,16 +1,12 @@
-import dayjs from 'dayjs'
-import 'dayjs/locale/id'
+import dayjs, { locale } from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTanggalBerangkatKembali } from '../../redux/reducers/jadwalPenerbanganReducer'
 import { getFlightByCityorCountry } from '../../redux/actions/flightsAction'
 import { setIsLoading } from '../../redux/reducers/flightsReducer'
-
-dayjs.locale('id')
-
+import 'dayjs/locale/id'
 export const DateList = () => {
   const [dates, setDates] = useState([])
-  const [currentDate, setCurrentDate] = useState(dayjs().format('YYYY-MM-DD'))
   const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
   const kotaKeberangkatan = jadwalPenerbangan?.departureCity
   const kotaTujuan = jadwalPenerbangan?.arrivalCity
@@ -51,10 +47,6 @@ export const DateList = () => {
     ).then(() => dispatch(setIsLoading(false)))
   }
 
-  useEffect(() => {
-    generateDates()
-  }, [])
-
   const generateDates = (startIndex = 0, numberOfDays = 11) => {
     let tempDates = []
     for (let i = startIndex; i < startIndex + numberOfDays; i++) {
@@ -68,15 +60,18 @@ export const DateList = () => {
 
   const handleScroll = (event) => {
     const { scrollLeft, scrollWidth, clientWidth } = event.target
+
     if (scrollLeft + clientWidth >= scrollWidth) {
       // generate more dates when the user scrolls to the end
       generateDates(dates.length)
     }
   }
-
+  useEffect(() => {
+    generateDates()
+  }, [])
   return (
     <div
-      className="text-sm flex justify-between my-5 gap-x-2 overflow-x-auto pb-2"
+      className="text-sm flex justify-between mb-5 mt-4 gap-x-2 overflow-x-auto pb-2"
       onScroll={handleScroll}
     >
       {dates.map((date, index) => (
@@ -85,6 +80,7 @@ export const DateList = () => {
           onClick={() => {
             setTanggalBerangkat(date.format('YYYY-MM-DD'))
             setChosenDate(date.format('YYYY-MM-DD'))
+            dispatch(setTanggalBerangkatKembali([date.format('DD MMMM YYYY'), tanggalKembali]))
           }}
           className={`text-center max-w-24 h-11 py-1 px-4 cursor-pointer transition-colors rounded-md ${
             chosenDate === date.format('YYYY-MM-DD')
@@ -92,7 +88,7 @@ export const DateList = () => {
               : 'hover:bg-blue-500 hover:text-white'
           }`}
         >
-          <b>{date.format('dddd')}</b>
+          <b>{dayjs(date).locale('id').format('dddd')}</b>
           <div
             className={`${
               chosenDate === date.format('YYYY-MM-DD') ? 'text-white' : 'text-gray-300'
