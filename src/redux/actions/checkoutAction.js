@@ -7,7 +7,8 @@ import {
 } from '../reducers/checkoutReducer'
 import { toast } from 'react-toastify'
 
-export const getFlightById = (id) => async (dispatch) => {
+export const getFlightById = () => async (dispatch, state) => {
+  const id = state()?.checkout?.idFlight
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/flights/search-by-id?id=${id}`
@@ -17,24 +18,27 @@ export const getFlightById = (id) => async (dispatch) => {
       dispatch(setFlightDetail(data))
       dispatch(setFlightSeats(response.data.result[0]))
     }
+    console.log('responsxe', response)
   } catch (error) {
     console.log(error)
   }
 }
-export const postBooking = (navigate) => async (dispatch, getState) => {
+export const postBooking = (navigate, isUserDonate, checkout) => async (dispatch, getState) => {
   const token = getState()?.auth?.token
   const checkout = getState()?.checkout
   const flight_id = checkout?.idFlight
   const passengers = checkout?.penumpang
   const baby = checkout?.jumlahPenumpang?.penumpangBayi
   const booker = checkout?.pemesan?.data
+  const donation = isUserDonate ? parseInt(checkout?.donation) : 0
+  console.log('donation', donation)
   try {
     toast.loading('Mohon tunggu sebentar', {
       toastId: 'toastInfo',
     })
     const response = await axios.post(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/booking/create`,
-      { passengers, baby, booker },
+      { passengers, baby, booker, donation },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -52,6 +56,7 @@ export const postBooking = (navigate) => async (dispatch, getState) => {
       navigate('/menunggu-pembayaran', {
         state: {
           success: 'Pemesanan berhasil dilakukan',
+          checkout,
         },
       })
     } else if (response.status === 200) {

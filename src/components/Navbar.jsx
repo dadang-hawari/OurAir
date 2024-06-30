@@ -1,26 +1,16 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useResolvedPath } from 'react-router-dom'
 import Logo from '/assets/images/logoFooter.webp'
-import LogoTwo from '/assets/images/logo.webp'
+import LogoTwo from '/assets/images/Group 101.webp'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faSignInAlt,
-  faList,
-  faArrowLeft,
-  faDoorOpen,
-  faUser,
-  faChevronDown,
-  faBell,
-  faXmark,
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons'
+import { faSignInAlt, faList, faArrowLeft, faUser, faChevronDown, faBell, faXmark, faChevronRight, faChevronLeft, faClockRotateLeft, faCircleInfo, faHouse } from '@fortawesome/free-solid-svg-icons'
 import { logout } from '../redux/actions/authAction'
 import iconFaBell from '/assets/images/fi_bell.svg'
 import iconFaUser from '/assets/images/fi_user.svg'
-import { getNotification } from '../redux/actions/notificationAction'
+import { getNotification, getNotificationById } from '../redux/actions/notificationAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
+import { io } from 'socket.io-client'
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false)
@@ -30,12 +20,16 @@ const Navbar = () => {
   const [showNotification, setShowNotifcation] = useState(false)
   const token = useSelector((state) => state.auth.token)
   const notification = useSelector((state) => state?.notification?.notification?.notifications)
+  const hasUnreadNotifications = notification?.some((notif) => !notif.is_read)
+  const maxNotificationToShow = notification?.slice(0, 3)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const path = useResolvedPath().pathname
+  const [width, setWidth] = useState('')
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
+      if (window.scrollY > 25) {
         setIsSticky(true)
       } else {
         setIsSticky(false)
@@ -53,9 +47,9 @@ const Navbar = () => {
   }
 
   const handleConfirmLogout = () => {
-    dispatch(logout())
+    dispatch(logout(navigate))
     setConfirmLogout(false)
-    setSidebarVisible(false) // Menutup sidebar
+    setSidebarVisible(false)
   }
 
   const handleCancelLogout = () => {
@@ -79,30 +73,57 @@ const Navbar = () => {
   }
 
   const getNotificationList = () => {
-    dispatch(getNotification())
+    if (token) dispatch(getNotification(navigate))
   }
 
-  const navigateToRiwayat = () => {
+  const navigateToRiwayat = (id) => {
     setShowNotifcation(false)
+    dispatch(getNotificationById(id, navigate))
     navigate('/riwayat-pemesanan')
   }
+
+  const handleResize = () => {
+    setWidth(window.innerWidth)
+  }
+
+  const windowListener = () => {
+    window.addEventListener('resize', handleResize)
+  }
+
+  useEffect(() => {
+    windowListener()
+    handleResize()
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   useEffect(() => {
     getNotificationList()
   }, [])
 
+  // useEffect(() => {
+  //   const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`) // Replace 'http://your-server-url' with your actual server URL
+
+  //   // Socket.IO event listeners and logic here
+  //   socket.on('transaction-update', (data) => {
+  //     // Show pop up notification with the received data
+  //     console.log('data from backend:', data)
+  //   })
+
+  //   return () => {
+  //     socket.disconnect() // Disconnect the socket when the component unmounts
+  //   }
+  // }, [])
+
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-10 p-4 transiti-colors duration-500 select-none ${
-          isSticky ? 'bg-white bg-opacity-40 backdrop-blur-sm shadow-md' : 'bg-transparent'
-        }`}
-      >
+      <nav className={`fixed top-0 left-0 right-0 z-10 p-4 transiti-colors duration-500 select-none ${path !== '/' && 'shadow-md bg-white bg-opacity-40 backdrop-blur-sm'} ${isSticky ? 'bg-white bg-opacity-40 backdrop-blur-sm shadow-md ' : 'bg-transparent'}`}>
         <div className="mx-auto flex justify-between items-center">
           {/* Logo */}
-          <div className="text-black text-lg font-bold">
+          <div className={`text-lg font-bold  `}>
             <Link to="/">
-              <img src={Logo} alt="Logo" className="h-12 w-auto" />
+              <img src={path === '/' && !isSticky && width > 780 ? LogoTwo : Logo} alt="Logo" className="h-12 w-auto" />
             </Link>
           </div>
 
@@ -111,42 +132,43 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
               <ul>
                 <button onClick={sideBar}>
-                  <FontAwesomeIcon icon={faList} className="px-2 h-5 mt-1" />
+                  <FontAwesomeIcon icon={faList} className=" h-5 mt-1 text-gray-900" />
                 </button>
               </ul>
               <ul className="relative">
                 <button className="relative" onClick={handleNotificationDropdown}>
-                  <img src={iconFaBell} alt="faBell" className="px-2 h-6" />
-                  <div
-                    className={`${''} absolute right-3 top-0 bg-red-600 h-2 w-2 rounded-full`}
-                  ></div>
+                  <img src={iconFaBell} alt="faBell" className="px-2 h-6 mt-1 w-10" />
+                  <div className={`${hasUnreadNotifications && 'bg-red-600'} absolute right-3 top-1  h-2 w-2 rounded-full`}></div>
                 </button>
                 {showNotification && (
                   <div
-                    className={`absolute bg-white bg-opacity-90 p-5 text-xs shadow-md rounded-md top-10  right-1 w-[300px] sm:w-200px md:w-[400px] ${
-                      !notification?.isRead && 'bg-gray-100'
+                    className={`absolute bg-white pt-7 text-xs shadow-md rounded-md top-10 -right-10  w-[250px] sm:right-1 mini:w-[300px] sm:w-200px md:w-[400px] 
                     }`}
                   >
-                    <FontAwesomeIcon
-                      icon={faXmark}
-                      className="absolute right-2 top-2 cursor-pointer"
-                      onClick={handleNotificationDropdown}
-                    />
-                    {notification?.map((notification, i) => (
+                    <FontAwesomeIcon icon={faXmark} className="absolute right-2 top-2 cursor-pointer" onClick={handleNotificationDropdown} />
+                    {maxNotificationToShow?.map((notification, i) => (
                       <>
-                        <div key={i} className="my-2 cursor-pointer" onClick={navigateToRiwayat}>
-                          <div className="flex text-[10px] text-[#8A8A8A] ">
+                        <div
+                          key={i}
+                          className={`  pt-1 cursor-pointer px-4
+                          
+                          ${!notification?.is_read && 'bg-gray-100'}
+                          `}
+                          onClick={() => navigateToRiwayat(notification?.id)}
+                        >
+                          <div className="flex text-[10px] py-2  text-[#8A8A8A] w-full ">
                             <div className="bg-secondary rounded-full h-5 w-5 px-2 flex items-center justify-center">
                               <FontAwesomeIcon icon={faBell} className="text-white h-3 w-3 " />
                             </div>
-                            <div className="ml-4 ">
+                            <div className="ml-4 w-full ">
                               <div className="flex w-full justify-between">
                                 <span>{notification?.title}</span>
-                                <span>{`${formatTimeToIndonesia(
-                                  notification?.created_at
-                                )} ${formatTimeToHM(notification?.created_at)}`}</span>
+                                <span>{`${formatTimeToIndonesia(notification?.created_at)} ${formatTimeToHM(notification?.created_at)}`}</span>
                               </div>
-                              <div className="text-base text-black">{notification?.message}</div>
+                              <div className="text-sm text-gray-900">{notification?.message}</div>
+                              <Link to={notification?.link} target="_blank" className={`${notification?.link ? '' : 'hidden'} text-xs text-blue-400`}>
+                                Link Pembayaran Tiket Pesawat
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -154,36 +176,25 @@ const Navbar = () => {
                       </>
                     ))}
 
-                    <Link to={'/notification'} className="text-blue-400 mt-2 py-1 block w-fit">
+                    <Link to={'/notification'} className="text-blue-400 mt-2 pt-3 pb-4 block w-fit px-4 ">
                       Lihat semua notifikasi <FontAwesomeIcon icon={faChevronRight} />
                     </Link>
                   </div>
                 )}
               </ul>
-              <ul className="flex items-center gap-x-2 flex-row-reverse cursor-pointer relative">
-                <div
-                  className="flex items-center gap-x-2 flex-row-reverse cursor-pointer"
-                  onClick={handleProfileDropdown}
-                >
+              <ul className="flex items-center gap-x-2 flex-row-reverse  relative">
+                <div className="flex items-center gap-x-2 flex-row-reverse cursor-pointer" onClick={handleProfileDropdown}>
                   <button>
                     <span className="bg-gray-300 block w-[30px] h-[30px] relative rounded-full">
-                      <FontAwesomeIcon
-                        icon={faUser}
-                        className="text-white absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2"
-                      />
+                      <FontAwesomeIcon icon={faUser} className="text-white absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2" />
                     </span>
                   </button>
-                  <FontAwesomeIcon
-                    icon={faChevronDown}
-                    className={`transition-transform duration-200 text-gray-700 ${
-                      showProfileDropdown ? 'rotate-180' : 'rotate-0'
-                    }`}
-                  />
+                  <FontAwesomeIcon icon={faChevronDown} className={`transition-transform duration-200 text-gray-900 ${showProfileDropdown ? 'rotate-180' : 'rotate-0'}`} />
                 </div>
                 {showProfileDropdown && (
-                  <div className="absolute bg-white bg-opacity-90 p-5 shadow-md rounded-md w-fit px-10 top-10 right-1 ">
+                  <div className="absolute bg-white p-5 transition-all shadow-md rounded-md w-fit px-10 top-10 right-1 ">
                     <Link to="/profile">Profile</Link>
-                    <div className="text-red-400 my-1 cursor-pointer" onClick={handleLogout}>
+                    <div className="text-red-400 mt-1 cursor-pointer" onClick={handleLogout}>
                       Logout
                     </div>
                   </div>
@@ -193,10 +204,7 @@ const Navbar = () => {
           ) : (
             <div className="flex space-x-4">
               <ul>
-                <Link
-                  to="/login"
-                  className="bg-white hover:bg-gray-100 text-gray-900 py-2 px-5 w-28 rounded-xl flex items-center"
-                >
+                <Link to="/login" className="bg-white border border-gray-300 hover:bg-gray-100 text-gray-900 py-2 px-5 w-28 rounded-xl flex items-center">
                   <FontAwesomeIcon icon={faSignInAlt} className="h-4 w-3 mr-2" />
                   Masuk
                 </Link>
@@ -207,36 +215,32 @@ const Navbar = () => {
       </nav>
 
       {/* Sidebar */}
-      <div
-        className={`fixed inset-0 z-20 transition-all duration-300 ${
-          sidebarVisible ? 'bg-black bg-opacity-50' : 'pointer-events-none'
-        }`}
-      >
-        <div
-          className={`fixed right-0 top-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
-            sidebarVisible ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
+      <div className={`fixed inset-0 z-20 transition-all duration-300 ${sidebarVisible ? 'bg-black bg-opacity-50' : 'pointer-events-none'}`}>
+        <div className="w-full h-full" onClick={sideBar}></div>
+        <div className={`fixed right-0 top-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${sidebarVisible ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="p-6">
-            <button
-              onClick={sideBar}
-              className="flex items-center mt-4 px-2 py-2 text-black hover:text-blue-500 rounded-lg"
-            >
-              <FontAwesomeIcon icon={faArrowLeft} className=" h-5 mr-2" />
+            <button onClick={sideBar} className="flex items-center mt-4  py-2 text-base text-gray-700 hover:text-blue-500 rounded-lg">
+              <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
               Kembali
             </button>
 
             {/* Menu */}
-            <div className="flex flex-col mt-4">
-              <Link to="/profile" className="text-black hover:text-blue-500 mb-4">
-                Profile
+            <div className="flex flex-col gap-3 mt-4 ">
+              <Link to="/" className={`hover:text-blue-500 text-base ${path === '/' ? 'cursor-default text-blue-500' : 'text-gray-700'}`}>
+                <FontAwesomeIcon icon={faHouse} className="mr-2" />
+                Beranda
               </Link>
-              <Link to="/about" className="text-black hover:text-blue-500 mb-4">
+              <hr />
+              <Link to="/riwayat-pemesanan" className={`hover:text-blue-500 text-base ${path === '/riwayat-pemesanan' ? 'cursor-default text-blue-500' : 'text-gray-700'}`}>
+                <FontAwesomeIcon icon={faClockRotateLeft} className="mr-2" />
+                Riwayat Pesanan
+              </Link>
+              <hr />
+              <Link to="/about" className={`hover:text-blue-500 ${path === '/tentang' ? 'cursor-default text-blue-500' : 'text-gray-700'}`}>
+                <FontAwesomeIcon icon={faCircleInfo} className="mr-2" />
                 Tentang kami
               </Link>
-              <button onClick={handleLogout} className=" py-2  ">
-                <span className="text-lg hover:text-red-500">Keluar</span>
-              </button>
+              <hr />
             </div>
           </div>
         </div>
@@ -248,16 +252,10 @@ const Navbar = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <p className="mb-4">Tetap ingin keluar?</p>
             <div className="flex justify-end space-x-4">
-              <button
-                onClick={handleCancelLogout}
-                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg"
-              >
+              <button onClick={handleCancelLogout} className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg">
                 Batal
               </button>
-              <button
-                onClick={handleConfirmLogout}
-                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
-              >
+              <button onClick={handleConfirmLogout} className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg">
                 Keluar
               </button>
             </div>

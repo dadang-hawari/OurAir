@@ -32,6 +32,7 @@ const Daftar = () => {
   const [isPasswordMedium, setIsPasswordMedium] = useState(false)
   const [isPasswordStrong, setIsPasswordStrong] = useState(false)
   const [passMeter, setPassMeter] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   // Set state empty fields
@@ -44,12 +45,7 @@ const Daftar = () => {
 
   // Check empty fields
   const checkEmptyFields = () => {
-    if (
-      !email.trim() ||
-      !username.trim() ||
-      !password.trim() ||
-      !phoneNumber.trim()
-    ) {
+    if (!email.trim() || !username.trim() || !password.trim() || !phoneNumber.trim()) {
       return false
     }
     return true
@@ -87,11 +83,7 @@ const Daftar = () => {
         </span>
       )
     } else {
-      return (
-        <span className={passMeter ? 'text-red-500' : 'hidden'}>
-          Password Lemah
-        </span>
-      )
+      return <span className={passMeter ? 'text-red-500' : 'hidden'}>Password Lemah</span>
     }
   }
 
@@ -99,14 +91,16 @@ const Daftar = () => {
     e.preventDefault()
     setEmptyFields()
     setIsSubmitted(true)
-
     if (
       checkEmptyFields() &&
       isEmailValid(email) &&
       combineWithNumAndLetter(password) &&
       minPassLengthEight(password)
     ) {
-      dispatch(registUser(phoneNumber, username, email, password, navigate))
+      setIsLoading(true)
+      dispatch(registUser(phoneNumber, username, email, password, navigate)).then(() =>
+        setIsLoading(false)
+      )
     }
 
     console.log('DaftarRegistering:', {
@@ -131,15 +125,10 @@ const Daftar = () => {
       </div>
       <div className="flex items-center justify-center md:w-1/2 h-full px-5 md:px-0">
         <div className="w-full max-w-sm">
-          <h1 className="mb-2 text-black text-xl font-bold text-left">
-            Daftar
-          </h1>
+          <h1 className="mb-2 text-black text-xl font-bold text-left">Daftar</h1>
           <form onSubmit={() => handleSubmit()}>
             <div className="mb-2">
-              <label
-                htmlFor="username"
-                className="text-left block mb-1 text-sm"
-              >
+              <label htmlFor="username" className="text-left block mb-1 text-sm">
                 Nama
                 <span className="text-red-500" title="required">
                   *
@@ -151,19 +140,13 @@ const Daftar = () => {
                 placeholder="Nama Lengkap"
                 autoComplete="off"
                 className={`input-primary  ${
-                  isUsernameEmpty
-                    ? 'border-red-500 focus:border-red-500'
-                    : 'focus:border-accent '
+                  isUsernameEmpty ? 'border-red-500 focus:border-red-500' : 'focus:border-accent '
                 }'}`}
                 aria-label="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
-              <p
-                className={`${
-                  isUsernameEmpty ? 'block' : 'hidden'
-                }  text-xs  text-red-500`}
-              >
+              <p className={`${isUsernameEmpty ? 'block' : 'hidden'}  text-xs  text-red-500`}>
                 Mohon inputkan nama lengkap
               </p>
             </div>
@@ -180,28 +163,19 @@ const Daftar = () => {
                 placeholder="Contoh: johndee@gmail.com"
                 autoComplete="off"
                 className={`input-primary ${
-                  isEmailEmpty
-                    ? 'border-red-500 focus:border-red-500'
-                    : 'focus:border-accent'
+                  isEmailEmpty ? 'border-red-500 focus:border-red-500' : 'focus:border-accent'
                 }`}
                 aria-label="Email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <p
-                className={`${
-                  isEmailEmpty ? 'block' : 'hidden'
-                }  text-xs text-red-500`}
-              >
+              <p className={`${isEmailEmpty ? 'block' : 'hidden'}  text-xs text-red-500`}>
                 Mohon inputkan alamat email Anda
               </p>
             </div>
             <div className="mb-2">
-              <label
-                htmlFor="phone-number"
-                className="text-left block mb-1 text-sm"
-              >
+              <label htmlFor="phone-number" className="text-left block mb-1 text-sm">
                 Nomor Telepon
                 <span className="text-red-500" title="required">
                   *
@@ -212,9 +186,7 @@ const Daftar = () => {
                 type="number"
                 placeholder="+62"
                 className={`input-primary ${
-                  isPhoneNumEmpty
-                    ? 'border-red-500 focus:border-red-500'
-                    : 'focus:border-accent'
+                  isPhoneNumEmpty ? 'border-red-500 focus:border-red-500' : 'focus:border-accent'
                 }`}
                 aria-label="Phone Number"
                 value={phoneNumber}
@@ -222,19 +194,12 @@ const Daftar = () => {
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
 
-              <p
-                className={`${
-                  isPhoneNumEmpty ? 'block' : 'hidden'
-                }  text-xs text-red-500`}
-              >
+              <p className={`${isPhoneNumEmpty ? 'block' : 'hidden'}  text-xs text-red-500`}>
                 Mohon inputkan nomor telepon
               </p>
             </div>
             <div className="mb-2">
-              <label
-                htmlFor="password"
-                className="text-left block mb-1 text-sm"
-              >
+              <label htmlFor="password" className="text-left block mb-1 text-sm">
                 Buat Password
                 <span className="text-red-500" title="required">
                   *
@@ -249,9 +214,7 @@ const Daftar = () => {
                   autoComplete="off"
                   placeholder="Buat Password"
                   className={`input-primary ${
-                    isPassEmpty
-                      ? 'border-red-500 focus:border-red-500'
-                      : 'focus:border-accent'
+                    isPassEmpty ? 'border-red-500 focus:border-red-500' : 'focus:border-accent'
                   }`}
                   aria-label="Password"
                   value={password}
@@ -269,11 +232,7 @@ const Daftar = () => {
                     height="32"
                   />
                 </button>
-                <p
-                  className={`${
-                    isPassEmpty ? 'block' : 'hidden'
-                  }  text-xs text-red-500`}
-                >
+                <p className={`${isPassEmpty ? 'block' : 'hidden'}  text-xs text-red-500`}>
                   Mohon inputkan password
                 </p>
                 <div
@@ -283,15 +242,9 @@ const Daftar = () => {
                 >
                   <div className="w-full flex justify-between h-full">
                     <div className="bg-red-500 w-full rounded-s-md"></div>
+                    <div className={`${isPasswordMedium && 'bg-orange-500'} w-full`}></div>
                     <div
-                      className={`${
-                        isPasswordMedium && 'bg-orange-500'
-                      } w-full`}
-                    ></div>
-                    <div
-                      className={`${
-                        isPasswordStrong && 'bg-green-500'
-                      } w-full rounded-e-md`}
+                      className={`${isPasswordStrong && 'bg-green-500'} w-full rounded-e-md`}
                     ></div>
                   </div>
                   <div className="block">{isPassMeterStrong()}</div>
@@ -299,18 +252,14 @@ const Daftar = () => {
                 <div className="pass-check mt-2">
                   <div className={isMinPassLengthEight('style', password)}>
                     <span className="text-xs">
-                      <FontAwesomeIcon
-                        icon={isMinPassLengthEight('icon', password)}
-                      />{' '}
-                      Minimal panjang password 8 karakter
+                      <FontAwesomeIcon icon={isMinPassLengthEight('icon', password)} /> Minimal
+                      panjang password 8 karakter
                     </span>
                   </div>
                   <div className={passWithNumAndLetter('style', password)}>
                     <div className="text-xs">
-                      <FontAwesomeIcon
-                        icon={passWithNumAndLetter('icon', password)}
-                      />{' '}
-                      Kombinasikan password dengan huruf dan angka
+                      <FontAwesomeIcon icon={passWithNumAndLetter('icon', password)} /> Kombinasikan
+                      password dengan huruf dan angka
                     </div>
                   </div>
                 </div>
@@ -320,6 +269,7 @@ const Daftar = () => {
               <ButtonPrimary
                 onClick={handleSubmit}
                 text={'Daftar'}
+                isDisabled={isLoading}
                 className={'mt-1'}
               />
             </div>

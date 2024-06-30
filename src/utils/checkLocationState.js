@@ -6,9 +6,12 @@ export const checkLocationState = (location, navigate) => {
     if (location.state.info) {
       toast.info(location.state.info, {
         toastId: 'toastInfo',
+        className: 'toast-info',
       })
     } else if (location.state.success) {
       toast(location.state.success, { className: 'success-toast' })
+    } else {
+      toast(location.state.error, { className: 'toast-error' })
     }
     navigate('.', { state: false })
   }

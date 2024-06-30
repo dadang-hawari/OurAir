@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   paymentHistory: [],
+  waitingTransaction: null,
 }
 
 const paymentHistorySlice = createSlice({
@@ -12,9 +13,12 @@ const paymentHistorySlice = createSlice({
     setPaymentHistory: (state, action) => {
       state.paymentHistory = action.payload
     },
+    setWaitingTransaction: (state, action) => {
+      state.waitingTransaction = action.payload
+    },
   },
 })
 
-export const { setPaymentHistory } = paymentHistorySlice.actions
+export const { setPaymentHistory, setWaitingTransaction } = paymentHistorySlice.actions
 
 export default paymentHistorySlice.reducer

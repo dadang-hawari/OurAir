@@ -14,18 +14,20 @@ import {
 
 import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { useState, useRef, useEffect } from 'react'
 import ReactModal from 'react-modal'
 import { customStyles, customStylesFilter } from '../styles/customStyles'
 import { useDispatch, useSelector } from 'react-redux'
-import { getTransaction } from '../redux/actions/paymentHistoryAction'
+import { getTransaction, getTransactionById } from '../redux/actions/paymentHistoryAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
 import SkeletonDetailPesanan from '../components/RiwayatPesanan/SkeletonDetailPesanan'
 import DirectionArrow from '../components/RiwayatPesanan/DirectionArrow'
 import SkeletonListPesanan from '../components/RiwayatPesanan/SkeletonListPesanan'
 import { ToastContainer } from 'react-toastify'
+import { setTransactionId } from '../redux/reducers/checkoutReducer'
+import { setPage } from '../redux/reducers/otpReducers'
 export default function RiwayatPemesanan() {
   const [search, setSearch] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -36,6 +38,7 @@ export default function RiwayatPemesanan() {
   const [filteredHistory, setFilteredHistory] = useState([])
   const detailPesanan = filteredHistory?.length > 0 ? filteredHistory[historyIndex] : null
   const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate()
   const detailRef = useRef(null)
 
   const setDetail = (index) => {
@@ -56,23 +59,19 @@ export default function RiwayatPemesanan() {
   }, [])
   useEffect(() => {
     // Filter paymentHistory based on search input and status filter
-    const filtered = paymentHistory
-      ?.filter((history) => {
-        const matchesSearch =
-          history?.midtrans_order_id?.toLowerCase().includes(search.toLowerCase()) ||
-          history?.flights?.fromAirport?.cityName
-            ?.toLowerCase()
-            .includes(search?.toLocaleLowerCase())
+    const filtered = paymentHistory?.filter((history) => {
+      const matchesSearch =
+        history?.midtrans_order_id?.toLowerCase().includes(search.toLowerCase()) ||
+        history?.flights?.fromAirport?.cityName?.toLowerCase().includes(search?.toLocaleLowerCase())
 
-        const matchesStatus =
-          statusFilter === 'Semua Status' ||
-          (statusFilter === 'Sudah Dibayar' && history?.status) ||
-          (statusFilter === 'Belum Dibayar' && !history?.status && !isExpired(history)) ||
-          (statusFilter === 'Expired' && !history?.status && isExpired(history))
+      const matchesStatus =
+        statusFilter === 'Semua Status' ||
+        (statusFilter === 'Sudah Dibayar' && history?.status) ||
+        (statusFilter === 'Belum Dibayar' && !history?.status && !isExpired(history)) ||
+        (statusFilter === 'Expired' && !history?.status && isExpired(history))
 
-        return matchesSearch && matchesStatus
-      })
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Sort by newest first
+      return matchesSearch && matchesStatus
+    })
 
     setFilteredHistory(filtered)
   }, [search, paymentHistory, statusFilter])
@@ -96,6 +95,12 @@ export default function RiwayatPemesanan() {
 
   const closeModal = () => {
     setIsModalOpen(false)
+  }
+
+  const handleLanjutBayar = (id) => {
+    dispatch(setPage('riwayat'))
+    dispatch(setTransactionId(id))
+    navigate('/menunggu-pembayaran')
   }
 
   return (
@@ -173,7 +178,9 @@ export default function RiwayatPemesanan() {
                         </h2>
                         <div className="text-xs">
                           <h3 className="w-max my-[3px]">
-                            {formatTimeToIndonesia(history?.flights?.departure_time)}
+                            {history?.flights
+                              ? formatTimeToIndonesia(history?.flights?.departure_time)
+                              : 'N/A'}
                           </h3>
                           <h3>{formatTimeToHM(history?.flights?.departure_time)}</h3>
                         </div>
@@ -181,9 +188,11 @@ export default function RiwayatPemesanan() {
                     </div>
                     <div className="w-full text-center -mt-4">
                       <h2 className="text-gray-600 text-xs pb-1 font-[600]">
-                        {(new Date(history?.flights?.arrival_time) -
-                          new Date(history?.flights?.departure_time)) /
-                          (1000 * 60 * 60)}
+                        {history?.flights
+                          ? (new Date(history?.flights?.arrival_time) -
+                              new Date(history?.flights?.departure_time)) /
+                            (1000 * 60 * 60)
+                          : 'N/A'}
                         h 0m
                       </h2>
                       <div className="w-full relative">
@@ -194,13 +203,19 @@ export default function RiwayatPemesanan() {
                       <FontAwesomeIcon icon={faLocationDot} className="text-gray-primary pt-1" />
                       <div>
                         <h2 className="text-sm font-bold">
-                          {history?.flights?.toAirport?.cityName}
+                          {history?.flights ? history?.flights?.toAirport?.cityName : 'N/A'}
                         </h2>
                         <div className="text-xs">
                           <h3 className="w-max my-[3px]">
-                            {formatTimeToIndonesia(history?.flights?.arrival_time)}
+                            {history?.flights
+                              ? formatTimeToIndonesia(history?.flights?.arrival_time)
+                              : 'N/A'}
                           </h3>
-                          <h3>{formatTimeToHM(history?.flights?.arrival_time)}</h3>
+                          <h3>
+                            {history?.flights
+                              ? formatTimeToHM(history?.flights?.arrival_time)
+                              : 'N/A'}
+                          </h3>
                         </div>
                       </div>
                     </div>
@@ -236,7 +251,7 @@ export default function RiwayatPemesanan() {
                     <FontAwesomeIcon icon={faSearch} className="text-7xl" />
                     ... not found
                   </div>
-                  <h5 className="text-black mt-10 text-xl">Hasil pencarian tidak ditemukan</h5>
+                  <h5 className="text-black mt-10 text-xl">Hasil tidak ditemukan</h5>
                 </div>
               </div>
             )}
@@ -277,6 +292,10 @@ export default function RiwayatPemesanan() {
                             : 'Unpaid'}
                         </span>
                       </div>
+                      <div>
+                        {formatTimeToIndonesia(detailPesanan?.created_at)}{' '}
+                        {formatTimeToHM(detailPesanan?.created_at)}
+                      </div>
                       <div className="my-2">
                         Kode Pemesanan:{' '}
                         <span className="text-secondary font-bold">
@@ -285,24 +304,30 @@ export default function RiwayatPemesanan() {
                       </div>
                       <div className="flex justify-between">
                         <b className="font-bold">
-                          {formatTimeToHM(detailPesanan?.flights?.departure_time)}
+                          {detailPesanan?.flights?.departure_time
+                            ? formatTimeToHM(detailPesanan?.flights?.departure_time)
+                            : 'N/A'}
                         </b>
                         <b className="text-secondary text-xs">Keberangkatan</b>
                       </div>
                       <p className="my-1">
-                        {formatTimeToIndonesia(detailPesanan?.flights?.departure_time)}
+                        {detailPesanan?.flights?.departure_time
+                          ? formatTimeToIndonesia(detailPesanan?.flights?.departure_time)
+                          : 'N/A'}
                       </p>
-                      <b className="font-[600]">{detailPesanan?.flights?.fromAirport?.namee}</b>
+                      <b className="font-[600]">
+                        {detailPesanan?.flights ? detailPesanan?.flights?.fromAirport?.name : 'N/A'}
+                      </b>
                       <div className="text-sm">
                         <hr className="w-[95%] mx-auto my-3" />
                         <div className="flex items-center gap-x-2">
                           <div className="w-full">
                             <div className="font-bold">
                               <h4>
-                                {
-                                  detailPesanan?.flights?.whomAirplaneFlights?.whomAirlinesAirplanes
-                                    ?.name
-                                }{' '}
+                                {detailPesanan?.flights
+                                  ? detailPesanan?.flights?.whomAirplaneFlights
+                                      ?.whomAirlinesAirplanes?.name
+                                  : 'N/A'}{' '}
                                 -{' '}
                                 {detailPesanan?.flights?.class === 'FIRSTCLASS'
                                   ? 'First Class'
@@ -310,7 +335,11 @@ export default function RiwayatPemesanan() {
                                   ? 'Business'
                                   : 'Economy'}
                               </h4>
-                              <h5>{detailPesanan?.flights?.whomAirplaneFlights?.airplane_code}</h5>
+                              <h5>
+                                {detailPesanan?.flights
+                                  ? detailPesanan?.flights?.whomAirplaneFlights?.airplane_code
+                                  : 'N/A'}
+                              </h5>
                             </div>
                             <div>
                               <b>Informasi:</b>
@@ -331,12 +360,22 @@ export default function RiwayatPemesanan() {
                         <div>
                           <div className="flex justify-between">
                             <h3 className="font-bold">
-                              {formatTimeToHM(detailPesanan?.flights?.arrival_time)}
+                              {detailPesanan?.flights
+                                ? formatTimeToHM(detailPesanan?.flights?.arrival_time)
+                                : 'N/A'}
                             </h3>
                             <b className="text-secondary">Kedatangan</b>
                           </div>
-                          <h4>{formatTimeToIndonesia(detailPesanan?.flights?.arrival_time)}</h4>
-                          <h5 className="font-[600]">{detailPesanan?.flights?.toAirport?.name}</h5>
+                          <h4>
+                            {detailPesanan?.flights
+                              ? formatTimeToIndonesia(detailPesanan?.flights?.arrival_time)
+                              : 'N/A'}
+                          </h4>
+                          <h5 className="font-[600]">
+                            {detailPesanan?.flights
+                              ? detailPesanan?.flights?.toAirport?.name
+                              : 'N/A'}
+                          </h5>
                         </div>
                         <hr className="w-[95%] mx-auto my-3" />
                         <div className="w-full">
@@ -374,6 +413,14 @@ export default function RiwayatPemesanan() {
                             <span>Pajak</span>
                             <span>IDR {detailPesanan?.tax_price?.toLocaleString('id-ID')}</span>
                           </div>
+                          <div
+                            className={`${
+                              !detailPesanan?.donation && 'hidden'
+                            } flex justify-between`}
+                          >
+                            <span>Donasi</span>
+                            <span>IDR {detailPesanan?.donation?.toLocaleString('id-ID')}</span>
+                          </div>
                         </div>
                         <hr className="w-[95%] mx-auto my-3" />
                         <div className="flex justify-between text-base">
@@ -399,7 +446,7 @@ export default function RiwayatPemesanan() {
                     </button>
                   ) : (
                     <button
-                      onClick={() => alert(detailPesanan?.payment_link)}
+                      onClick={() => handleLanjutBayar(detailPesanan?.id)}
                       className="mt-3 text-xl font-[600] bg-red-primary text-white rounded-md w-full h-[62px]"
                     >
                       Lanjut Bayar

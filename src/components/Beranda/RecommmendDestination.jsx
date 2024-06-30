@@ -41,7 +41,7 @@ export default function DestinasiFavorit() {
   }
 
   return (
-    <div className="mt-[630px] sm:mt-[375px] md:mt-[355px] xl:mt-[350px] max-w-[1040px] mx-auto md:px-0 px-4">
+    <div className="mt-[660px] mini:mt-[659px] minixl:mt-[620px] sm:mt-[325px]  md:mt-[340px] xl:mt-[350px] max-w-[1040px] mx-auto  md:px-0 px-4">
       <h2 className="font-bold px-5 text-xl">
         Rekomendasi <span className="text-accent">Destinasi</span>{' '}
       </h2>
@@ -85,7 +85,7 @@ export default function DestinasiFavorit() {
           Philippines
         </button>
       </div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 px-4 mt-5 sm:mt-0">
         {airports?.map((airport, i) => (
           <div key={i} className="border rounded-md">
             <img

@@ -15,6 +15,8 @@ const initialState = {
     },
   },
   transaction: null,
+  donation: 10000,
+  transactionId: null,
 }
 
 const checkoutSlice = createSlice({
@@ -23,6 +25,9 @@ const checkoutSlice = createSlice({
   reducers: {
     setTransaction: (state, action) => {
       state.transaction = action.payload
+    },
+    setTransactionId: (state, action) => {
+      state.transactionId = action.payload
     },
     setPemesan: (state, action) => {
       const { name, value } = action.payload
@@ -62,6 +67,9 @@ const checkoutSlice = createSlice({
     setIdFlight: (state, action) => {
       state.idFlight = action.payload
     },
+    setDonation: (state, action) => {
+      state.donation = action.payload
+    },
     setSelectedSeat: (state, action) => {
       state.selectedSeats = [action.payload]
     },
@@ -99,5 +107,7 @@ export const {
   setJumlahPenumpang,
   assignSeatsToPassengers,
   setTransaction,
+  setDonation,
+  setTransactionId,
 } = checkoutSlice.actions
 export default checkoutSlice.reducer
