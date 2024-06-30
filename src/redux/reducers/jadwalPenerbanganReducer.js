@@ -4,6 +4,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   departureCity: 'Bandara Keberangkatan',
   arrivalCity: 'Bandara Tujuan',
+  departureCityCode: '',
+  arrivalCityCode: '',
   kotaKeberangkatan: '',
   kotaTujuan: '',
   tanggalBerangkatKembali: ['Tanggal Berangkat', 'Jadwal Kembali'],
@@ -24,6 +26,12 @@ const penerbanganSlice = createSlice({
     },
     setArrivalCity: (state, action) => {
       state.arrivalCity = action.payload
+    },
+    setDepartureCityCode: (state, action) => {
+      state.departureCityCode = action.payload
+    },
+    setArrivalCityCode: (state, action) => {
+      state.arrivalCityCode = action.payload
     },
     setKotaKeberangkatan: (state, action) => {
       state.kotaKeberangkatan = action.payload
@@ -55,17 +63,6 @@ const penerbanganSlice = createSlice({
   },
 })
 
-export const {
-  setDepartureCity,
-  setArrivalCity,
-  setKotaKeberangkatan,
-  setKotaTujuan,
-  setTanggalBerangkatKembali,
-  setKelasJadwalPenerbangan,
-  setPenumpangAnak,
-  setPenumpangBayi,
-  setPenumpangDewasa,
-  setSeatClass,
-} = penerbanganSlice.actions
+export const { setDepartureCity, setArrivalCity, setKotaKeberangkatan, setKotaTujuan, setTanggalBerangkatKembali, setKelasJadwalPenerbangan, setPenumpangAnak, setPenumpangBayi, setPenumpangDewasa, setSeatClass, setDepartureCityCode, setArrivalCityCode } = penerbanganSlice.actions
 
 export default penerbanganSlice.reducer

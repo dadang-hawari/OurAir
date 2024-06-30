@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react'
 import '../styles/seatpicker.css'
-import {
-  addSelectedSeat,
-  removeSelectedSeat,
-  resetSelectedSeats,
-  setSelectedSeat,
-} from '../redux/reducers/checkoutReducer'
+import { addSelectedSeat, removeSelectedSeat, resetSelectedSeats, setSelectedSeat } from '../redux/reducers/checkoutReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function SeatPicker() {
@@ -40,7 +35,7 @@ export default function SeatPicker() {
   }
 
   return (
-    <div className="seat-picker overflow-x-auto">
+    <div className="seat-picker overflow-x-auto ">
       <div className="w-full">
         <h2 className="font-bold">Keterangan</h2>
         <div className="flex items-center">
@@ -64,7 +59,8 @@ export default function SeatPicker() {
           <div className="seat-heading">B</div>
           <div className="seat-heading">C</div>
         </div>
-        <h2 className={' w-10 h-9 mx-1'}></h2>
+        <h2 className={' w-4 h-9 mx-1'}></h2>
+
         <div className="w-full flex gap-x-1 items-center">
           <div className="seat-heading">D</div>
           <div className="seat-heading">E</div>
@@ -72,29 +68,23 @@ export default function SeatPicker() {
         </div>
       </div>
       {availableSeats?.map((row, rowIndex) => (
-        <div key={rowIndex} className="seat-row flex gap-x-1 items-center">
+        <div key={rowIndex} className="seat-row flex gap-x-1">
           {row.map((seat, i) => {
             const seatIndex = selectedSeats.indexOf(seat.seatNumber)
             const seatLabel = seatIndex >= 0 ? `P${seatIndex + 1}` : seat.isBooked ? 'X' : ''
             return (
               <React.Fragment key={seat.seatNumber}>
-                {' '}
-                {/* Add key here */}
                 {i === 3 && (
                   <h2
                     key={`row-${rowIndex}-seat-${seat.seatNumber}`} // Add unique key here
-                    className={
-                      'flex items-center justify-center w-4 h-9 mx-1 rounded-xl text-center text-gray-600  bg-gray-100  text-xs'
-                    }
+                    className={'flex items-center justify-center w-4 h-9 mx-1 rounded-xl text-center text-gray-600  bg-gray-100  text-xs'}
                   >
                     {rowIndex + 1}
                   </h2>
                 )}
                 <div
                   key={seat.seatNumber} // Key for the seat
-                  className={`seat ${seat.isBooked === false ? 'available' : 'unavailable'} ${
-                    selectedSeats.includes(seat.seatNumber) ? 'selected' : ''
-                  }`}
+                  className={`seat  ${seat.isBooked === false ? 'available' : 'unavailable'} ${selectedSeats.includes(seat.seatNumber) ? 'selected' : ''}`}
                   onClick={() => handleSeatClick(seat.seatNumber)}
                 >
                   {seatLabel}
