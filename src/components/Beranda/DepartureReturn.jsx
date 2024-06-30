@@ -1,4 +1,9 @@
-import { faCalendarDays, faChevronLeft, faChevronRight, faXmark } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCalendarDays,
+  faChevronLeft,
+  faChevronRight,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect, useState } from 'react'
 import { Calendar } from 'react-multi-date-picker'
@@ -9,12 +14,15 @@ import '../../styles/calendar.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllFlights } from '../../redux/actions/flightsAction'
 import { setTanggalBerangkatKembali } from '../../redux/reducers/jadwalPenerbanganReducer'
+import 'dayjs/locale/id'
 
 export const DepartureReturn = () => {
   ReactModal.setAppElement('#modal')
 
-  const [isReturn, setIsReturn] = useState(false)
-  const tanggalBerangkatKembali = useSelector((state) => state?.jadwalPenerbangan?.tanggalBerangkatKembali)
+  const [isReturn, setIsReturn] = useState(true)
+  const tanggalBerangkatKembali = useSelector(
+    (state) => state?.jadwalPenerbangan?.tanggalBerangkatKembali
+  )
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [width, setWidth] = useState(window.outerWidth)
   const dispatch = useDispatch()
@@ -29,7 +37,12 @@ export const DepartureReturn = () => {
   }
 
   const renderButton = (type, onClick) => {
-    const chevron = type === 'left' ? <FontAwesomeIcon icon={faChevronLeft} className="text-gray-400" /> : <FontAwesomeIcon icon={faChevronRight} className="text-gray-400" />
+    const chevron =
+      type === 'left' ? (
+        <FontAwesomeIcon icon={faChevronLeft} className="text-gray-400" />
+      ) : (
+        <FontAwesomeIcon icon={faChevronRight} className="text-gray-400" />
+      )
     return (
       <button type="button" className="p-1 " onClick={onClick}>
         {chevron}
@@ -53,7 +66,8 @@ export const DepartureReturn = () => {
 
   const setReturn = () => {
     setIsReturn(!isReturn)
-    if (isReturn === true) dispatch(setTanggalBerangkatKembali([tanggalBerangkatKembali[0], 'Jadwal Kembali']))
+    if (isReturn === true)
+      dispatch(setTanggalBerangkatKembali([tanggalBerangkatKembali[0], 'Jadwal Kembali']))
   }
 
   const handleDateChange = (value) => {
@@ -68,7 +82,10 @@ export const DepartureReturn = () => {
 
   const Close = () => {
     return (
-      <div className="absolute top-[2px] cursor-pointer pt-2 py-1 px-[13px] right-0 text-xs text-gray-500" onClick={closeModal}>
+      <div
+        className="absolute top-[2px] cursor-pointer pt-2 py-1 px-[13px] right-0 text-xs text-gray-500"
+        onClick={closeModal}
+      >
         <FontAwesomeIcon icon={faXmark} className="h-4" />
       </div>
     )
@@ -89,17 +106,54 @@ export const DepartureReturn = () => {
         <div className="flex-grow w-full">
           <div className="flex gap-x-5 w-full">
             <b className="text-gray-primary font-[600]">Kepulangan</b>
-            <button onClick={setReturn} id="returnBtn" aria-label="Tombol kepulangan" className={`w-10 h-5 flex items-center rounded-full transition-colors duration-300 cursor-pointer ${isReturn ? 'bg-accent' : 'bg-gray-300'}`}>
-              <div className={`bg-white w-5 h-5 rounded-full shadow-lg transform transition-transform ${isReturn ? 'translate-x-full' : 'translate-x-0'}`}></div>
+            <button
+              onClick={setReturn}
+              id="returnBtn"
+              aria-label="Tombol kepulangan"
+              className={`w-10 h-5 flex items-center rounded-full transition-colors duration-300 cursor-pointer ${
+                isReturn ? 'bg-accent' : 'bg-gray-300'
+              }`}
+            >
+              <div
+                className={`bg-white w-5 h-5 rounded-full shadow-lg transform transition-transform ${
+                  isReturn ? 'translate-x-full' : 'translate-x-0'
+                }`}
+              ></div>
             </button>
           </div>
           <div className="relative">
-            <button onClick={openModal} className={`text-left my-2 font-[600] w-full border p-3 ${!isReturn ? 'text-gray-primary cursor-not-allowed' : ''}`} disabled={!isReturn}>
+            <button
+              onClick={openModal}
+              className={`text-left my-2 font-[600] w-full border p-3 ${
+                !isReturn ? 'text-gray-primary cursor-not-allowed' : ''
+              }`}
+              disabled={!isReturn}
+            >
               {isReturn ? tanggalBerangkatKembali[1] : 'Tidak Kembali'}
             </button>
-            <ReactModal isOpen={isModalOpen} onRequestClose={closeModal} style={customStyles} className="border-none absolute top-7   overflow-hidden">
+            <ReactModal
+              isOpen={isModalOpen}
+              onRequestClose={closeModal}
+              style={customStyles}
+              className="border-none absolute top-7   overflow-hidden"
+            >
               <div className="departure">
-                <Calendar className="rounded-xl pb-3 px-4 pt-5" value={tanggalBerangkatKembali} onChange={handleDateChange} numberOfMonths={width < 650 ? 1 : 2} monthYearSeparator="-" range={isReturn} showOtherDays disableYearPicker disableMonthPicker highlightToday={false} format="DD MMMM YYYY" weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']} renderButton={renderButton}>
+                <Calendar
+                  className="rounded-xl pb-3 px-4 pt-5"
+                  value={tanggalBerangkatKembali}
+                  onChange={handleDateChange}
+                  numberOfMonths={window.innerWidth < 650 ? 1 : 2}
+                  monthYearSeparator="-"
+                  range={isReturn}
+                  showOtherDays
+                  disableYearPicker
+                  disableMonthPicker
+                  highlightToday={false}
+                  format="DD MMMM YYYY"
+                  weekDays={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
+                  renderButton={renderButton}
+                  minDate={new Date()}
+                >
                   <Close />
                 </Calendar>
               </div>

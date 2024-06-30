@@ -50,6 +50,9 @@ div.rmdp-wrapper .rmdp-day.rmdp-range.end {
 div.rmdp-wrapper .rmdp-week .rmdp-day span:hover {
   @apply rounded-sm text-white border-none;
 }
+div.rmdp-wrapper .rmdp-week .rmdp-day.rmdp-disabled span:hover {
+  @apply rounded-sm text-[#8798AD] border-none;
+}
 div.rmdp-wrapper .rmdp-day span.sd:hover {
   @apply bg-transparent border-none;
 }
@@ -58,6 +61,9 @@ div.rmdp-wrapper .rmdp-day:hover {
 }
 div.rmdp-wrapper .rmdp-day:active {
   @apply bg-secondary rounded-sm;
+}
+div.rmdp-wrapper .rmdp-day.rmdp-disabled:hover {
+  @apply bg-white rounded-sm text-[#8798AD];
 }
 
 div.rmdp-wrapper .rmdp-arrow-container.rmdp-left {

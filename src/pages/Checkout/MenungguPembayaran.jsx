@@ -12,6 +12,7 @@ import { useReactToPrint } from 'react-to-print'
 import SkeletonDetailPesanan from '../../components/RiwayatPesanan/SkeletonDetailPesanan'
 import { Bounce, toast } from 'react-toastify'
 import { setTransactionId } from '../../redux/reducers/checkoutReducer'
+import { getNotification } from '../../redux/actions/notificationAction'
 
 export default function MenungguPembayaran() {
   const dispatch = useDispatch()
@@ -41,7 +42,8 @@ export default function MenungguPembayaran() {
   const dataCheckout = useSelector((state) => state?.checkout)
   const prevPage = useSelector((state) => state?.otp?.page)
   const transactionId = dataCheckout?.transactionId
-  const transaction = prevPage !== 'riwayat' ? dataCheckout?.transaction?.transaction?.id : transactionId
+  const transaction =
+    prevPage !== 'riwayat' ? dataCheckout?.transaction?.transaction?.id : transactionId
   console.log('otp', prevPage)
   console.log('waitingTransaction', waitingTransaction)
   console.log('transactionId', transactionId)
@@ -75,6 +77,7 @@ export default function MenungguPembayaran() {
       })
       return
     }
+    dispatch(getNotification())
     dispatch(getTransaction())
     setTransactionId(transaction)
     dispatch(getTransactionById(transaction)).then(() => setIsLoading(false))
@@ -94,7 +97,10 @@ export default function MenungguPembayaran() {
           <b className="text-black">Isi Data Diri</b>
           <FontAwesomeIcon icon={faChevronRight} className="text-sm text-black" />
           <b className="text-black">Bayar</b>
-          <FontAwesomeIcon icon={faChevronRight} className={`text-sm  ${detailPesanan?.status && 'text-black'}`} />
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            className={`text-sm  ${detailPesanan?.status && 'text-black'}`}
+          />
           <b className={`${detailPesanan?.status && 'text-black'}`}>Selesai</b>
         </div>
         <div className="text-sm mt-4 flex gap-8 flex-col-reverse md:flex-row w-full">
@@ -107,19 +113,41 @@ export default function MenungguPembayaran() {
                   <div className="flex justify-between mt-2">
                     <h2 className="font-bold text-xl">Detail Pesanan</h2>
 
-                    <span className={`${detailPesanan?.status ? 'bg-[#73CA5C]' : isExpired(detailPesanan) ? 'bg-gray-400' : 'bg-red-primary'} py-1 px-3 text-white rounded-full h-fit`}>{detailPesanan?.status ? 'Issued' : isExpired(detailPesanan) ? 'Expired' : 'Unpaid'}</span>
+                    <span
+                      className={`${
+                        detailPesanan?.status
+                          ? 'bg-[#73CA5C]'
+                          : isExpired(detailPesanan)
+                          ? 'bg-gray-400'
+                          : 'bg-red-primary'
+                      } py-1 px-3 text-white rounded-full h-fit`}
+                    >
+                      {detailPesanan?.status
+                        ? 'Issued'
+                        : isExpired(detailPesanan)
+                        ? 'Expired'
+                        : 'Unpaid'}
+                    </span>
                   </div>
                   <div className="mt-2">
-                    {formatTimeToIndonesia(detailPesanan?.created_at)} {formatTimeToHM(detailPesanan?.created_at)}
+                    {formatTimeToIndonesia(detailPesanan?.created_at)}{' '}
+                    {formatTimeToHM(detailPesanan?.created_at)}
                   </div>
                   <div className="mb-2 mt-1">
-                    Kode Bayar : <span className="text-secondary font-bold">{detailPesanan?.midtrans_order_id?.slice(9, 50)}</span>
+                    Kode Bayar :{' '}
+                    <span className="text-secondary font-bold">
+                      {detailPesanan?.midtrans_order_id?.slice(9, 50)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <b className="font-bold">{formatTimeToHM(detailPesanan?.flights?.departure_time)}</b>
+                    <b className="font-bold">
+                      {formatTimeToHM(detailPesanan?.flights?.departure_time)}
+                    </b>
                     <b className="text-secondary text-xs">Keberangkatan</b>
                   </div>
-                  <p className="my-1">{formatTimeToIndonesia(detailPesanan?.flights?.departure_time)}</p>
+                  <p className="my-1">
+                    {formatTimeToIndonesia(detailPesanan?.flights?.departure_time)}
+                  </p>
                   <b className="font-[600]">{detailPesanan?.flights?.fromAirport?.namee}</b>
                   <div className="text-sm">
                     <hr className="w-[95%] mx-auto my-3" />
@@ -127,7 +155,16 @@ export default function MenungguPembayaran() {
                       <div className="w-full">
                         <div className="font-bold">
                           <h4>
-                            {detailPesanan?.flights?.whomAirplaneFlights?.whomAirlinesAirplanes?.name} - {detailPesanan?.flights?.class === 'FIRSTCLASS' ? 'First Class' : history?.flights?.class === 'BUSINESS' ? 'Business' : 'Economy'}
+                            {
+                              detailPesanan?.flights?.whomAirplaneFlights?.whomAirlinesAirplanes
+                                ?.name
+                            }{' '}
+                            -{' '}
+                            {detailPesanan?.flights?.class === 'FIRSTCLASS'
+                              ? 'First Class'
+                              : history?.flights?.class === 'BUSINESS'
+                              ? 'Business'
+                              : 'Economy'}
                           </h4>
                           <h5>{detailPesanan?.flights?.whomAirplaneFlights?.airplane_code}</h5>
                         </div>
@@ -136,7 +173,8 @@ export default function MenungguPembayaran() {
                           {detailPesanan?.tickets?.map((penumpang, i) => (
                             <div key={i}>
                               <p className="text-secondary font-[600]">
-                                Penumpang {i + 1} : {penumpang?.whomPassangerTicket?.title} {penumpang?.whomPassangerTicket?.fullname}
+                                Penumpang {i + 1} : {penumpang?.whomPassangerTicket?.title}{' '}
+                                {penumpang?.whomPassangerTicket?.fullname}
                               </p>
                               <p>KURSI : {penumpang?.whomPassangerTicket?.seat_number}</p>
                               <p>ID: {penumpang?.passanger_id}</p>
@@ -148,7 +186,9 @@ export default function MenungguPembayaran() {
                     <hr className="w-[95%] mx-auto my-3" />
                     <div>
                       <div className="flex justify-between">
-                        <h3 className="font-bold">{formatTimeToHM(detailPesanan?.flights?.arrival_time)}</h3>
+                        <h3 className="font-bold">
+                          {formatTimeToHM(detailPesanan?.flights?.arrival_time)}
+                        </h3>
                         <b className="text-secondary">Kedatangan</b>
                       </div>
                       <h4>{formatTimeToIndonesia(detailPesanan?.flights?.arrival_time)}</h4>
@@ -159,18 +199,34 @@ export default function MenungguPembayaran() {
                       <b>Rincian Harga</b>
                       <div className="flex justify-between">
                         <span>{adultCount} Orang Dewasa</span>
-                        <span>IDR {(detailPesanan?.adult_price / (detailPesanan?.tickets?.length / adultCount))?.toLocaleString('id-ID')}</span>
+                        <span>
+                          IDR{' '}
+                          {(
+                            detailPesanan?.adult_price /
+                            (detailPesanan?.tickets?.length / adultCount)
+                          )?.toLocaleString('id-ID')}
+                        </span>
                       </div>
                       <div className={`${!childCount && 'hidden'} flex justify-between`}>
                         <span>{childCount} Orang Anak</span>
-                        <span>IDR {(detailPesanan?.adult_price / (detailPesanan?.tickets?.length / childCount))?.toLocaleString('id-ID')}</span>
+                        <span>
+                          IDR{' '}
+                          {(
+                            detailPesanan?.adult_price /
+                            (detailPesanan?.tickets?.length / childCount)
+                          )?.toLocaleString('id-ID')}
+                        </span>
                       </div>
 
-                      <div className={`${!detailPesanan?.total_baby && 'hidden'} flex justify-between`}>
+                      <div
+                        className={`${!detailPesanan?.total_baby && 'hidden'} flex justify-between`}
+                      >
                         <span>{detailPesanan?.total_baby} Bayi</span>
                         <span>IDR 0</span>
                       </div>
-                      <div className={`${!detailPesanan?.donation && 'hidden'} flex justify-between`}>
+                      <div
+                        className={`${!detailPesanan?.donation && 'hidden'} flex justify-between`}
+                      >
                         <span>Donasi</span>
                         <span>IDR {detailPesanan?.donation?.toLocaleString('id-ID')}</span>
                       </div>
@@ -182,7 +238,9 @@ export default function MenungguPembayaran() {
                     <hr className="w-[95%] mx-auto my-3" />
                     <div className="flex justify-between text-base">
                       <b>Total</b>
-                      <b className="text-secondary">IDR {detailPesanan?.total_price?.toLocaleString('id-ID')}</b>
+                      <b className="text-secondary">
+                        IDR {detailPesanan?.total_price?.toLocaleString('id-ID')}
+                      </b>
                     </div>
                   </div>
                 </div>
@@ -191,27 +249,42 @@ export default function MenungguPembayaran() {
           )}
 
           <div className="w-full text-center  mt-5 rounded-md ">
-            <img src="/assets/images/ourair_logo.svg" alt="Logo ourair" className="w-40 h-auto mx-auto mt-10" />
+            <img
+              src="/assets/images/ourair_logo.svg"
+              alt="Logo ourair"
+              className="w-40 h-auto mx-auto mt-10"
+            />
             {detailPesanan?.status ? (
               <div className="text-center  flex flex-col justify-center items-center ">
                 <div className="w-full">
-                  <FontAwesomeIcon icon={faCircleCheck} className="mt-5 text-8xl mx-auto block text-green-400" />
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    className="mt-5 text-8xl mx-auto block text-green-400"
+                  />
                   <div className="text-4xl my-4">Terima Kasih!</div>
                   <div className="text-1xl my-4">Pembayaran Sukses...</div>
                 </div>
               </div>
             ) : (
               <div className="w-full">
-                <div className="text-6xl mt-4 font-bold text-[#13587B] animate-bounce tracking-widest ">....</div>
+                <div className="text-6xl mt-4 font-bold text-[#13587B] animate-bounce tracking-widest ">
+                  ....
+                </div>
                 <div className="flex flex-col gap-y-5 text-base">
                   <div className=" font-[600] text-[#13587B] ">
                     <b className="text-2xl">Menunggu pembayaran</b>
                   </div>
                   <a>Silahkan tekan tombol berikut untuk menuju ke pembayaran</a>
-                  <a href={detailPesanan?.payment_link} target="_blank" className="block bg-secondary w-fit py-3 px-5 mx-auto rounded-md text-white">
+                  <a
+                    href={detailPesanan?.payment_link}
+                    target="_blank"
+                    className="block bg-secondary w-fit py-3 px-5 mx-auto rounded-md text-white"
+                  >
                     Menuju pembayaran
                   </a>
-                  <p className="text-sm text-secondary text-[600]">Anda akan diarahkan ke halaman cetak tiket setelah melakukan pembayaran</p>
+                  <p className="text-sm text-secondary text-[600]">
+                    Anda akan diarahkan ke halaman cetak tiket setelah melakukan pembayaran
+                  </p>
                 </div>
               </div>
             )}

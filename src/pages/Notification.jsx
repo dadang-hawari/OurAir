@@ -1,10 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faBell, faEyeDropperEmpty, faMessage } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowLeft,
+  faBell,
+  faEyeDropperEmpty,
+  faMessage,
+} from '@fortawesome/free-solid-svg-icons'
 import iconFaFilter from '../../public/assets/images/fi_filter.svg'
-import { useEffect } from 'react'
-import { getNotification, getNotificationById, readAllNotification } from '../redux/actions/notificationAction'
+import React, { useEffect } from 'react'
+import {
+  getNotification,
+  getNotificationById,
+  readAllNotification,
+} from '../redux/actions/notificationAction'
 import { useDispatch, useSelector } from 'react-redux'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
 
@@ -20,7 +29,10 @@ function Header({ title }) {
               <span className="text-lg px-3">Beranda</span>
             </Link>
           </div>
-          <Link to="#" className="absolute  right-4 border border-white text-white rounded-3xl py-2 px-3 pr-6 flex items-center">
+          <Link
+            to="#"
+            className="absolute  right-4 border border-white text-white rounded-3xl py-2 px-3 pr-6 flex items-center"
+          >
             <img src={iconFaFilter} alt="faFilter" className="px-1" />
             Filter
           </Link>
@@ -55,15 +67,27 @@ const Notification = () => {
         <ul>
           {notification?.length > 0 ? (
             notification?.map((notification, i) => (
-              <>
-                <li key={i} className={`w-full border-b  last:border-b-0 ${notification?.is_read ? 'cursor-default' : 'bg-gray-100 cursor-pointer'} `} onClick={() => handleNotificationClick(notification?.id)}>
+              <React.Fragment key={i}>
+                <li
+                  className={`w-full border-b  last:border-b-0 ${
+                    notification?.is_read ? 'cursor-default' : 'bg-gray-100 cursor-pointer'
+                  } `}
+                  onClick={() => handleNotificationClick(notification?.id)}
+                >
                   <div className="flex justify-between   p-4 items-center">
                     <div className="flex items-center gap-x-5 flex-grow w-full ">
-                      <FontAwesomeIcon icon={faBell} className="h-5 text-white self-center  bg-accent rounded-full  p-1" />
+                      <FontAwesomeIcon
+                        icon={faBell}
+                        className="h-5 text-white self-center  bg-accent rounded-full  p-1"
+                      />
                       <div>
                         <h2 className="text-gray-400">{notification?.title}</h2>
                         <p className="text-black">{notification?.message}</p>
-                        <Link to={notification?.link} target="_blank" className={`${notification?.link ? '' : 'hidden'} text-xs text-blue-400`}>
+                        <Link
+                          to={notification?.link}
+                          target="_blank"
+                          className={`${notification?.link ? '' : 'hidden'} text-xs text-blue-400`}
+                        >
                           Link Pembayaran Tiket Pesawat
                         </Link>
                       </div>
@@ -75,7 +99,7 @@ const Notification = () => {
                   </div>
                 </li>
                 <hr />
-              </>
+              </React.Fragment>
             ))
           ) : (
             <div className="text-center text-secondary text-xl mt-10">
