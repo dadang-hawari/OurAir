@@ -52,7 +52,7 @@ export default function CariPenerbangan() {
     useSelector((state) => state?.flightLists)
   )
   const flights = useSelector((state) => state?.flightLists)
-  const listFlights = flights?.flightsByCity?.flights
+  const listFlights = flights?.flightsByCity?.flights || []
   const flightDetail = flights?.flightDetail
   const totalPages = flightDetail?.totalPages
   console.log('flightDetail', flightDetail)
@@ -146,46 +146,46 @@ export default function CariPenerbangan() {
   const handleFilter = (filter = 'Harga Termurah') => {
     closeModal()
     setSelectedFilter(filter)
-    setSortedFlights(listFlights) // Create a copy of listFlights
+    let sortedFlightsCopy = [...listFlights] // Create a copy of listFlights
 
     switch (filter) {
       case 'Harga Termurah':
-        setSortedFlights(sortedFlights?.sort((a, b) => a.ticket_price - b.ticket_price))
+        sortedFlightsCopy = sortedFlightsCopy.sort((a, b) => a.ticket_price - b.ticket_price)
         break
       case 'Durasi Terpendek':
-        setSortedFlights(
-          sortedFlights?.sort((a, b) => {
-            const durationA =
-              (new Date(a.arrival_time) - new Date(a.departure_time)) / (1000 * 60 * 60)
-            const durationB =
-              (new Date(b.arrival_time) - new Date(b.departure_time)) / (1000 * 60 * 60)
-            return durationA - durationB
-          })
-        )
+        sortedFlightsCopy = sortedFlightsCopy.sort((a, b) => {
+          const durationA =
+            (new Date(a.arrival_time) - new Date(a.departure_time)) / (1000 * 60 * 60)
+          const durationB =
+            (new Date(b.arrival_time) - new Date(b.departure_time)) / (1000 * 60 * 60)
+          return durationA - durationB
+        })
         break
       case 'Keberangkatan Paling Awal':
-        setSortedFlights(
-          sortedFlights?.sort((a, b) => new Date(a.departure_time) - new Date(b.departure_time))
+        sortedFlightsCopy = sortedFlightsCopy.sort(
+          (a, b) => new Date(a.departure_time) - new Date(b.departure_time)
         )
         break
       case 'Keberangkatan Paling Akhir':
-        setSortedFlights(
-          sortedFlights?.sort((a, b) => new Date(b.departure_time) - new Date(a.departure_time))
+        sortedFlightsCopy = sortedFlightsCopy.sort(
+          (a, b) => new Date(b.departure_time) - new Date(a.departure_time)
         )
         break
       case 'Kedatangan Paling Awal':
-        setSortedFlights(
-          sortedFlights?.sort((a, b) => new Date(a.arrival_time) - new Date(b.arrival_time))
+        sortedFlightsCopy = sortedFlightsCopy.sort(
+          (a, b) => new Date(a.arrival_time) - new Date(b.arrival_time)
         )
         break
       case 'Kedatangan Paling Akhir':
-        setSortedFlights(
-          sortedFlights?.sort((a, b) => new Date(b.arrival_time) - new Date(a.arrival_time))
+        sortedFlightsCopy = sortedFlightsCopy.sort(
+          (a, b) => new Date(b.arrival_time) - new Date(a.arrival_time)
         )
         break
       default:
         break
     }
+
+    setSortedFlights(sortedFlightsCopy)
   }
 
   const handleClickPilih = (id, availableSeats) => {
@@ -340,18 +340,8 @@ export default function CariPenerbangan() {
         </div>
         <div className="flex gap-x-8 mt-8">
           {/* Filter */}
-          <div className="w-72 flex flex-col gap-y-2 cursor-default shadow-shadow-c-primary p-4 rounded-xl h-fit">
-            <FilterClass />
-            <h3>
-              <FontAwesomeIcon icon={faClock} className=" w-4 text-gray-300" /> Transit
-            </h3>
-            <h3 className="border-t border-b py-2">
-              <FontAwesomeIcon icon={faHeart} className="w-4 text-gray-300" /> Fasilitas
-            </h3>
-            <h3>
-              <FontAwesomeIcon icon={faDollar} className=" w-4 text-gray-300 " /> Harga
-            </h3>
-          </div>
+          <FilterClass />
+
           {/* Hasil Pencarian */}
           {isLoading ? (
             <div className="w-full">
