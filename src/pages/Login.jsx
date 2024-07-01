@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import Toast from '../components/common/Toast'
 import { checkLocationState } from '../utils/checkLocationState'
 import LoginGoogle from '../components/LoginGoogle'
+import { Flip } from 'react-toastify'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -72,12 +73,22 @@ const Login = () => {
 
   return (
     <div className="w-full md:flex h-screen justify-center ">
-      <div className="relative w-1/2 h-full hidden xl:block bg-cover bg-center" style={{ backgroundImage: `url(${Image})` }}>
-        <img src={Logo} alt="Ourair" className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-96   w-full h-auto" />
+      <div
+        className="relative w-1/2 h-full hidden xl:block bg-cover bg-center"
+        style={{ backgroundImage: `url(${Image})` }}
+      >
+        <img
+          src={Logo}
+          alt="Ourair"
+          className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-96   w-full h-auto"
+        />
       </div>
       <div className="flex items-center justify-center md:w-1/2 h-full px-5 md:px-0">
         <div className="w-full max-w-sm relative">
-          <Link to="/" className="absolute -top-12 left-0 py-2  text-accent flex items-center gap-2">
+          <Link
+            to="/"
+            className="absolute -top-12 left-0 py-2  text-accent flex items-center gap-2"
+          >
             <FontAwesomeIcon icon={faChevronLeft} className="w-2 h-auto " />
             <p className="text-sm">Beranda</p>
           </Link>
@@ -87,7 +98,17 @@ const Login = () => {
               <label htmlFor="email" className="block text-sm mb-1">
                 Email
               </label>
-              <input id="email" type="text" placeholder="Contoh: Jhondoe@gmail.com " className={`w-full input-primary outline-none  ${emailError ? 'border-red-500 ' : 'focus:border-blue-500'}`} value={email} autoComplete="off" onChange={(e) => setEmail(e.target.value)} />
+              <input
+                id="email"
+                type="text"
+                placeholder="Contoh: Jhondoe@gmail.com "
+                className={`w-full input-primary outline-none  ${
+                  emailError ? 'border-red-500 ' : 'focus:border-blue-500'
+                }`}
+                value={email}
+                autoComplete="off"
+                onChange={(e) => setEmail(e.target.value)}
+              />
               {emailError && <div className="text-red-500 text-xs">{emailError}</div>}
             </div>
             <div className="mb-6">
@@ -100,9 +121,28 @@ const Login = () => {
                 </Link>
               </div>
               <div className="relative">
-                <input id="password" type={showPassword ? 'text' : 'password'} placeholder="Masukkan password" className={`w-full input-primary outline-none ${passwordError ? 'border-red-500' : 'focus:border-blue-500'}`} autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl" onClick={() => setShowPassword(!showPassword)} type="button">
-                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className="text-gray-400 h-[13px]" width="32" height="32" />
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Masukkan password"
+                  className={`w-full input-primary outline-none ${
+                    passwordError ? 'border-red-500' : 'focus:border-blue-500'
+                  }`}
+                  autoComplete="off"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  className="absolute right-0 top-0 py-[14px] px-1 rounded-e-xl"
+                  onClick={() => setShowPassword(!showPassword)}
+                  type="button"
+                >
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className="text-gray-400 h-[13px]"
+                    width="32"
+                    height="32"
+                  />
                 </button>
               </div>
               {passwordError && <div className="text-red-500 text-xs">{passwordError}</div>}
@@ -119,7 +159,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Toast />
+      <Toast autoClose={5000} transition={Flip} />
     </div>
   )
 }

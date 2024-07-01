@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import '../styles/seatpicker.css'
 import {
   addSelectedSeat,
@@ -18,7 +18,6 @@ export default function SeatPicker() {
   const jumlahPenumpangAnak = dataCheckout?.jumlahPenumpang?.penumpangAnak
   const jumlahPenumpangDewasa = dataCheckout?.jumlahPenumpang?.penumpangDewasa
   const penumpang = jumlahPenumpangAnak + jumlahPenumpangDewasa
-  console.log('flightDetail', flightDetail)
 
   const handleSeatClick = (seatId) => {
     const seat = availableSeats.flat().find((seat) => seat?.seatNumber === seatId)
@@ -36,7 +35,6 @@ export default function SeatPicker() {
       dispatch(resetSelectedSeats())
       dispatch(setSelectedSeat(seatId))
     }
-    console.log('pemesan', pemesan)
   }
 
   return (

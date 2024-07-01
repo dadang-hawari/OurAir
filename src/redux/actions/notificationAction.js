@@ -24,7 +24,6 @@ export const getNotification = (navigate) => async (dispatch, getState) => {
     if (response.status === 200 || response.status === 201) {
       dispatch(setNotification(data))
     }
-    console.log('data', data)
   } catch (error) {
     if (error.response.status === 401) {
       dispatch(setToken(null))
@@ -36,7 +35,6 @@ export const getNotification = (navigate) => async (dispatch, getState) => {
         },
       })
     }
-    console.log(error)
   }
 }
 
@@ -53,21 +51,7 @@ export const getNotificationById = (id, navigate) => async (dispatch, getState) 
     )
     const data = response.data.notification
     dispatch(getNotification(navigate))
-    console.log('data', data)
-    console.log('response', response)
-  } catch (error) {
-    // if (error.response.status === 401) {
-    //   dispatch(setToken(null))
-    //   dispatch(setUserData(null))
-    //   dispatch(setIsLoggedIn(false))
-    //   navigate('/login', {
-    //     state: {
-    //       error: 'Token expired silahkan login kembali',
-    //     },
-    //   })
-    // }
-    console.log(error)
-  }
+  } catch (error) {}
 }
 
 export const readAllNotification = (id, navigate) => async (dispatch, getState) => {
@@ -85,20 +69,5 @@ export const readAllNotification = (id, navigate) => async (dispatch, getState) 
     if (response?.status === 200) {
       dispatch(getNotification(navigate))
     }
-
-    console.log('data', data)
-    console.log('responsenya', response)
-  } catch (error) {
-    // if (error.response.status === 401) {
-    //   dispatch(setToken(null))
-    //   dispatch(setUserData(null))
-    //   dispatch(setIsLoggedIn(false))
-    //   navigate('/login', {
-    //     state: {
-    //       error: 'Token expired silahkan login kembali',
-    //     },
-    //   })
-    // }
-    console.log(error)
-  }
+  } catch (error) {}
 }

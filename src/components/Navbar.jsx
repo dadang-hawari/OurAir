@@ -77,7 +77,6 @@ const Navbar = () => {
   const handleProfileDropdown = () => {
     setShowNotifcation(false)
     setShowProfileDropdown(!showProfileDropdown)
-    console.log('showProfileDropdown', showProfileDropdown)
   }
 
   const handleNotificationDropdown = () => {
@@ -91,7 +90,7 @@ const Navbar = () => {
 
   const navigateToRiwayat = (id) => {
     setShowNotifcation(false)
-    dispatch(getNotificationById(id, navigate)).then(() => navigate('/riwayat-pemesanan'))
+    dispatch(getNotificationById(id, navigate))
   }
 
   const handleResize = () => {
@@ -113,20 +112,6 @@ const Navbar = () => {
   useEffect(() => {
     getNotificationList()
   }, [])
-
-  // useEffect(() => {
-  //   const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`) // Replace 'http://your-server-url' with your actual server URL
-
-  //   // Socket.IO event listeners and logic here
-  //   socket.on('transaction-update', (data) => {
-  //     // Show pop up notification with the received data
-  //     console.log('data from backend:', data)
-  //   })
-
-  //   return () => {
-  //     socket.disconnect() // Disconnect the socket when the component unmounts
-  //   }
-  // }, [])
 
   return (
     <>

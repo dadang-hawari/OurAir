@@ -6,9 +6,7 @@ import { useEffect, useState } from 'react'
 
 export default function DestinasiFavorit() {
   const airports = useSelector((state) => state?.flightLists?.flightRecomendation)
-  console.log('airports :>> ', airports)
   const [chosenCountry, setChosenCountry] = useState('Indonesia')
-  console.log('airports', airports)
   const dispatch = useDispatch()
 
   useEffect(() => {

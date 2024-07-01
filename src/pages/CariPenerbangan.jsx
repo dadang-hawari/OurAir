@@ -47,15 +47,10 @@ export default function CariPenerbangan() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState('Sortir Berdasarkan')
 
-  console.log(
-    'state?.flightLists',
-    useSelector((state) => state?.flightLists)
-  )
   const flights = useSelector((state) => state?.flightLists)
   const listFlights = flights?.flightsByCity?.flights || []
   const flightDetail = flights?.flightDetail
   const totalPages = flightDetail?.totalPages
-  console.log('flightDetail', flightDetail)
   const [currentPage, setCurrentPage] = useState(1)
   const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
   const kotaKeberangkatan = jadwalPenerbangan?.departureCity
@@ -72,7 +67,6 @@ export default function CariPenerbangan() {
   const toastClass = 'toast-info'
   const isLoading = useSelector((state) => state?.flightLists?.isLoading)
   const dispatch = useDispatch()
-  console.log('jadwalPenerbangan', jadwalPenerbangan)
   const [sortedFlights, setSortedFlights] = useState([])
 
   const kelas = jadwalPenerbangan?.kelas
@@ -140,9 +134,6 @@ export default function CariPenerbangan() {
     setActiveDetailId((prevId) => (prevId === id ? null : id))
   }
 
-  console.log('listFlights', listFlights)
-  console.log('sortedFlights', sortedFlights)
-
   const handleFilter = (filter = 'Harga Termurah') => {
     closeModal()
     setSelectedFilter(filter)
@@ -202,21 +193,24 @@ export default function CariPenerbangan() {
     })
   }
 
+  const checkDepartureAndArrival = () => {
+    console.log('jadwalPenerbangan', jadwalPenerbangan)
+  }
+
   useEffect(() => {
     checkLocationState(location, navigate)
+    checkDepartureAndArrival()
+  }, [])
+
+  useEffect(() => {
     getFlights()
   }, [currentPage, kelas])
-  useEffect(() => {
-    if (listFlights) {
-      setSortedFlights([...listFlights])
-    }
-  }, [listFlights])
+
   useEffect(() => {
     if (isLoading && listFlights) {
-      setSortedFlights([...listFlights])
-      if (sortedFlights) handleFilter(selectedFilter)
+      handleFilter(selectedFilter)
     }
-  }, [isLoading, listFlights])
+  }, [isLoading, listFlights, selectedFilter])
 
   ReactModal.setAppElement('#modal')
 
@@ -338,7 +332,7 @@ export default function CariPenerbangan() {
             </div>
           </ReactModal>
         </div>
-        <div className="flex gap-x-8 mt-8">
+        <div className="flex flex-col sm:flex-row gap-8 mt-8">
           {/* Filter */}
           <FilterClass />
 
@@ -368,7 +362,7 @@ export default function CariPenerbangan() {
                           : 'Business'}
                       </h4>
                     </div>
-                    <div className="flex gap-x-10 items-center text-sm">
+                    <div className=" block sm:flex gap-x-10 items-center text-sm">
                       <div className="flex justify-center gap-x-4 w-full p-3">
                         <div>
                           <h4 className="font-bold">{formatTimeToHM(flight?.departure_time)}</h4>
@@ -393,18 +387,18 @@ export default function CariPenerbangan() {
                           className="text-secondary flex self-center mx-3"
                         />
                       </div>
-                      <div className="flex justify-center gap-y-2 flex-col">
+                      <div className="flex relative justify-between items-center   sm:justify-center gap-y-2 sm:flex-col">
                         <b className="text-secondary w-max">
                           IDR {flight?.ticket_price?.toLocaleString('id-ID')}
                         </b>
                         <button
-                          className="bg-secondary text-white max-w-[100px] w-full rounded-full py-2"
+                          className="bg-secondary text-white max-w-[100px] order-1  w-full rounded-full py-2"
                           onClick={() => handleClickPilih(flight?.id, flight?.availableSeats)}
                         >
                           Pilih
                         </button>
                         <button
-                          className="text-primary font-[600] mt-1"
+                          className="text-primary font-[600] mt-1 sm:order-2"
                           onClick={() => toggleDetailVisibility(flight?.id)}
                         >
                           <FontAwesomeIcon
