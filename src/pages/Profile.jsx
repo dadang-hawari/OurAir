@@ -73,118 +73,120 @@ export default function Profile() {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto  mt-20 px-5">
-      <Navbar />
+    <>
+      <div className="w-full max-w-3xl mx-auto  mt-20 px-5">
+        <Navbar />
 
-      <main className="w-full flex flex-col md:flex-row gap-10">
-        <div className=" mt-5 w-full rounded-lg space-y-4">
-          <div className="bg-accent rounded-lg text-white px-5 py-3 space-x-4">
-            <Link to="/">
-              <FontAwesomeIcon icon={faArrowLeft} className="h-4" />
-            </Link>
-            <span className="text-lg">Beranda</span>
-          </div>
-          <h2 className="text-xl font-bold">Ubah Data Profile</h2>
-          <div className="w-full flex flex-col gap-5 sm:flex-row">
-            <div className="w-max flex flex-col gap-0.5">
-              <span className="text-primary font-semibold w-max">Foto Profil</span>
-              <div className="flex justify-center flex-col items-center gap-4">
-                <img
-                  src={preview ? preview : userData?.avatar_link}
-                  alt="Profile Picture"
-                  className="w-12 h-12 rounded-full mx-auto border border-gray-300 object-cover object-center"
-                />
-                <label
-                  htmlFor="foto-profil"
-                  className={`bg-primary px-3 py-2 w-max text-center  rounded-lg text-white cursor-pointer ${
-                    isEditing ? 'block' : 'hidden'
-                  }`}
-                >
-                  Ubah Foto
-                </label>
-                <input
-                  type="file"
-                  id="foto-profil"
-                  accept="image/png, image/jpeg"
-                  onChange={onPictureChange}
-                  max={-1}
-                  className="hidden"
-                />
-              </div>
+        <main className="w-full flex flex-col md:flex-row gap-10">
+          <div className=" mt-5 w-full rounded-lg space-y-4">
+            <div className="bg-accent rounded-lg text-white px-5 py-3 space-x-4">
+              <Link to="/">
+                <FontAwesomeIcon icon={faArrowLeft} className="h-4" />
+              </Link>
+              <span className="text-lg">Beranda</span>
             </div>
-            <form
-              className="space-y-2 w-full"
-              onSubmit={(e) => {
-                e?.preventDefault()
-                handleSave()
-              }}
-            >
-              <fieldset className="flex flex-col gap-0.5">
-                <label htmlFor="nama-lengkap" className="text-primary font-semibold">
-                  Nama Lengkap
-                </label>
-                <input
-                  id="nama-lengkap"
-                  type="text"
-                  placeholder="John Doe"
-                  className="p-2 border border-gray-300 rounded-md"
-                  disabled={!isEditing}
-                  value={name}
-                  onChange={onNameChange}
-                />
-              </fieldset>
-              <fieldset className="flex flex-col gap-0.5">
-                <label htmlFor="nomor-telepon" className="text-primary font-semibold">
-                  Nomor Telepon
-                </label>
-                <input
-                  id="nomor-telepon"
-                  type="text"
-                  placeholder="+6212345678910"
-                  className="p-2 border border-gray-300 rounded-md"
-                  disabled={!isEditing}
-                  value={phone}
-                  onChange={onPhoneChange}
-                />
-              </fieldset>
-              <fieldset className="flex flex-col gap-0.5">
-                <label htmlFor="email" className="text-primary font-semibold">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="johndoe@email.co"
-                  className="p-2  rounded-md"
-                  disabled
-                  value={email}
-                  onChange={onEmailChange}
-                />
-              </fieldset>
-              <div className="w-full flex justify-center items-center gap-2 flex-wrap pt-5">
-                <button
-                  disabled={isEditing}
-                  type="button"
-                  className="border-2 border-primary text-primary px-10 py-3 rounded-lg text-lg disabled:opacity-50"
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit
-                </button>
-                <button
-                  disabled={!isEditing}
-                  type="submit"
-                  className="bg-primary border-2 border-primary text-white px-10 py-3 rounded-lg text-lg disabled:opacity-50"
-                >
-                  Simpan
-                </button>
+            <h2 className="text-xl font-bold">Ubah Data Profile</h2>
+            <div className="w-full flex flex-col gap-5 sm:flex-row">
+              <div className="w-max flex flex-col gap-0.5">
+                <span className="text-primary font-semibold w-28 text-center">Foto Profil</span>
+                <div className="flex justify-center flex-col items-center gap-4">
+                  <img
+                    src={preview ? preview : userData?.avatar_link}
+                    alt="Profile Picture"
+                    className="w-12 h-12 rounded-full mx-auto border border-gray-300 object-cover object-center"
+                  />
+                  <label
+                    htmlFor="foto-profil"
+                    className={`bg-primary px-3 py-2 w-28 text-center  rounded-lg text-white cursor-pointer ${
+                      isEditing ? 'block' : 'hidden'
+                    }`}
+                  >
+                    Ubah Foto
+                  </label>
+                  <input
+                    type="file"
+                    id="foto-profil"
+                    accept="image/png, image/jpeg"
+                    onChange={onPictureChange}
+                    max={-1}
+                    className="hidden"
+                  />
+                </div>
               </div>
-            </form>
+              <form
+                className="space-y-2 w-full"
+                onSubmit={(e) => {
+                  e?.preventDefault()
+                  handleSave()
+                }}
+              >
+                <fieldset className="flex flex-col gap-0.5">
+                  <label htmlFor="nama-lengkap" className="text-primary font-semibold">
+                    Nama Lengkap
+                  </label>
+                  <input
+                    id="nama-lengkap"
+                    type="text"
+                    placeholder="John Doe"
+                    className="p-2 border border-gray-300 rounded-md"
+                    disabled={!isEditing}
+                    value={name}
+                    onChange={onNameChange}
+                  />
+                </fieldset>
+                <fieldset className="flex flex-col gap-0.5">
+                  <label htmlFor="nomor-telepon" className="text-primary font-semibold">
+                    Nomor Telepon
+                  </label>
+                  <input
+                    id="nomor-telepon"
+                    type="text"
+                    placeholder="+6212345678910"
+                    className="p-2 border border-gray-300 rounded-md"
+                    disabled={!isEditing}
+                    value={phone}
+                    onChange={onPhoneChange}
+                  />
+                </fieldset>
+                <fieldset className="flex flex-col gap-0.5">
+                  <label htmlFor="email" className="text-primary font-semibold">
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="johndoe@email.co"
+                    className="p-2  rounded-md"
+                    disabled
+                    value={email}
+                    onChange={onEmailChange}
+                  />
+                </fieldset>
+                <div className="w-full flex justify-center items-center gap-2 flex-wrap pt-5">
+                  <button
+                    disabled={isEditing}
+                    type="button"
+                    className="border-2 border-primary text-primary px-10 py-3 rounded-lg text-lg disabled:opacity-50"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    disabled={!isEditing}
+                    type="submit"
+                    className="bg-primary border-2 border-primary text-white px-10 py-3 rounded-lg text-lg disabled:opacity-50"
+                  >
+                    Simpan
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      </main>
-      <ScrollToTop />
+        </main>
+        <ScrollToTop />
+        <Toast margin="mt-10" />
+      </div>
       <Footer />
-      <Toast margin="mt-10" />
-    </div>
+    </>
   )
 }

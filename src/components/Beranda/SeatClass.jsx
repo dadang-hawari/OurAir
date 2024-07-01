@@ -28,7 +28,6 @@ export const SeatClass = () => {
 
   const confirmSeatClass = () => {
     dispatch(setSeatClass(tempSelectedSeatClass))
-    alert(tempSelectedSeatClass.name)
     closeModalSeatClass()
   }
 
@@ -36,7 +35,12 @@ export const SeatClass = () => {
 
   return (
     <div className="flex-grow w-full">
-      <ReactModal isOpen={isModalOpenSeatClass} onRequestClose={closeModalSeatClass} style={customStylesDestination} className="border-none relative overflow-hidden max-w-[800px] px-4 w-full">
+      <ReactModal
+        isOpen={isModalOpenSeatClass}
+        onRequestClose={closeModalSeatClass}
+        style={customStylesDestination}
+        className="border-none relative overflow-hidden max-w-[800px] px-4 w-full"
+      >
         <div className="text-center bg-white py-3 rounded-md relative">
           <div className="absolute top-2 right-2 cursor-pointer" onClick={closeModalSeatClass}>
             <FontAwesomeIcon icon={faTimes} size="sm" className="text-gray-500" />
@@ -46,14 +50,20 @@ export const SeatClass = () => {
               <div key={index} className="w-full">
                 <hr className="mt-1" />
                 <button
-                  className={`  text-left  font-bold text-black py-4 px-6 rounded-sm w-full ${tempSelectedSeatClass?.name === seatClass.name ? 'bg-blue-500 text-white h-full' : 'bg-white'}`}
+                  className={`  text-left  font-bold text-black py-4 px-6 rounded-sm w-full ${
+                    tempSelectedSeatClass?.name === seatClass.name
+                      ? 'bg-blue-500 text-white h-full'
+                      : 'bg-white'
+                  }`}
                   onClick={() => {
                     selectSeatClass(seatClass)
                   }}
                 >
                   <div className="flex justify-between items-center">
                     <div>{seatClass.name}</div>
-                    {tempSelectedSeatClass?.name === seatClass.name && <FontAwesomeIcon icon={faCheckCircle} className=" h-5 text-[#73CA5C]" />}
+                    {tempSelectedSeatClass?.name === seatClass.name && (
+                      <FontAwesomeIcon icon={faCheckCircle} className=" h-5 text-[#73CA5C]" />
+                    )}
                   </div>
                 </button>
               </div>
@@ -61,7 +71,10 @@ export const SeatClass = () => {
           </div>
           <hr />
           <div className="flex justify-end w-full mt-3">
-            <button className="bg-blue-600 text-white py-3 px-5 my-2 mr-4 text-sm font-[600] rounded-md " onClick={confirmSeatClass}>
+            <button
+              className="bg-blue-600 text-white py-3 px-5 my-2 mr-4 text-sm font-[600] rounded-md "
+              onClick={confirmSeatClass}
+            >
               Simpan
             </button>
           </div>
@@ -72,7 +85,10 @@ export const SeatClass = () => {
         <h2 className="font-[600] text-gray-primary">Kelas</h2>
       </div>
       <div>
-        <button onClick={openModalSeatClass} className="text-left my-2 border p-3  font-[600] w-full">
+        <button
+          onClick={openModalSeatClass}
+          className="text-left my-2 border p-3  font-[600] w-full"
+        >
           {selectedSeatClass ? `${selectedSeatClass.name}` : 'Pilih Seat Class'}
         </button>
       </div>
