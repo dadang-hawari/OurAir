@@ -51,7 +51,9 @@ export default function Profile() {
 
   const handleUpload = () => {
     if (imageFile) {
-      dispatch(updateProfile(imageFile, token))
+      dispatch(updateProfile(imageFile, token)).then((response) =>
+        dispatch(updateUser(name, email, phone, token))
+      )
     }
   }
 
@@ -68,7 +70,6 @@ export default function Profile() {
       })
       return
     }
-    dispatch(updateUser(name, email, phone, token))
     handleUpload()
     setIsEditing(false)
   }
@@ -76,6 +77,88 @@ export default function Profile() {
   return (
     <div className="w-full max-w-3xl mx-auto  mt-20 px-5">
       <Navbar />
+
+      <ReactModal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        style={customStylesFilter}
+        className="border-none absolute top-7 overflow-hidden"
+      >
+        <div className="bg-white rounded-xl pb-10">
+          <div className="text-right">
+            <button
+              id="close"
+              aria-label="close button"
+              className="text-gray-400 p-3"
+              onClick={closeModal}
+            >
+              <FontAwesomeIcon icon={faXmark} className="text-xl" />
+            </button>
+          </div>
+          <ul className="flex flex-col ">
+            <li
+              className={`px-4 cursor-pointer border-b py-4  ${
+                selectedFilter === 'Harga Termurah'
+                  ? 'hover:bg-secondary bg-secondary text-white'
+                  : 'hover:bg-gray-200'
+              }`}
+              onClick={() => handleFilter('Harga Termurah')}
+            >
+              <b>Harga</b> - Termurah
+            </li>
+            <li
+              className={`px-4 cursor-pointer border-b py-4  ${
+                selectedFilter === 'Durasi Terpendek'
+                  ? 'hover:bg-secondary bg-secondary text-white'
+                  : 'hover:bg-gray-200'
+              }`}
+              onClick={() => handleFilter('Durasi Terpendek')}
+            >
+              <b>Durasi</b> - Terpendek
+            </li>
+            <li
+              className={`px-4 cursor-pointer border-b py-4  ${
+                selectedFilter === 'Keberangkatan Paling Awal'
+                  ? 'hover:bg-secondary bg-secondary text-white'
+                  : 'hover:bg-gray-200'
+              }`}
+              onClick={() => handleFilter('Keberangkatan Paling Awal')}
+            >
+              <b>Keberangkatan </b> - Paling Awal
+            </li>
+            <li
+              className={`px-4 cursor-pointer border-b py-4  ${
+                selectedFilter === 'Keberangkatan Paling Akhir'
+                  ? 'hover:bg-secondary bg-secondary text-white'
+                  : 'hover:bg-gray-200'
+              }`}
+              onClick={() => handleFilter('Keberangkatan Paling Akhir')}
+            >
+              <b>Keberangkatan</b> - Paling Akhir
+            </li>
+            <li
+              className={`px-4 cursor-pointer border-b py-4  ${
+                selectedFilter === 'Kedatangan Paling Awal'
+                  ? 'hover:bg-secondary bg-secondary text-white'
+                  : 'hover:bg-gray-200'
+              }`}
+              onClick={() => handleFilter('Kedatangan Paling Awal')}
+            >
+              <b>Kedatangan </b> - Paling Awal
+            </li>
+            <li
+              className={`px-4 cursor-pointer border-b py-4  ${
+                selectedFilter === 'Kedatangan Paling Akhir'
+                  ? 'hover:bg-secondary bg-secondary text-white'
+                  : 'hover:bg-gray-200'
+              }`}
+              onClick={() => handleFilter('Kedatangan Paling Akhir')}
+            >
+              <b>Kedatangan</b> - Paling Akhir
+            </li>
+          </ul>
+        </div>
+      </ReactModal>
 
       <main className="w-full flex flex-col md:flex-row gap-10">
         <div className=" mt-5 w-full rounded-lg space-y-4">
