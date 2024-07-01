@@ -46,7 +46,6 @@ const Notification = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const notification = useSelector((state) => state?.notification?.notification?.notifications)
-  console.log('notification', notification)
   useEffect(() => {
     dispatch(getNotification()).then(() => {
       dispatch(readAllNotification(navigate))

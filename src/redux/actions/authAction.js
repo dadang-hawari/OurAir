@@ -133,6 +133,9 @@ export const sendVerifyOtp = (email) => async () => {
 }
 
 export const resetPassword = (token, password, navigate) => async () => {
+  toast.loading(loadingMessage, {
+    toastId: toastIdWait,
+  })
   try {
     const response = await axios.post(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/reset-password-do-login`,
@@ -145,7 +148,6 @@ export const resetPassword = (token, password, navigate) => async () => {
         },
       }
     )
-    console.log('response :>> ', response)
     if (response?.status === 200 || response?.status === 201) {
       toast.dismiss('toastLoading')
       navigate('/login', {
@@ -279,6 +281,8 @@ export const loginUser = (email, password, navigate) => async (dispatch) => {
     }
   } catch (error) {
     toast.dismiss(toastIdWait)
+    console.log(error)
+
     if (error?.response?.status === 409)
       toast('Email atau Password yang Anda masukkan Salah', {
         className: 'toast-error',
@@ -288,18 +292,16 @@ export const loginUser = (email, password, navigate) => async (dispatch) => {
       toast.info('Akun belum terdaftar', {
         toastId: 'toastInfo',
       })
-    else
-      error?.response?.data?.errors[0]?.msg
-        ? toast(error?.response?.data.errors[0].msg, {
-            className: 'toast-error',
-            toastId: 'toast-error',
-          })
-        : toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
-            className: 'toast-error',
-            toastId: 'toastError',
-          })
-
-    console.log(error)
+    else if (error?.response?.data?.message === 'your account is registered by google !') {
+      toast('Silahkan login mengggunakan akun Google Anda', {
+        toastId: 'toastInfo',
+        className: 'toast-info',
+      })
+    } else
+      toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
+        className: 'toast-error',
+        toastId: 'toastError',
+      })
   }
 }
 
@@ -312,7 +314,8 @@ export const logout = (navigate) => async (dispatch) => {
   dispatch(logoutAction())
 }
 
-export const updateUser = (name, phone_number, email, token) => async () => {
+export const updateUser = (name, email, phone_number, token) => async (dispatch) => {
+  console.log('name, phone_number, email, token', name, phone_number, email, token)
   try {
     const response = await axios.patch(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/users/profile`,
@@ -328,9 +331,16 @@ export const updateUser = (name, phone_number, email, token) => async () => {
         },
       }
     )
-    console.log('response :>> ', response)
+    const data = response.data.data
+    console.log('response :>> update user', response)
     if (response?.status === 200 || response?.status === 201) {
-      alert('success')
+      dispatch(setUserData(data))
+      dispatch(setToken(token))
+      dispatch(setIsLoggedIn(true))
+      toast('Data anda telah berhasil disimpan!', {
+        className: 'success-toast',
+        toastId: 'successToast',
+      })
     }
   } catch (error) {
     toast.dismiss('toastLoading')
@@ -345,7 +355,7 @@ export const updateUser = (name, phone_number, email, token) => async () => {
   }
 }
 
-export const validateUser = (token, navigate) => async (dispatch) => {
+export const validateUser = (token, navigate) => async () => {
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/who-am-i`,
@@ -372,7 +382,9 @@ export const validateUser = (token, navigate) => async (dispatch) => {
         })
   }
 }
-export const getUsersProfile = (token, navigate) => async (dispatch) => {
+
+export const getUsersProfile = (navigate) => async (dispatch, state) => {
+  const token = state()?.auth?.token
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/who-am-i`,
@@ -398,5 +410,37 @@ export const getUsersProfile = (token, navigate) => async (dispatch) => {
           className: 'toast-error',
         })
     console.error('Error:', error)
+  }
+}
+
+export const updateProfile = (imageFile, token) => async () => {
+  try {
+    const formData = new FormData()
+    formData.append('avatar', imageFile)
+
+    const response = await axios.put(
+      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/users/avatar-profile`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    )
+
+    toast('Foto profil berhasil diperbarui', {
+      className: 'toast-success',
+      toastId: 'toastSuccess',
+    })
+    console.log('response', response)
+  } catch (error) {
+    const errorMsg =
+      error?.response?.data?.errors[0]?.msg ||
+      'Coba lagi nanti, saat ini ada kesalahan di sistem kami'
+    toast(errorMsg, {
+      className: 'toast-error',
+      toastId: 'toastError',
+    })
   }
 }

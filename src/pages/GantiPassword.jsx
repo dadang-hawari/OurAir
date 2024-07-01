@@ -26,7 +26,6 @@ const GantiPassword = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { token } = useParams()
   const navigate = useNavigate()
-  console.log('token :>> ', token)
   const dispatch = useDispatch()
 
   const checkConfirmPassword = () => {
@@ -64,7 +63,7 @@ const GantiPassword = () => {
   }
 
   return (
-    <div className="w-full flex h-screen justify-center items-center">
+    <div className="w-full flex h-screen justify-center items-center px-2">
       <div className="flex items-center justify-center w-full max-w-md h-fit m-auto px-5 py-8 border rounded-lg md:px-5 text-gray-900">
         <div className="w-full max-w-sm">
           <img src={Logo} alt="Our Air" className="w-full h-auto max-w-28 mx-auto" />

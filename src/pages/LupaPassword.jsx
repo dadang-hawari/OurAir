@@ -37,7 +37,7 @@ const LupaPassword = () => {
   }
 
   return (
-    <div className="w-full flex h-screen justify-center items-center">
+    <div className="w-full flex h-screen justify-center items-center px-2">
       <div className="flex items-center justify-center w-fit  relative h-fit m-auto px-5 pb-8 pt-14 border rounded-lg md:px-5 text-gray-900">
         <div className="w-full max-w-sm">
           <Link

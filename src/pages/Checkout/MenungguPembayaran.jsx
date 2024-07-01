@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight, faCircleCheck, faIcons } from '@fortawesome/free-solid-svg-icons'
@@ -13,6 +13,18 @@ import SkeletonDetailPesanan from '../../components/RiwayatPesanan/SkeletonDetai
 import { Bounce, toast } from 'react-toastify'
 import { setTransactionId } from '../../redux/reducers/checkoutReducer'
 import { getNotification } from '../../redux/actions/notificationAction'
+import { io } from 'socket.io-client'
+
+const SkeletonMenungguPembayaran = () => {
+  return (
+    <div className="animate-pulse gap-y-7 flex flex-col w-full mt-10">
+      <div className="mx-auto h-10 max-w-60 w-full bg-gray-300 rounded-xl "></div>
+      <div className="mx-auto h-5 max-w-96 w-full bg-gray-300 rounded-xl "></div>
+      <div className="mx-auto h-14 max-w-48 w-full bg-gray-300 rounded-xl "></div>
+      <div className="mx-auto h-5 max-w-52  w-full bg-gray-300 rounded-xl "></div>
+    </div>
+  )
+}
 
 export default function MenungguPembayaran() {
   const dispatch = useDispatch()
@@ -20,7 +32,6 @@ export default function MenungguPembayaran() {
   const location = useLocation()
   const [isLoading, setIsLoading] = useState(true)
   const auth = useSelector((state) => state?.auth)
-  console.log('auth', auth)
   const isLoggedIn = auth?.isLoggedin
   const token = auth?.token
   const riwayat = location
@@ -44,12 +55,6 @@ export default function MenungguPembayaran() {
   const transactionId = dataCheckout?.transactionId
   const transaction =
     prevPage !== 'riwayat' ? dataCheckout?.transaction?.transaction?.id : transactionId
-  console.log('otp', prevPage)
-  console.log('waitingTransaction', waitingTransaction)
-  console.log('transactionId', transactionId)
-
-  console.log('detailPesanan', detailPesanan)
-  console.log('transaction', transaction)
   const printRef = useRef()
 
   const handlePrint = useReactToPrint({
@@ -57,19 +62,8 @@ export default function MenungguPembayaran() {
     documentTitle: 'ticket.ourAir',
   })
 
-  // const getTransactionData = () => {
-  //   const interval = setInterval(() => {
-  //     dispatch(getTransaction()).then(() => {
-  //       setIsLoading(false)
-  //     })
-  //   }, 5000) // Interval 5 detik
-
-  //   return () => clearInterval(interval)
-  // }
-
   const getPayment = () => {
-    console.log('isLoggedin', isLoggedIn)
-    if (isLoggedIn === false) {
+    if (!isLoggedIn) {
       navigate('/login', {
         state: {
           error: 'Maaf anda tidak mempunyai akses ke halaman ini, silahkan login terlebih dahulu',
@@ -82,6 +76,15 @@ export default function MenungguPembayaran() {
     setTransactionId(transaction)
     dispatch(getTransactionById(transaction)).then(() => setIsLoading(false))
   }
+  useEffect(() => {
+    const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`)
+    socket.on(`transaction-update-${token}`, (data) => {
+      if (data) getPayment()
+    })
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
 
   useEffect(() => {
     checkLocationState(location, navigate)
@@ -248,13 +251,16 @@ export default function MenungguPembayaran() {
             </div>
           )}
 
-          <div className="w-full text-center  mt-5 rounded-md ">
+          <div className="w-full text-center bg-blue-100 pt-5 rounded-md ">
             <img
               src="/assets/images/ourair_logo.svg"
               alt="Logo ourair"
               className="w-40 h-auto mx-auto mt-10"
             />
-            {detailPesanan?.status ? (
+
+            {isLoading ? (
+              <SkeletonMenungguPembayaran />
+            ) : detailPesanan?.status ? (
               <div className="text-center  flex flex-col justify-center items-center ">
                 <div className="w-full">
                   <FontAwesomeIcon
@@ -263,6 +269,15 @@ export default function MenungguPembayaran() {
                   />
                   <div className="text-4xl my-4">Terima Kasih!</div>
                   <div className="text-1xl my-4">Pembayaran Sukses...</div>
+                  <button
+                    onClick={handlePrint}
+                    className="mt-3 text-base font-[600] bg-secondary hover:bg-blue-600 text-white rounded-md w-full max-w-52 h-11"
+                  >
+                    Cetak Tiket
+                  </button>
+                  <Link to="/riwayat-pemesanan" className="block mt-2 py-2 text-secondary ">
+                    Lihat riwayat pemesanan
+                  </Link>
                 </div>
               </div>
             ) : (
@@ -283,12 +298,13 @@ export default function MenungguPembayaran() {
                     Menuju pembayaran
                   </a>
                   <p className="text-sm text-secondary text-[600]">
-                    Anda akan diarahkan ke halaman cetak tiket setelah melakukan pembayaran
+                    Anda dapat mencetak tiket setelah melakukan pembayaran
                   </p>
                 </div>
               </div>
             )}
           </div>
+
           <Toast margin="mt-16" transition={Bounce} />
         </div>
       </div>

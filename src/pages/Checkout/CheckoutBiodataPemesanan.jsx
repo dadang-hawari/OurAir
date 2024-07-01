@@ -2,27 +2,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '../../components/Navbar'
 import ReactModal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faCalendar,
-  faChevronDown,
-  faChevronRight,
-  faIcons,
-  faQuestion,
-  faQuestionCircle,
-} from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
-import { data } from 'autoprefixer'
-import DatePicker from 'react-multi-date-picker'
 import SeatPicker from '../../components/SeatPicker'
 import {
   assignSeatsToPassengers,
   resetSelectedSeats,
   setDonation,
-  setIdFlight,
   setJumlahPenumpang,
   setPemesan,
   setPenumpang,
-  setSelectedSeat,
   setUseCurrentEmail,
   updateBerlakuSampai,
   updatePenumpang,
@@ -37,6 +26,7 @@ import BackToTop from '../../components/common/BackToTop'
 import { setPage } from '../../redux/reducers/otpReducers'
 import { customStylesDestination } from '../../styles/customStyles'
 import SkeletonDetailPesanan from '../../components/RiwayatPesanan/SkeletonDetailPesanan'
+import IsiDataPenumpang from './IsiDataPenumpang'
 
 export default function CheckoutBiodataPemesan() {
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
@@ -57,7 +47,6 @@ export default function CheckoutBiodataPemesan() {
   const navigate = useNavigate()
   const [isHovered, setIsHovered] = useState(false)
   const penumpangSaatIni = dataCheckout?.jumlahPenumpang
-  console.log('penumpangSaatIni', penumpangSaatIni)
   const jumlahPenumpang = location?.state?.jumlahPenumpang
   const [email, setEmail] = useState(useCurrentEmail ? emailnow : pemesan.data.email)
   const pajak =
@@ -77,7 +66,6 @@ export default function CheckoutBiodataPemesan() {
     'Mohon maaf, jumlah kursi di maskapai ini kurang dari jumlah penumpang yang telah dipilih. Silahkan melakukan ulang maskapai penerbangan'
   const toastId = 'toastInfo'
   const toastClass = 'toast-info'
-  console.log('penumpang', penumpang)
 
   if (!isLoggedin) document.body.style.overflowY = 'hidden'
 
@@ -176,11 +164,9 @@ export default function CheckoutBiodataPemesan() {
   const handlePemesan = (e) => {
     let { name, value } = e.target
     dispatch(setPemesan({ name, value }))
-    console.log('name, value', name, value)
   }
 
   const handleLanjutBayar = () => {
-    console.log('pemesan', pemesan)
     if (!pemesan?.data?.fullname || !pemesan?.data?.phone_number || !pemesan?.data?.email) {
       toast('Mohon lengkapi semua data diri pemesan yang perlu diisi.', {
         toastId: 'toastError',
@@ -255,7 +241,6 @@ export default function CheckoutBiodataPemesan() {
     setIsUserDonate(!isUserDonate)
   }
 
-  console.log('donasi', donasi)
   return (
     <div>
       <ReactModal
@@ -277,7 +262,6 @@ export default function CheckoutBiodataPemesan() {
 
         <div className="text-sm mt-4 flex gap-8 flex-col md:flex-row w-full">
           <div className="w-full">
-            {/* Isi Data Pemesan */}
             {/* Isi Data Pemesan */}
             <div className="border rounded-md h-fit p-5 w-full">
               <b className="text-xl mb-3 block">Isi Data Pemesan</b>
@@ -382,189 +366,13 @@ export default function CheckoutBiodataPemesan() {
             </div>
 
             {/* Isi Data Penumpang */}
-            <div className="border rounded-md h-fit my-8 p-5 w-full">
-              <b className="text-xl mb-3 block">Isi Data Penumpang</b>
-              <div className="w-full text-gray-secondary">
-                {penumpang.map((penumpangData) => (
-                  <div key={penumpangData?.id} className="mb-5">
-                    <h2 className="bg-gray-700 text-white rounded-t-md p-2 text-[600]">
-                      Data Diri {penumpangData?.id}
-                    </h2>
-                    <div className="w-full p-3 flex flex-col gap-y-4">
-                      <div>
-                        <label className="font-bold" htmlFor={`title-${penumpangData?.id}`}>
-                          Title
-                          <span className="text-red-500 font-normal" title="Perlu diisi">
-                            *
-                          </span>
-                        </label>
-                        <div className="relative">
-                          <FontAwesomeIcon
-                            icon={faChevronDown}
-                            className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
-                          />
-                          <select
-                            name="title"
-                            id={`title-${penumpangData?.id}`}
-                            className="w-full cursor-pointer border outline-none focus:border-secondary rounded-md h-10 appearance-none px-3 mt-1"
-                            value={penumpangData?.title}
-                            onChange={(e) => handlePenumpang(e, penumpangData?.id)}
-                          >
-                            <option value="Mr.">Mr.</option>
-                            <option value="Ms.">Ms.</option>
-                            <option value="Miss">Miss</option>
-                            <option value="Mrs.">Mrs.</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div>
-                        <label className="font-bold" htmlFor={`fullname-${penumpangData?.id}`}>
-                          Nama Lengkap
-                          <span className="text-red-500 font-normal" title="Perlu diisi">
-                            *
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                          placeholder="Masukkan nama lengkap"
-                          id={`fullname-${penumpangData?.id}`}
-                          name="fullname"
-                          value={penumpangData?.fullname}
-                          onChange={(e) => handlePenumpang(e, penumpangData?.id)}
-                        />
-                      </div>
-                      <div>
-                        <label className="font-bold" htmlFor={`surname-${penumpangData?.id}`}>
-                          Nama Keluarga (opsional)
-                        </label>
-                        <input
-                          type="text"
-                          className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                          placeholder="Masukkan nama keluarga"
-                          id={`surname-${penumpangData?.id}`}
-                          name="surname"
-                          value={penumpangData?.surname}
-                          onChange={(e) => handlePenumpang(e, penumpangData?.id)}
-                        />
-                      </div>
-                      <div className="relative">
-                        <label
-                          className="font-bold block"
-                          htmlFor={`birth_date-${penumpangData?.id}`}
-                        >
-                          Tanggal Lahir
-                          <span className="text-red-500 font-normal" title="Perlu diisi">
-                            *
-                          </span>
-                        </label>
-                        <div className="relative">
-                          <DatePicker
-                            monthYearSeparator="-"
-                            format="YYYY-MM-DD"
-                            showOtherDays
-                            highlightToday={false}
-                            value={penumpangData?.birth_date}
-                            onChange={(date) => handleTanggalLahirChange(date, penumpangData?.id)}
-                          />
-                          <FontAwesomeIcon
-                            icon={faCalendar}
-                            className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="font-bold" htmlFor={`nationality-${penumpangData?.id}`}>
-                          Kewarganegaraan
-                          <span className="text-red-500 font-normal" title="Perlu diisi">
-                            *
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                          placeholder="Masukkan Kewarganegaraan"
-                          id={`nationality-${penumpangData?.id}`}
-                          name="nationality"
-                          value={penumpangData?.nationality}
-                          onChange={(e) => handlePenumpang(e, penumpangData?.id)}
-                        />
-                      </div>
-                      <div>
-                        <label className="font-bold" htmlFor={`document-${penumpangData?.id}`}>
-                          KTP/Paspor
-                          <span className="text-red-500 font-normal" title="Perlu diisi">
-                            *
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
-                          placeholder="Masukkan KTP/Paspor"
-                          id={`document-${penumpangData?.id}`}
-                          name="document"
-                          value={penumpangData?.document}
-                          onChange={(e) => handlePenumpang(e, penumpangData?.id)}
-                        />
-                      </div>
-                      <div>
-                        <label
-                          className="font-bold"
-                          htmlFor={`country_publication-${penumpangData?.id}`}
-                        >
-                          Negara Penerbit
-                          <span className="text-red-500 font-normal" title="Perlu diisi">
-                            *
-                          </span>
-                        </label>
-                        <div className="relative">
-                          <FontAwesomeIcon
-                            icon={faChevronDown}
-                            className="absolute pointer-events-none text-gray-primary right-2 top-1/2 -translate-y-1/2 z-10"
-                          />
-                          <select
-                            name="country_publication"
-                            id={`country_publication-${penumpangData?.id}`}
-                            className="w-full cursor-pointer border outline-none focus:border-secondary rounded-md h-10 appearance-none px-3 mt-1"
-                            value={penumpangData?.country_publication}
-                            onChange={(e) => handlePenumpang(e, penumpangData?.id)}
-                          >
-                            <option value="Singapore">Singapore</option>
-                            <option value="Amerika">Amerika</option>
-                            <option value="Indonesia">Indonesia</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="relative">
-                        <label
-                          className="font-bold block"
-                          htmlFor={`document_expired-${penumpangData?.id}`}
-                        >
-                          Berlaku
-                          <span className="text-red-500 font-normal" title="Perlu diisi">
-                            *
-                          </span>
-                        </label>
-                        <div className="relative">
-                          <DatePicker
-                            monthYearSeparator="-"
-                            showOtherDays
-                            highlightToday={false}
-                            format="YYYY-MM-DD"
-                            value={penumpangData?.document_expired}
-                            onChange={(date) => handleBerlakuSampaiChange(date, penumpangData?.id)}
-                          />
-                          <FontAwesomeIcon
-                            icon={faCalendar}
-                            className="text-gray-400 absolute pointer-events-none right-3 -translate-y-1/2 top-1/2"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+
+            <IsiDataPenumpang
+              penumpang={penumpang}
+              handlePenumpang={handlePenumpang}
+              handleBerlakuSampaiChange={handleBerlakuSampaiChange}
+              handleTanggalLahirChange={handleTanggalLahirChange}
+            />
 
             {/* Kursi */}
             <div className="border rounded-md h-fit my-8 p-5 w-full">
