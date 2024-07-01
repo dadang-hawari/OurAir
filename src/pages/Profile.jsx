@@ -4,14 +4,11 @@ import { toast } from 'react-toastify'
 import Footer from './Footer'
 import Toast from '../components/common/Toast'
 import { updateUser, updateProfile } from '../redux/actions/authAction'
-import Sidebar from '../components/Profile/Sidebar'
-import Header from '../components/Profile/Header'
 import ScrollToTop from '../components/common/ScrollToTop'
 import Navbar from '../components/Navbar'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import ReactModal from 'react-modal'
 
 function useInput(defaultValue = '') {
   const [state, setState] = useState(defaultValue)
