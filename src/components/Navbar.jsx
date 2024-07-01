@@ -31,10 +31,12 @@ const Navbar = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false)
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const [showNotification, setShowNotifcation] = useState(false)
-  const token = useSelector((state) => state.auth.token)
+  const token = useSelector((state) => state?.auth.token)
   const notification = useSelector((state) => state?.notification?.notification?.notifications)
   const hasUnreadNotifications = notification?.some((notif) => !notif.is_read)
   const maxNotificationToShow = notification?.slice(0, 3)
+  const userData = useSelector((state) => state?.auth.userData)
+  const avatar_link = userData?.avatar_link
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const path = useResolvedPath().pathname
@@ -211,12 +213,16 @@ const Navbar = () => {
                   onClick={handleProfileDropdown}
                 >
                   <button>
-                    <span className="bg-gray-300 block w-[30px] h-[30px] relative rounded-full">
-                      <FontAwesomeIcon
-                        icon={faUser}
-                        className="text-white absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2"
-                      />
-                    </span>
+                    {avatar_link ? (
+                      <img src={avatar_link} alt="profile image" className="h-7 w-7 rounded-full" />
+                    ) : (
+                      <span className="bg-gray-300 block w-[30px] h-[30px] relative rounded-full">
+                        <FontAwesomeIcon
+                          icon={faUser}
+                          className="text-white absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2"
+                        />
+                      </span>
+                    )}
                   </button>
                   <FontAwesomeIcon
                     icon={faChevronDown}
