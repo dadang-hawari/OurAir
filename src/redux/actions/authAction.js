@@ -315,7 +315,9 @@ export const logout = (navigate) => async (dispatch) => {
 }
 
 export const updateUser = (name, email, phone_number, token) => async (dispatch) => {
-  console.log('name, phone_number, email, token', name, phone_number, email, token)
+  toast.loading('Mohon tunggu sebentar...', {
+    toastId: 'toastWait',
+  })
   try {
     const response = await axios.patch(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/users/profile`,
@@ -334,6 +336,8 @@ export const updateUser = (name, email, phone_number, token) => async (dispatch)
     const data = response.data.data
     console.log('response :>> update user', response)
     if (response?.status === 200 || response?.status === 201) {
+      toast.dismiss('toastWait')
+
       dispatch(setUserData(data))
       dispatch(setToken(token))
       dispatch(setIsLoggedIn(true))
@@ -342,8 +346,9 @@ export const updateUser = (name, email, phone_number, token) => async (dispatch)
         toastId: 'successToast',
       })
     }
+    toast.dismiss('toastWait')
   } catch (error) {
-    toast.dismiss('toastLoading')
+    toast.dismiss('toastWait')
 
     error?.response?.data?.errors[0]?.msg
       ? toast(error?.response?.data.errors[0].msg, { className: 'toast-error' })
@@ -413,7 +418,7 @@ export const getUsersProfile = (navigate) => async (dispatch, state) => {
   }
 }
 
-export const updateProfile = (imageFile, token) => async () => {
+export const updateProfile = (imageFile, token) => async (dispatch) => {
   try {
     const formData = new FormData()
     formData.append('avatar', imageFile)
@@ -428,12 +433,7 @@ export const updateProfile = (imageFile, token) => async () => {
         },
       }
     )
-
-    toast('Foto profil berhasil diperbarui', {
-      className: 'toast-success',
-      toastId: 'toastSuccess',
-    })
-    console.log('response', response)
+    return response
   } catch (error) {
     const errorMsg =
       error?.response?.data?.errors[0]?.msg ||

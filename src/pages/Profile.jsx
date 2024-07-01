@@ -51,7 +51,9 @@ export default function Profile() {
 
   const handleUpload = () => {
     if (imageFile) {
-      dispatch(updateProfile(imageFile, token))
+      dispatch(updateProfile(imageFile, token)).then((response) =>
+        dispatch(updateUser(name, email, phone, token))
+      )
     }
   }
 
@@ -68,7 +70,6 @@ export default function Profile() {
       })
       return
     }
-    dispatch(updateUser(name, email, phone, token))
     handleUpload()
     setIsEditing(false)
   }
