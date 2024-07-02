@@ -105,6 +105,7 @@ const Navbar = () => {
     const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`, { withCredentials: true })
     socket.on(`notification-all`, (data) => {
       if (data) getNotificationList()
+      console.log(data, 'data')
     })
     return () => {
       socket.disconnect()
