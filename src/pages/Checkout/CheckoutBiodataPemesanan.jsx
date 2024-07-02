@@ -20,13 +20,15 @@ import {
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getFlightById, postBooking } from '../../redux/actions/checkoutAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
-import { toast } from 'react-toastify'
+import { Flip, toast } from 'react-toastify'
 import Toast from '../../components/common/Toast'
 import BackToTop from '../../components/common/BackToTop'
 import { setPage } from '../../redux/reducers/otpReducers'
 import { customStylesDestination } from '../../styles/customStyles'
 import SkeletonDetailPesanan from '../../components/RiwayatPesanan/SkeletonDetailPesanan'
 import IsiDataPenumpang from './IsiDataPenumpang'
+import { setPrevPage } from '../../redux/reducers/notifReducer'
+import ScrollToTop from '../../components/common/ScrollToTop'
 
 export default function CheckoutBiodataPemesan() {
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
@@ -66,8 +68,6 @@ export default function CheckoutBiodataPemesan() {
     'Mohon maaf, jumlah kursi di maskapai ini kurang dari jumlah penumpang yang telah dipilih. Silahkan melakukan ulang maskapai penerbangan'
   const toastId = 'toastInfo'
   const toastClass = 'toast-info'
-
-  if (!isLoggedin) document.body.style.overflowY = 'hidden'
 
   const setDataPenumpang = () => {
     // percabangan if biar inputan nggak kereset jika misalnya tidak ada perubahan penumpang
@@ -123,6 +123,19 @@ export default function CheckoutBiodataPemesan() {
 
     dispatch(setPenumpang(penumpangBaru))
   }
+
+  const checkFlightId = () => {
+    if (!flight_id) {
+      navigate('/')
+      return
+    }
+    if (!isLoggedin) document.body.style.overflowY = 'hidden'
+    else document.body.style.overflowY = 'auto'
+  }
+
+  useEffect(() => {
+    checkFlightId()
+  }, [])
 
   useEffect(() => {
     setEmail(useCurrentEmail ? emailnow : pemesan.data.email)
@@ -241,22 +254,34 @@ export default function CheckoutBiodataPemesan() {
     setIsUserDonate(!isUserDonate)
   }
 
+  const handleButtonMasuk = () => {
+    dispatch(setPrevPage('/checkout-pemesanan'))
+    navigate('/login')
+  }
+
+  ReactModal.setAppElement('#modal')
   return (
     <div>
       <ReactModal
         isOpen={!isLoggedin}
         style={customStylesDestination}
-        className="border-none absolute top-7 w-full focus:border"
+        className="border-none absolute top-7 w-full outline-none"
       >
         <div
-          className="bg-[#FF0000] text-center py-10 px-4 text-white w-full rounded-md relative pt-3"
-          tabIndex={0}
+          className="bg-[#FF0000] text-center py-10 border-none px-4 text-white w-full rounded-md relative "
+          tabIndex={-4}
         >
           <h2 className="text-2xl">Silahkan login terlebih dahulu</h2>
-          {/* <button onClick={handleButtonMasuk} className="border border-white rounded-md p-2 my-4 text-base">Masuk</button> */}
+          <button
+            onClick={handleButtonMasuk}
+            className="border border-white rounded-md py-2 px-8 my-4 text-base"
+          >
+            Masuk
+          </button>
           <h3>Anda akan diarahkan ke halaman ini setelah login</h3>
         </div>
       </ReactModal>
+      <ScrollToTop />
       <Navbar />
       <div className="max-w-5xl px-5 mx-auto mt-24">
         <div className="text-xl cursor-default text-gray-400 flex items-center gap-x-2">
@@ -602,7 +627,7 @@ export default function CheckoutBiodataPemesan() {
           )}
         </div>
         <BackToTop />
-        <Toast margin="mt-16" />
+        <Toast margin="mt-16" transition={Flip} />
       </div>
     </div>
   )

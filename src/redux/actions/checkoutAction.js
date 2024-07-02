@@ -18,7 +18,6 @@ export const getFlightById = () => async (dispatch, state) => {
       dispatch(setFlightDetail(data))
       dispatch(setFlightSeats(response.data.result[0]))
     }
-    console.log('responsxe', response)
   } catch (error) {
     console.log(error)
   }

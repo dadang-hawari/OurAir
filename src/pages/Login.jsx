@@ -6,7 +6,7 @@ import ButtonPrimary from '../components/ButtonPrimary'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { loginUser } from '../redux/actions/authAction'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Toast from '../components/common/Toast'
 import { checkLocationState } from '../utils/checkLocationState'
 import LoginGoogle from '../components/LoginGoogle'
@@ -19,6 +19,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [passwordError, setPasswordError] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const prevPage = useSelector((state) => state?.notification?.prevPage)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
@@ -68,7 +69,7 @@ const Login = () => {
       return
     }
 
-    dispatch(loginUser(email, password, navigate))
+    dispatch(loginUser(email, password, navigate, prevPage))
   }
 
   return (
