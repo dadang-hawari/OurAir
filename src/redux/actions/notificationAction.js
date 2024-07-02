@@ -54,7 +54,7 @@ export const getNotificationById = (id, navigate) => async (dispatch, getState) 
   } catch (error) {}
 }
 
-export const readAllNotification = (id, navigate) => async (dispatch, getState) => {
+export const readAllNotification = (navigate) => async (dispatch, getState) => {
   try {
     const response = await axios.patch(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/notification/notifications/read`,

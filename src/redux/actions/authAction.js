@@ -7,6 +7,7 @@ import {
   setUserData,
   logout as logoutAction,
 } from '../reducers/authReducer'
+import { setPrevPage } from '../reducers/notifReducer'
 
 const loadingMessage = 'Mohon tunggu sebentar..'
 const toastIdWait = 'toasWait'
@@ -248,7 +249,7 @@ export const forgotPassword = (email, navigate) => async () => {
   }
 }
 
-export const loginUser = (email, password, navigate) => async (dispatch) => {
+export const loginUser = (email, password, navigate, prevPage) => async (dispatch) => {
   try {
     toast.loading(loadingMessage, {
       toastId: toastIdWait,
@@ -265,11 +266,12 @@ export const loginUser = (email, password, navigate) => async (dispatch) => {
         dispatch(setToken(data.token))
         dispatch(setUserData(data))
         dispatch(setIsLoggedIn(true))
-        navigate('/', {
+        navigate(prevPage ? prevPage : '/', {
           state: {
             success: 'Berhasil Masuk',
           },
         })
+        dispatch(setPrevPage(null))
       } else {
         dispatch(setEmail(data?.email))
         navigate('/otp', {
@@ -419,6 +421,9 @@ export const getUsersProfile = (navigate) => async (dispatch, state) => {
 }
 
 export const updateProfile = (imageFile, token) => async (dispatch) => {
+  toast.loading('Mohon tunggu sebentar...', {
+    toastId: 'toastWait',
+  })
   try {
     const formData = new FormData()
     formData.append('avatar', imageFile)
@@ -433,8 +438,10 @@ export const updateProfile = (imageFile, token) => async (dispatch) => {
         },
       }
     )
+    toast.dismiss('toastWait')
     return response
   } catch (error) {
+    toast.dismiss('toastWait')
     const errorMsg =
       error?.response?.data?.errors[0]?.msg ||
       'Coba lagi nanti, saat ini ada kesalahan di sistem kami'
