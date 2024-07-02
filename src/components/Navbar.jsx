@@ -103,7 +103,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`, { withCredentials: true })
-    socket.on(`notification-all`, (data) => {
+    socket.on(`data`, (data) => {
       if (data) getNotificationList()
       console.log(data, 'data')
     })
