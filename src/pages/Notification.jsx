@@ -4,11 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowLeft,
   faBell,
+  faCheck,
+  faChevronDown,
   faEyeDropperEmpty,
   faMessage,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import iconFaFilter from '../../public/assets/images/fi_filter.svg'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   getNotification,
   getNotificationById,
@@ -16,12 +19,14 @@ import {
 } from '../redux/actions/notificationAction'
 import { useDispatch, useSelector } from 'react-redux'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
+import { customStyles, customStylesFilter } from '../styles/customStyles'
+import ReactModal from 'react-modal'
+import SkeletonNotification from '../components/Notification/SkeletonNotification'
 
-function Header({ title }) {
+function Header({ openModal, text }) {
   return (
     <header className="w-full px-4 pt-10">
       <div className="max-w-3xl mx-auto space-y-4">
-        <h1 className="text-xl font-bold">{title || 'Header'}</h1>
         <div className="flex items-center space-x-4 relative">
           <div className="bg-accent rounded-lg text-white px-5 py-3 flex items-center space-x-2 w-full">
             <Link to="/" className="flex items-center">
@@ -29,13 +34,13 @@ function Header({ title }) {
               <span className="text-lg px-3">Beranda</span>
             </Link>
           </div>
-          <Link
-            to="#"
-            className="absolute  right-4 border border-white text-white rounded-3xl py-2 px-3 pr-6 flex items-center"
+          <button
+            onClick={openModal}
+            className="absolute flex right-4 border-2 rounded-md border-white text-white py-2 justifiy-between px-4 gap-x-2 items-center"
           >
-            <img src={iconFaFilter} alt="faFilter" className="px-1" />
-            Filter
-          </Link>
+            {text}
+            <FontAwesomeIcon icon={faChevronDown} />
+          </button>
         </div>
       </div>
     </header>
@@ -45,27 +50,53 @@ function Header({ title }) {
 const Notification = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [statusFilter, setStatusFilter] = useState('Terbaru')
+  const [isLoading, setIsLoading] = useState(false)
+
   const notification = useSelector((state) => state?.notification?.notification?.notifications)
   useEffect(() => {
-    dispatch(getNotification()).then(() => {
-      dispatch(readAllNotification(navigate))
-    })
+    setIsLoading(true)
+    dispatch(getNotification())
+      .then(() => {
+        dispatch(readAllNotification(navigate))
+      })
+      .then(() => setIsLoading(false))
   }, [])
+
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
 
   const handleNotificationClick = (id) => {
     dispatch(getNotificationById(id))
     dispatch(getNotification(navigate))
   }
 
+  const sortedNotifications = [...(notification || [])].sort((a, b) => {
+    if (statusFilter === 'Terbaru') {
+      return new Date(b.created_at) - new Date(a.created_at)
+    } else {
+      return new Date(a.created_at) - new Date(b.created_at)
+    }
+  })
+
+  ReactModal.setAppElement('#modal')
+
   return (
-    //  PR IF MESSAGE TITLE === BOOKING SUCCESSFULL SAAT USER KLIK ARAHIN KE HALAMAN RIWAYAT PESANAN
     <div className="mt-16">
       <Navbar />
-      <Header title="Notifikasi" />
+      <Header openModal={openModal} text={statusFilter} />
       <div className="max-w-3xl mx-auto ">
         <ul>
-          {notification?.length > 0 ? (
-            notification?.map((notification, i) => (
+          {isLoading ? (
+            <SkeletonNotification />
+          ) : notification?.length > 0 ? (
+            sortedNotifications?.map((notification, i) => (
               <React.Fragment key={i}>
                 <li
                   className={`w-full border-b  last:border-b-0 ${
@@ -107,7 +138,50 @@ const Notification = () => {
           )}
         </ul>
       </div>
-      {/* <Footer /> */}
+
+      <ReactModal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        style={customStylesFilter}
+        className="border-none absolute top-7 overflow-hidden px-5"
+      >
+        <div className="bg-white rounded-xl">
+          <div className="text-right">
+            <button
+              id="close"
+              aria-label="close button"
+              className="text-gray-400 p-3"
+              onClick={closeModal}
+            >
+              <FontAwesomeIcon icon={faXmark} className="text-xl" />
+            </button>
+          </div>
+          <ul className="flex flex-col ">
+            <li
+              className={`px-4 ${
+                statusFilter === 'Terbaru' ? 'bg-secondary text-white' : 'hover:bg-gray-200'
+              } cursor-pointer border-b border-t py-4    hover:font-bold `}
+              onClick={() => {
+                closeModal()
+                setStatusFilter('Terbaru')
+              }}
+            >
+              <div className="flex justify-between font-[600]">Terbaru</div>
+            </li>
+            <li
+              className={`px-4 ${
+                statusFilter === 'Terlama' ? 'bg-secondary text-white' : 'hover:bg-gray-200'
+              } cursor-pointer border-t py-4   rounded-b-xl hover:font-bold `}
+              onClick={() => {
+                closeModal()
+                setStatusFilter('Terlama')
+              }}
+            >
+              <div className="flex justify-between font-[600]">Terlama</div>
+            </li>
+          </ul>
+        </div>
+      </ReactModal>
     </div>
   )
 }

@@ -198,7 +198,7 @@ export const Passengers = () => {
                 className="bg-blue-600 text-white py-3 px-5 my-2 text-sm font-[600] rounded-md "
                 onClick={confirmPassenger}
               >
-                Simpan
+                Tutup
               </button>
             </div>
           </div>

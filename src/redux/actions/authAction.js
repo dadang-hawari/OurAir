@@ -421,6 +421,9 @@ export const getUsersProfile = (navigate) => async (dispatch, state) => {
 }
 
 export const updateProfile = (imageFile, token) => async (dispatch) => {
+  toast.loading('Mohon tunggu sebentar...', {
+    toastId: 'toastWait',
+  })
   try {
     const formData = new FormData()
     formData.append('avatar', imageFile)
@@ -435,8 +438,10 @@ export const updateProfile = (imageFile, token) => async (dispatch) => {
         },
       }
     )
+    toast.dismiss('toastWait')
     return response
   } catch (error) {
+    toast.dismiss('toastWait')
     const errorMsg =
       error?.response?.data?.errors[0]?.msg ||
       'Coba lagi nanti, saat ini ada kesalahan di sistem kami'

@@ -571,15 +571,6 @@ export default function RiwayatPemesanan() {
               </div>
             </li>
           </ul>
-
-          <div className="text-right">
-            <button
-              className="my-3 mr-3 font-[600] text-white bg-accent py-3 px-10 rounded-xl"
-              onClick={closeModal}
-            >
-              Pilih
-            </button>
-          </div>
         </div>
       </ReactModal>
     </>

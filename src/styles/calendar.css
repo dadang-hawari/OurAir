@@ -53,7 +53,7 @@ div.rmdp-wrapper .rmdp-week .rmdp-day span:hover {
 div.rmdp-wrapper .rmdp-week .rmdp-day.rmdp-disabled span:hover {
   @apply rounded-sm text-[#8798AD] border-none;
 }
-div.rmdp-wrapper .rmdp-day span.sd:hover {
+div.rmdp-wrapper div.rmdp-day span:hover {
   @apply bg-transparent border-none;
 }
 div.rmdp-wrapper .rmdp-day:hover {

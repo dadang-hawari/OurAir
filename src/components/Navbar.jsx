@@ -19,7 +19,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { logout } from '../redux/actions/authAction'
 import iconFaBell from '/assets/images/fi_bell.svg'
-import { getNotification, getNotificationById } from '../redux/actions/notificationAction'
+import {
+  getNotification,
+  getNotificationById,
+  readAllNotification,
+} from '../redux/actions/notificationAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
 import { io } from 'socket.io-client'
 
@@ -80,8 +84,13 @@ const Navbar = () => {
   }
 
   const handleNotificationDropdown = () => {
+    readAllNotifications()
     setShowProfileDropdown(false)
     setShowNotifcation(!showNotification)
+  }
+
+  const readAllNotifications = () => {
+    dispatch(readAllNotification(navigate))
   }
 
   const getNotificationList = () => {
@@ -103,8 +112,9 @@ const Navbar = () => {
 
   useEffect(() => {
     const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`, { withCredentials: true })
-    socket.on(`notification-all`, (data) => {
-      if (data) getNotificationList()
+    socket.on(`notification-all`, (notifications) => {
+      if (notifications) getNotificationList()
+      alert('ex')
     })
     return () => {
       socket.disconnect()
@@ -189,7 +199,11 @@ const Navbar = () => {
                                   notification?.created_at
                                 )} ${formatTimeToHM(notification?.created_at)}`}</span>
                               </div>
-                              <div className="text-sm text-gray-900">{notification?.message}</div>
+                              <div className="text-sm text-gray-900">
+                                {notification?.message?.length > 50
+                                  ? notification?.message.slice(0, 45) + '....'
+                                  : notification?.message}
+                              </div>
                               <Link
                                 to={notification?.link}
                                 target="_blank"

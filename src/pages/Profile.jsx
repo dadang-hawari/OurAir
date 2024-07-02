@@ -55,11 +55,6 @@ export default function Profile() {
     }
   }
 
-  const handleRemove = () => {
-    setImageFile(null)
-    setPreview('')
-  }
-
   const handleSave = () => {
     if (!name.trim() || !phone.trim()) {
       toast('Mohon agar tidak mengosongkan inputan', {
@@ -69,6 +64,7 @@ export default function Profile() {
       return
     }
     handleUpload()
+    dispatch(updateUser(name, email, phone, token))
     setIsEditing(false)
   }
 
