@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate, useResolvedPath } from 'react-router-dom'
 import Logo from '/assets/images/logoFooter.webp'
-import LogoTwo from '/assets/images/Group 101.webp'
+import LogoTwo from '/assets/images/logo_white_ourair.webp'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faSignInAlt,
   faList,
-  faArrowLeft,
   faUser,
   faChevronDown,
   faBell,
@@ -20,7 +19,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { logout } from '../redux/actions/authAction'
 import iconFaBell from '/assets/images/fi_bell.svg'
-import iconFaUser from '/assets/images/fi_user.svg'
 import { getNotification, getNotificationById } from '../redux/actions/notificationAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
 import { io } from 'socket.io-client'
@@ -102,6 +100,16 @@ const Navbar = () => {
   const windowListener = () => {
     window.addEventListener('resize', handleResize)
   }
+
+  useEffect(() => {
+    const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`, { withCredentials: true })
+    socket.on(`notification-all`, (data) => {
+      if (data) getNotificationList()
+    })
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
 
   useEffect(() => {
     windowListener()

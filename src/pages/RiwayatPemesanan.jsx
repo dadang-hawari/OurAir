@@ -34,12 +34,13 @@ export default function RiwayatPemesanan() {
   const [statusFilter, setStatusFilter] = useState('Semua Status')
   const paymentHistory = useSelector((state) => state?.payment?.paymentHistory?.transaction)
   const [historyIndex, setHistoryIndex] = useState(0)
-  const dispatch = useDispatch()
   const [filteredHistory, setFilteredHistory] = useState([])
   const detailPesanan = filteredHistory?.length > 0 ? filteredHistory[historyIndex] : null
   const [isLoading, setIsLoading] = useState(true)
-  const navigate = useNavigate()
+  const isLoggedin = useSelector((state) => state?.auth?.isLoggedin)
   const detailRef = useRef(null)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const setDetail = (index) => {
     setHistoryIndex(index)
@@ -50,12 +51,24 @@ export default function RiwayatPemesanan() {
     return tickets?.filter((ticket) => ticket?.whomPassangerTicket?.category === category)?.length
   }
 
-  const adultCount = countPassengersByCategory(detailPesanan?.tickets, 'adult')
-  const childCount = countPassengersByCategory(detailPesanan?.tickets, 'child')
-  useEffect(() => {
+  const checkIsUserLoggedIn = () => {
+    if (!isLoggedin) {
+      navigate('/login', {
+        state: {
+          error: 'Maaf anda tidak mempunyai akses ke halaman ini, silahkan login terlebih dahulu',
+        },
+      })
+      return
+    }
     dispatch(getTransaction()).then(() => {
       setIsLoading(false)
     })
+  }
+
+  const adultCount = countPassengersByCategory(detailPesanan?.tickets, 'adult')
+  const childCount = countPassengersByCategory(detailPesanan?.tickets, 'child')
+  useEffect(() => {
+    checkIsUserLoggedIn()
   }, [])
   useEffect(() => {
     // Filter paymentHistory based on search input and status filter

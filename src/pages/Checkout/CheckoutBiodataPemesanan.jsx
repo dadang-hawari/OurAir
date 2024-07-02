@@ -246,9 +246,16 @@ export default function CheckoutBiodataPemesan() {
       <ReactModal
         isOpen={!isLoggedin}
         style={customStylesDestination}
-        className="border-none absolute top-7 w-full"
+        className="border-none absolute top-7 w-full focus:border"
       >
-        <div className="bg-white w-full rounded-md relative pt-3"></div>
+        <div
+          className="bg-[#FF0000] text-center py-10 px-4 text-white w-full rounded-md relative pt-3"
+          tabIndex={0}
+        >
+          <h2 className="text-2xl">Silahkan login terlebih dahulu</h2>
+          {/* <button onClick={handleButtonMasuk} className="border border-white rounded-md p-2 my-4 text-base">Masuk</button> */}
+          <h3>Anda akan diarahkan ke halaman ini setelah login</h3>
+        </div>
       </ReactModal>
       <Navbar />
       <div className="max-w-5xl px-5 mx-auto mt-24">

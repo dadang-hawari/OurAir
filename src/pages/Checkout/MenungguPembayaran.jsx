@@ -36,7 +36,6 @@ export default function MenungguPembayaran() {
   const token = auth?.token
   const riwayat = location
   const waitingTransaction = useSelector((state) => state?.payment?.waitingTransaction)
-  const page = useSelector((state) => state?.otp?.page)
 
   const isExpired = (detailPesanan) => {
     return (Date.now() - new Date(detailPesanan?.created_at)) / (1000 * 60 * 60) > 24
@@ -76,6 +75,7 @@ export default function MenungguPembayaran() {
     setTransactionId(transaction)
     dispatch(getTransactionById(transaction)).then(() => setIsLoading(false))
   }
+
   useEffect(() => {
     const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`, { withCredentials: true })
     socket.on(`transaction-update-${token}`, (data) => {
@@ -96,7 +96,7 @@ export default function MenungguPembayaran() {
     <>
       <Navbar />
       <div className="max-w-5xl px-5 mx-auto mt-24 mb-10">
-        <div className="text-xl cursor-default text-gray-400 flex items-center gap-x-2">
+        <div className="text-[18px] sm:text-xl cursor-default text-gray-400 flex items-center gap-x-2">
           <b className="text-black">Isi Data Diri</b>
           <FontAwesomeIcon icon={faChevronRight} className="text-sm text-black" />
           <b className="text-black">Bayar</b>
@@ -106,7 +106,7 @@ export default function MenungguPembayaran() {
           />
           <b className={`${detailPesanan?.status && 'text-black'}`}>Selesai</b>
         </div>
-        <div className="text-sm mt-4 flex gap-8 flex-col-reverse md:flex-row w-full">
+        <div className="text-sm  flex gap-8 flex-col-reverse md:flex-row w-full">
           {isLoading ? (
             <SkeletonDetailPesanan />
           ) : (
@@ -251,7 +251,7 @@ export default function MenungguPembayaran() {
             </div>
           )}
 
-          <div className="w-full text-center bg-blue-100 pt-5 rounded-md ">
+          <div className="w-full text-center bg-blue-100 pt-5 rounded-md pb-10 px-4">
             <img
               src="/assets/images/ourair_logo.svg"
               alt="Logo ourair"
@@ -282,7 +282,7 @@ export default function MenungguPembayaran() {
               </div>
             ) : (
               <div className="w-full">
-                <div className="text-6xl mt-4 font-bold text-[#13587B] animate-bounce tracking-widest ">
+                <div className="text-6xl mt-4 font-bold text-[#13587B] animate-bounce tracking-widest">
                   ....
                 </div>
                 <div className="flex flex-col gap-y-5 text-base">

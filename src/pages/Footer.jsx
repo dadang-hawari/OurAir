@@ -18,19 +18,19 @@ const Footer = () => {
           <div className="mb-4 md:mb-0">
             <h3 className="text-2xl font-bold text-black mb-4">Navigasi</h3>
             <p className="my-2">
-              <Link to="/login" className="my-2 text-xs">
+              <Link to="/" className="my-2 text-xs">
                 Beranda
               </Link>
             </p>
             <p className="my-2">
-              <Link to="/login" className="my-2 text-xs ">
+              <Link to="/tentang" className="my-2 text-xs ">
                 Tentang Kami
               </Link>
             </p>
             <p>
               {' '}
-              <Link to="/login" className="text-xs w-max block">
-                Semua Penerbangan
+              <Link to="https://sdgs.bappenas.go.id/" className="text-xs w-max block">
+                SDGs
               </Link>
             </p>
           </div>
