@@ -29,7 +29,7 @@ const Footer = () => {
             </p>
             <p>
               {' '}
-              <Link to="https://sdgs.bappenas.go.id/" className="text-xs w-max block">
+              <Link to="/sdgs" className="text-xs w-max block">
                 SDGs
               </Link>
             </p>

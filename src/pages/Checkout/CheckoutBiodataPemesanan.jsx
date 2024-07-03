@@ -500,7 +500,7 @@ export default function CheckoutBiodataPemesan() {
                         berkontribusi dalam upaya global untuk mencapai Sustainable Development
                         Goals (SDGs).
                       </p>
-                      <Link to="google.com" className="text-blue-400 text-xs" target="_blank">
+                      <Link to="/sdgs" className="text-blue-400 text-xs" target="_blank">
                         Baca selengkapnya<span className="tracking-wider">...</span>{' '}
                       </Link>
                     </div>

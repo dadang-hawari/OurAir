@@ -13,7 +13,7 @@ import CheckoutBiodataPemesanan from './pages/Checkout/CheckoutBiodataPemesanan'
 import Notification from './pages/Notification'
 import Tentang from './pages/Tentang'
 import MenungguPembayaran from './pages/Checkout/MenungguPembayaran'
-
+import SDSGs from './pages/SDGs'
 import NotFound from './components/common/NotFound'
 
 export default function Route() {
@@ -21,6 +21,10 @@ export default function Route() {
     {
       path: '/',
       element: <Beranda />,
+    },
+    {
+      path: '/sdgs',
+      element: <SDSGs />,
     },
 
     {

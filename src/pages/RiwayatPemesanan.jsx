@@ -559,7 +559,7 @@ export default function RiwayatPemesanan() {
               </div>
             </li>
             <li
-              className="px-4 cursor-pointer  py-4  hover:bg-secondary hover:font-bold hover:text-white"
+              className="px-4 cursor-pointer  py-4  hover:bg-secondary rounded-b-xl hover:font-bold hover:text-white"
               onClick={() => setStatusFilter('Expired')}
             >
               <div className="flex justify-between font-[600]">
