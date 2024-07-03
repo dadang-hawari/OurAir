@@ -4,12 +4,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getFlightRecomendation } from '../../redux/actions/flightsAction'
 import { useEffect, useState } from 'react'
 import { SkeletonRekomendasi } from './SkeletonRekomendasi'
+import { setIdFlight } from '../../redux/reducers/checkoutReducer'
+import { useNavigate } from 'react-router-dom'
 
 export default function RecommendDestination() {
   const airports = useSelector((state) => state?.flightLists?.flightRecomendation)
   const [chosenCountry, setChosenCountry] = useState('Indonesia')
   const [isLoading, setIsLoading] = useState('false')
+  const jadwalPenerbangan = useSelector((state) => state?.jadwalPenerbangan)
+  const jumlahPenumpang = jadwalPenerbangan?.jumlahPenumpang
+  const navigate = useNavigate()
+
   const dispatch = useDispatch()
+  console.log('airports', airports)
 
   useEffect(() => {
     setFirstCountry()
@@ -40,6 +47,13 @@ export default function RecommendDestination() {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' })
       .format(amount)
       .replace(/\D00(?=\D*$)/, '')
+  }
+
+  const handleClick = (id) => {
+    dispatch(setIdFlight(id))
+    navigate('/checkout-pemesanan', {
+      state: { jumlahPenumpang: jadwalPenerbangan?.jumlahPenumpang, flight_id: id },
+    })
   }
 
   return (
@@ -88,7 +102,7 @@ export default function RecommendDestination() {
         </button>
         <button
           className={`text-sm  max-w-32 min-w-32 w-full h-12 my-4 rounded-xl ${
-            chosenCountry === 'Philippines' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
+            chosenCountry === 'Thailand' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
           }`}
           onClick={() => getFlightsByCountry('Thailand')}
         >
@@ -97,12 +111,12 @@ export default function RecommendDestination() {
         </button>
         <button
           className={`text-sm  max-w-32 min-w-32 w-full h-12 my-4 rounded-xl ${
-            chosenCountry === 'Philippines' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
+            chosenCountry === 'Singapore' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
           }`}
-          onClick={() => getFlightsByCountry('Vietnam')}
+          onClick={() => getFlightsByCountry('Singapore')}
         >
           <FontAwesomeIcon icon={faSearch} className="mr-2" />
-          Vietnam
+          Singapore
         </button>
       </div>
 
@@ -111,7 +125,7 @@ export default function RecommendDestination() {
       ) : (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 px-4 mt-5 sm:mt-0">
           {airports?.map((airport, i) => (
-            <div key={i} className="border rounded-md">
+            <div key={i} className="border rounded-md" onClick={() => handleClick(airport?.id)}>
               <img
                 src={airport?.toAirport?.thumbnail}
                 alt={airport?.toAirport?.cityName}
