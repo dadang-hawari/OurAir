@@ -16,7 +16,6 @@ export default function RecommendDestination() {
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
-  console.log('airports', airports)
 
   useEffect(() => {
     setFirstCountry()
