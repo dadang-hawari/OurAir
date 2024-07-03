@@ -35,7 +35,6 @@ const checkoutSlice = createSlice({
     },
     setPenumpang: (state, action) => {
       state.penumpang = action.payload
-      console.log('penupmang', action)
     },
     setJumlahPenumpang: (state, action) => {
       state.jumlahPenumpang = action.payload

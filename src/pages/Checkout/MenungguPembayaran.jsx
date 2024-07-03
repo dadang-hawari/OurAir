@@ -77,7 +77,7 @@ export default function MenungguPembayaran() {
   }
 
   useEffect(() => {
-    const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`, { withCredentials: true })
+    const socket = io(`${import.meta.env.VITE_DOMAIN_API}`, { withCredentials: true })
     socket.on(`transaction-update-${token}`, (data) => {
       if (data) getPayment()
     })
