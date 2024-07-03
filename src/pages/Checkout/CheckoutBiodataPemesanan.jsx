@@ -129,8 +129,6 @@ export default function CheckoutBiodataPemesan() {
       navigate('/')
       return
     }
-    if (!isLoggedin) document.body.style.overflowY = 'hidden'
-    else document.body.style.overflowY = 'auto'
   }
 
   useEffect(() => {

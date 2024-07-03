@@ -125,7 +125,11 @@ export default function RecommendDestination() {
       ) : (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 px-4 mt-5 sm:mt-0">
           {airports?.map((airport, i) => (
-            <div key={i} className="border rounded-md" onClick={() => handleClick(airport?.id)}>
+            <div
+              key={i}
+              className="border rounded-md cursor-pointer"
+              onClick={() => handleClick(airport?.id)}
+            >
               <img
                 src={airport?.toAirport?.thumbnail}
                 alt={airport?.toAirport?.cityName}
