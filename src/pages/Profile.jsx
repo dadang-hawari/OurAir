@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Footer from '../components/common/Footer'
 import Toast from '../components/common/Toast'
-import { updateUser, updateProfile } from '../redux/actions/authAction'
+import { updateUser, updateProfile, getUsersProfile } from '../redux/actions/authAction'
 import ScrollToTop from '../components/common/ScrollToTop'
 import Navbar from '../components/common/Navbar'
 import { Link, useNavigate } from 'react-router-dom'
@@ -59,6 +59,7 @@ export default function Profile() {
   }
 
   useEffect(() => {
+    dispatch(getUsersProfile(navigate))
     if (!isLoggedin)
       navigate('/login', {
         state: {
