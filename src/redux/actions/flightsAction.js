@@ -19,7 +19,10 @@ export const getAllFlights = () => async (dispatch) => {
       dispatch(setFligthLists(data))
     }
   } catch (error) {
-    console.error('error', error)
+    toast(error?.response?.data?.errors[0]?.msg, {
+      toastId: 'toastError',
+      className: 'toast-error',
+    })
   }
 }
 
@@ -40,7 +43,12 @@ export const getFlightByCityorCountry =
         dispatch(setFlightsByCity(data))
         dispatch(setFlightDetail(response?.data))
       }
-    } catch (error) {}
+    } catch (error) {
+      toast(error?.response?.data?.errors[0]?.msg, {
+        toastId: 'toastError',
+        className: 'toast-error',
+      })
+    }
   }
 
 export const getFlightRecomendation = (country) => async (dispatch) => {
@@ -54,7 +62,12 @@ export const getFlightRecomendation = (country) => async (dispatch) => {
     if (response.status === 200 || response.status === 201) {
       dispatch(setFlightRecomendation(data))
     }
-  } catch (error) {}
+  } catch (error) {
+    toast(error?.response?.data?.errors[0]?.msg, {
+      toastId: 'toastError',
+      className: 'toast-error',
+    })
+  }
 }
 
 export const getFlightsByCity = (city) => async (dispatch) => {
@@ -65,13 +78,14 @@ export const getFlightsByCity = (city) => async (dispatch) => {
       }/api/v1/flights/search-city-or-country?city=${city}&limit=10`
     )
     const data = response.data.data
-    console.log('response', response)
-    alert('excute by city')
+
     if (response.status === 200 || response.status === 201) {
       dispatch(setFlightsByCity(data))
     }
-    console.log('response bandara berdasarkan city :>> ', data)
   } catch (error) {
-    console.log('error', error)
+    toast(error?.response?.data?.errors[0]?.msg, {
+      toastId: 'toastError',
+      className: 'toast-error',
+    })
   }
 }

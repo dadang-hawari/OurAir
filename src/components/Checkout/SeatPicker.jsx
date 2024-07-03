@@ -1,11 +1,11 @@
 import React from 'react'
-import '../styles/seatpicker.css'
+import '../../styles/seatpicker.css'
 import {
   addSelectedSeat,
   removeSelectedSeat,
   resetSelectedSeats,
   setSelectedSeat,
-} from '../redux/reducers/checkoutReducer'
+} from '../../redux/reducers/checkoutReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function SeatPicker() {

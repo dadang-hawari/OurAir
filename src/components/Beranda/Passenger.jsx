@@ -21,7 +21,6 @@ import {
 export const Passengers = () => {
   const [isModalOpenPassenger, setIsModalOpenPassenger] = useState(false)
   const penumpang = useSelector((state) => state?.jadwalPenerbangan)
-  console.log('penumpang :>> ', penumpang)
 
   const adults = penumpang?.jumlahPenumpang?.penumpangDewasa
   const children = penumpang?.jumlahPenumpang?.penumpangAnak
@@ -195,7 +194,7 @@ export const Passengers = () => {
 
             <div className="flex justify-end w-full">
               <button
-                className="bg-blue-600 text-white py-3 px-5 my-2 text-sm font-[600] rounded-md "
+                className="bg-blue-600 text-white py-3 px-5 mt-4 mb-1 text-sm font-[600] rounded-md "
                 onClick={confirmPassenger}
               >
                 Tutup

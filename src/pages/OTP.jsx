@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import OTPInput from 'react-otp-input'
-import ButtonPrimary from '../components/ButtonPrimary'
+import ButtonPrimary from '../components/Login/ButtonPrimary'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { decrementTimerOtp, resetTimerOtp, setOtpSentTime } from '../redux/reducers/otpReducers'
@@ -91,7 +91,6 @@ export default function OTP() {
     dispatch(verifyOTP(email, otp, navigate)).then(() => {
       setIsLoading(false)
     })
-    console.log('OTP yang dimasukkan:', otp)
   }
 
   return (

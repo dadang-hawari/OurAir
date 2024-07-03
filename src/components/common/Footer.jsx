@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import logoFooter from '../../public/assets/images/logoFooter.webp'
+import logoFooter from '/assets/images/logoFooter.webp'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'

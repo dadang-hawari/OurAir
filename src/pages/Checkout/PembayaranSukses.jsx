@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/common/Navbar'
 import ReactModal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -46,7 +46,7 @@ export default function PembayaranSukses() {
   const [useCurrentEmail, setUseCurrentEmail] = useState(false)
   const [currentEmail, setCurrentEmail] = useState('')
   const emailnow = useSelector((state) => state?.auth?.userData?.email)
-  console.log('data', emailnow)
+
   ReactModal.setAppElement('#modal')
 
   const openModal = () => {

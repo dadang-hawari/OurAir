@@ -7,16 +7,14 @@ import GantiPassword from './pages/GantiPassword'
 import Daftar from './pages/Daftar'
 import CariPenerbangan from './pages/CariPenerbangan'
 import Profile from './pages/Profile'
-import LoadingGoogle from './components/LoadingGoogle'
+import LoadingGoogle from './components/Login/LoadingGoogle'
 import RiwayatPemesanan from './pages/RiwayatPemesanan'
 import CheckoutBiodataPemesanan from './pages/Checkout/CheckoutBiodataPemesanan'
 import Notification from './pages/Notification'
 import Tentang from './pages/Tentang'
 import MenungguPembayaran from './pages/Checkout/MenungguPembayaran'
 import PembayaranSukses from './pages/Checkout/PembayaranSukses'
-import SeatPicker from './components/SeatPicker'
-import ScrollToTop from './components/common/ScrollToTop'
-import NotFound from './components/NotFound'
+import NotFound from './components/common/NotFound'
 
 export default function Route() {
   const router = createBrowserRouter([
@@ -24,10 +22,7 @@ export default function Route() {
       path: '/',
       element: <Beranda />,
     },
-    {
-      path: '/seat-picker',
-      element: <SeatPicker />,
-    },
+
     {
       path: '/otp',
       element: <OTP />,

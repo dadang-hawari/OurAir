@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Image from '/assets/images/cloud_ourair.webp'
 import Logo from '/assets/images/ourair_logo.svg'
-import ButtonPrimary from '../components/ButtonPrimary'
+import ButtonPrimary from '../components/Login/ButtonPrimary'
 import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -102,13 +102,6 @@ const Daftar = () => {
         setIsLoading(false)
       )
     }
-
-    console.log('DaftarRegistering:', {
-      username,
-      email,
-      phoneNumber,
-      password,
-    })
   }
 
   return (

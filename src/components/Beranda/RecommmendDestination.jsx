@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFlightRecomendation } from '../../redux/actions/flightsAction'
 import { useEffect, useState } from 'react'
+import { SkeletonRekomendasi } from './SkeletonRekomendasi'
 
-export default function DestinasiFavorit() {
+export default function RecommendDestination() {
   const airports = useSelector((state) => state?.flightLists?.flightRecomendation)
   const [chosenCountry, setChosenCountry] = useState('Indonesia')
+  const [isLoading, setIsLoading] = useState('false')
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -14,7 +16,8 @@ export default function DestinasiFavorit() {
   }, [])
 
   const setFirstCountry = () => {
-    dispatch(getFlightRecomendation('Indonesia'))
+    setIsLoading(true)
+    dispatch(getFlightRecomendation('Indonesia')).then(() => setIsLoading(false))
     setChosenCountry('Indonesia')
   }
 
@@ -29,7 +32,8 @@ export default function DestinasiFavorit() {
 
   const getFlightsByCountry = (country) => {
     setChosenCountry(country)
-    dispatch(getFlightRecomendation(country))
+    setIsLoading(true)
+    dispatch(getFlightRecomendation(country)).then(() => setIsLoading(false))
   }
 
   const formatCurrency = (amount) => {
@@ -39,7 +43,7 @@ export default function DestinasiFavorit() {
   }
 
   return (
-    <div className="mt-[660px] mini:mt-[659px] minixl:mt-[620px] sm:mt-[325px]  md:mt-[340px] xl:mt-[350px] max-w-[1040px] mx-auto  md:px-0 px-4">
+    <div className="mt-[660px] mini:mt-[659px] minixl:mt-[620px] sm:mt-[340px]  md:mt-[340px] xl:mt-[350px] max-w-[1040px] mx-auto  md:px-0 px-4">
       <h2 className="font-bold px-5 text-xl">
         Rekomendasi <span className="text-accent">Destinasi</span>{' '}
       </h2>
@@ -83,45 +87,50 @@ export default function DestinasiFavorit() {
           Philippines
         </button>
       </div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 px-4 mt-5 sm:mt-0">
-        {airports?.map((airport, i) => (
-          <div key={i} className="border rounded-md">
-            <img
-              src={airport?.toAirport?.thumbnail}
-              alt={airport?.toAirport?.cityName}
-              className="w-full  mb-2 min-h-40 max-h-40 object-cover rounded-t-md"
-            />
-            <div className=" p-1 flex flex-col gap-y-1 pb-2 px-2">
-              <div className="font-[600] text-sm flex items-center gap-2">
-                <span title={airport?.fromAirport?.cityName}>
-                  {airport?.fromAirport?.cityName?.length > 12
-                    ? airport?.fromAirport?.cityName?.slice(0, 11) + '...'
-                    : airport?.fromAirport?.cityName}
-                </span>
-                <FontAwesomeIcon icon={faArrowRight} />
-                <span title={airport?.toAirport?.cityName}>
-                  {airport?.toAirport?.cityName?.length > 12
-                    ? airport?.toAirport?.cityName?.slice(0, 11) + '...'
-                    : airport?.toAirport?.cityName}
-                </span>
-              </div>
-              <div className="font-bold text-secondary text-xs">
-                {airport?.whomAirplaneFlights?.whomAirlinesAirplanes.name}
-              </div>
 
-              <div className="text-sm">
-                {formatFlightDates(airport?.arrival_time, airport?.departure_time)}
-              </div>
-              <div className="text-sm">
-                Harga : {'  '}
-                <span className="text-red-500 font-bold">
-                  {formatCurrency(airport?.ticket_price)}
-                </span>
+      {isLoading ? (
+        <SkeletonRekomendasi />
+      ) : (
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 px-4 mt-5 sm:mt-0">
+          {airports?.map((airport, i) => (
+            <div key={i} className="border rounded-md">
+              <img
+                src={airport?.toAirport?.thumbnail}
+                alt={airport?.toAirport?.cityName}
+                className="w-full  h-auto mb-2 min-h-40 max-h-40 object-cover rounded-t-md"
+              />
+              <div className=" p-1 flex flex-col gap-y-1 pb-2 px-2">
+                <div className="font-[600] text-sm flex items-center gap-2">
+                  <span title={airport?.fromAirport?.cityName}>
+                    {airport?.fromAirport?.cityName?.length > 12
+                      ? airport?.fromAirport?.cityName?.slice(0, 11) + '...'
+                      : airport?.fromAirport?.cityName}
+                  </span>
+                  <FontAwesomeIcon icon={faArrowRight} />
+                  <span title={airport?.toAirport?.cityName}>
+                    {airport?.toAirport?.cityName?.length > 12
+                      ? airport?.toAirport?.cityName?.slice(0, 11) + '...'
+                      : airport?.toAirport?.cityName}
+                  </span>
+                </div>
+                <div className="font-bold text-secondary text-xs">
+                  {airport?.whomAirplaneFlights?.whomAirlinesAirplanes.name}
+                </div>
+
+                <div className="text-sm">
+                  {formatFlightDates(airport?.arrival_time, airport?.departure_time)}
+                </div>
+                <div className="text-sm">
+                  Harga : {'  '}
+                  <span className="text-red-500 font-bold">
+                    {formatCurrency(airport?.ticket_price)}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

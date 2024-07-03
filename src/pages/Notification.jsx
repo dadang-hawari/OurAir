@@ -1,16 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/common/Navbar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faArrowLeft,
-  faBell,
-  faCheck,
-  faChevronDown,
-  faEyeDropperEmpty,
-  faMessage,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons'
-import iconFaFilter from '../../public/assets/images/fi_filter.svg'
+import { faArrowLeft, faBell, faChevronDown, faXmark } from '@fortawesome/free-solid-svg-icons'
 import React, { useEffect, useState } from 'react'
 import {
   getNotification,
@@ -88,10 +79,10 @@ const Notification = () => {
   ReactModal.setAppElement('#modal')
 
   return (
-    <div className="mt-16">
+    <div className="mt-16 pb-20">
       <Navbar />
       <Header openModal={openModal} text={statusFilter} />
-      <div className="max-w-3xl mx-auto ">
+      <div className="max-w-3xl mx-auto mt-4">
         <ul>
           {isLoading ? (
             <SkeletonNotification />

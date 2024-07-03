@@ -15,7 +15,7 @@ import {
 import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link, useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/common/Navbar'
 import { useState, useRef, useEffect } from 'react'
 import ReactModal from 'react-modal'
 import { customStyles, customStylesFilter } from '../styles/customStyles'
@@ -475,7 +475,9 @@ export default function RiwayatPemesanan() {
           )}
         </div>
       </div>
-      <div className={`${paymentHistory?.length === 0 ? 'block' : 'hidden'}  text-center my-5`}>
+      <div
+        className={`${paymentHistory?.length === 0 ? 'block' : 'hidden'}  text-center my-5 px-4`}
+      >
         <img
           src="/assets/images/riwayat-pesanan/empty.webp"
           alt="Riwayat Pesanan Kosong"
