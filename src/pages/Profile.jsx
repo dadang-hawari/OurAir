@@ -99,9 +99,15 @@ export default function Profile() {
               <div className="w-max flex flex-col gap-0.5">
                 <span className="text-primary font-semibold w-28 text-center">Foto Profil</span>
                 <div className="flex justify-center flex-col items-center gap-4">
-                  {preview || userData?.avatar_link ? (
+                  {userData?.avatar_link ? (
                     <img
-                      src={preview ? preview : userData?.avatar_link}
+                      src={userData?.avatar_link}
+                      alt="Profile Picture"
+                      className="w-12 h-12 rounded-full mx-auto border border-gray-300 object-cover object-center"
+                    />
+                  ) : preview ? (
+                    <img
+                      src={preview}
                       alt="Profile Picture"
                       className="w-12 h-12 rounded-full mx-auto border border-gray-300 object-cover object-center"
                     />
