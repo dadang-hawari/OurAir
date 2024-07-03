@@ -29,7 +29,7 @@ const Footer = () => {
             </p>
             <p>
               {' '}
-              <Link to="/sdgs" className="text-xs w-max block">
+              <Link to="/sdgs" target="_blank" className="text-xs w-max block">
                 SDGs
               </Link>
             </p>
