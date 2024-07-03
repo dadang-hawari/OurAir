@@ -166,7 +166,8 @@ export const resetPassword = (token, password, navigate) => async () => {
   }
 }
 
-export const authGoogleUser = (token, navigate) => async (dispatch) => {
+export const authGoogleUser = (token, navigate) => async (dispatch, state) => {
+  console.log('state', state)
   try {
     const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/who-am-i`, {
       headers: {
