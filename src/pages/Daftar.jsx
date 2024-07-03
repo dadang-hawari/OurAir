@@ -14,7 +14,7 @@ import {
 } from '../utils/passRegex'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import Toast from '../components/common/Toast'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { registUser } from '../redux/actions/authAction'
 import { isEmailValid } from '../utils/emailRegex'
 
@@ -43,6 +43,17 @@ const Daftar = () => {
     setIsPhoneNumEmpty(phoneNumber.trim().length === 0)
   }
 
+  const isLoggedin = useSelector((state) => state?.auth?.isLoggedin)
+
+  const isLoggedIn = () => {
+    if (isLoggedin)
+      navigate('/', {
+        state: {
+          info: 'Anda sudah login',
+        },
+      })
+  }
+
   // Check empty fields
   const checkEmptyFields = () => {
     if (!email.trim() || !username.trim() || !password.trim() || !phoneNumber.trim()) {
@@ -60,6 +71,10 @@ const Daftar = () => {
     setIsPasswordMedium(passwordMedium(password))
     setIsPasswordStrong(passwordStrong(password))
   }, [password])
+
+  useEffect(() => {
+    isLoggedIn()
+  }, [])
 
   const showPassMeter = () => {
     setPassMeter(true)

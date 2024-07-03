@@ -11,6 +11,7 @@ import flightsReducer from './reducers/flightsReducer'
 import checkoutReducer from './reducers/checkoutReducer'
 import notifReducer from './reducers/notifReducer'
 import paymentHistoryReducer from './reducers/paymentHistoryReducer'
+import sdgsReducer from './reducers/sdgsReducers'
 
 const rootReducers = combineReducers({
   auth: authReducer,
@@ -20,6 +21,7 @@ const rootReducers = combineReducers({
   checkout: checkoutReducer,
   notification: notifReducer,
   payment: paymentHistoryReducer,
+  sdgs: sdgsReducer,
 })
 
 const persistConfig = {

@@ -47,7 +47,7 @@ export default function RecommendDestination() {
       <h2 className="font-bold px-5 text-xl">
         Rekomendasi <span className="text-accent">Destinasi</span>{' '}
       </h2>
-      <div className="flex gap-x-3 px-5 overflow-x-auto">
+      <div className="flex gap-x-3 px-5 overflow-x-auto mb-5">
         <button
           className={`text-sm  max-w-32 min-w-32 w-full h-12 my-4 rounded-xl ${
             chosenCountry === 'Indonesia' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
@@ -85,6 +85,24 @@ export default function RecommendDestination() {
         >
           <FontAwesomeIcon icon={faSearch} className="mr-2" />
           Philippines
+        </button>
+        <button
+          className={`text-sm  max-w-32 min-w-32 w-full h-12 my-4 rounded-xl ${
+            chosenCountry === 'Philippines' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
+          }`}
+          onClick={() => getFlightsByCountry('Thailand')}
+        >
+          <FontAwesomeIcon icon={faSearch} className="mr-2" />
+          Thailand
+        </button>
+        <button
+          className={`text-sm  max-w-32 min-w-32 w-full h-12 my-4 rounded-xl ${
+            chosenCountry === 'Philippines' ? 'bg-secondary text-white' : 'bg-soft-blue text-black'
+          }`}
+          onClick={() => getFlightsByCountry('Vietnam')}
+        >
+          <FontAwesomeIcon icon={faSearch} className="mr-2" />
+          Vietnam
         </button>
       </div>
 

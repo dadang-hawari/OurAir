@@ -11,7 +11,7 @@ export const getAllFlights = () => async (dispatch) => {
   try {
     const response = await axios.get(
       `${
-        import.meta.env.VITE_DOMAIN_API_DEV
+        import.meta.env.VITE_DOMAIN_API
       }/api/v1/flights/search-or-fetch-all-flight-from?page=1&limit=9999`
     )
     const data = response.data.data
@@ -32,7 +32,7 @@ export const getFlightByCityorCountry =
     try {
       const response = await axios.get(
         `${
-          import.meta.env.VITE_DOMAIN_API_DEV
+          import.meta.env.VITE_DOMAIN_API
         }/api/v1/flights/search?fromairport=${fromairport}&toairport=${toairport}&limit=${limit}&page=${page}` +
           `${kelas ? `&class=${kelas === 'First Class' ? 'firstclass' : kelas}` : ''}` +
           `${startDate ? `&startDate=${startDate}` : ''}` +
@@ -55,7 +55,7 @@ export const getFlightRecomendation = (country) => async (dispatch) => {
   try {
     const response = await axios.get(
       `${
-        import.meta.env.VITE_DOMAIN_API_DEV
+        import.meta.env.VITE_DOMAIN_API
       }/api/v1/flights/recommendation?fromcountry=${country}&limit=${10}`
     )
     const data = response.data.data
@@ -74,7 +74,7 @@ export const getFlightsByCity = (city) => async (dispatch) => {
   try {
     const response = await axios.get(
       `${
-        import.meta.env.VITE_DOMAIN_API_DEV
+        import.meta.env.VITE_DOMAIN_API
       }/api/v1/flights/search-city-or-country?city=${city}&limit=10`
     )
     const data = response.data.data

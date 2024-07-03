@@ -11,7 +11,7 @@ export const getFlightById = () => async (dispatch, state) => {
   const id = state()?.checkout?.idFlight
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/flights/search-by-id?id=${id}`
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/flights/search-by-id?id=${id}`
     )
     const data = response.data.data
     if (response.status === 200 || response.status === 201) {
@@ -39,7 +39,7 @@ export const postBooking = (navigate, isUserDonate, checkout) => async (dispatch
       toastId: 'toastInfo',
     })
     const response = await axios.post(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/booking/create`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/booking/create`,
       { passengers, baby, booker, donation },
       {
         headers: {

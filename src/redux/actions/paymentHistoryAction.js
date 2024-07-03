@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 export const getTransaction = () => async (dispatch, state) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/transactions/history`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/transactions/history`,
       {
         headers: {
           Authorization: `Bearer ${state()?.auth?.token}`,
@@ -29,9 +29,7 @@ export const getTransactionById = (idnya) => async (dispatch, state) => {
   const id = idnya ? idnya : state()?.checkout?.transactionId
   try {
     const response = await axios.get(
-      `${
-        import.meta.env.VITE_DOMAIN_API_DEV
-      }/api/v1/transactions/search-transaction-history?id=${id}`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/transactions/search-transaction-history?id=${id}`,
       {
         headers: {
           Authorization: `Bearer ${state()?.auth?.token}`,

@@ -6,9 +6,10 @@ import Toast from '../components/common/Toast'
 import { updateUser, updateProfile } from '../redux/actions/authAction'
 import ScrollToTop from '../components/common/ScrollToTop'
 import Navbar from '../components/common/Navbar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { useEffect } from 'react'
 
 function useInput(defaultValue = '') {
   const [state, setState] = useState(defaultValue)
@@ -30,6 +31,8 @@ export default function Profile() {
   const [name, onNameChange] = useInput(() => userData?.name)
   const [phone, onPhoneChange] = useInput(() => userData?.phone_number || '')
   const [email, onEmailChange] = useInput(() => userData?.email || '')
+  const navigate = useNavigate()
+  const isLoggedin = useSelector((state) => state?.auth?.isLoggedin)
 
   const dispatch = useDispatch()
 
@@ -54,6 +57,15 @@ export default function Profile() {
       )
     }
   }
+
+  useEffect(() => {
+    if (!isLoggedin)
+      navigate('/login', {
+        state: {
+          error: 'Mohon login terlebih dahulu',
+        },
+      })
+  }, [])
 
   const handleSave = () => {
     if (!name.trim() || !phone.trim()) {

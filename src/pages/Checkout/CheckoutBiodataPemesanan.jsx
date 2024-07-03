@@ -26,7 +26,7 @@ import BackToTop from '../../components/common/BackToTop'
 import { setPage } from '../../redux/reducers/otpReducers'
 import { customStylesDestination } from '../../styles/customStyles'
 import SkeletonDetailPesanan from '../../components/RiwayatPesanan/SkeletonDetailPesanan'
-import IsiDataPenumpang from './IsiDataPenumpang'
+import IsiDataPenumpang from '../../components/Checkout/IsiDataPenumpang'
 import { setPrevPage } from '../../redux/reducers/notifReducer'
 import ScrollToTop from '../../components/common/ScrollToTop'
 
@@ -500,7 +500,7 @@ export default function CheckoutBiodataPemesan() {
                         berkontribusi dalam upaya global untuk mencapai Sustainable Development
                         Goals (SDGs).
                       </p>
-                      <Link to="google.com" className="text-blue-400 text-xs" target="_blank">
+                      <Link to="/sdgs" className="text-blue-400 text-xs" target="_blank">
                         Baca selengkapnya<span className="tracking-wider">...</span>{' '}
                       </Link>
                     </div>

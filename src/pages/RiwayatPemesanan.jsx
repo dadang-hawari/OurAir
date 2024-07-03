@@ -18,7 +18,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/common/Navbar'
 import { useState, useRef, useEffect } from 'react'
 import ReactModal from 'react-modal'
-import { customStyles, customStylesFilter } from '../styles/customStyles'
+import { customStylesFilter } from '../styles/customStyles'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTransaction, getTransactionById } from '../redux/actions/paymentHistoryAction'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
@@ -559,7 +559,7 @@ export default function RiwayatPemesanan() {
               </div>
             </li>
             <li
-              className="px-4 cursor-pointer border-b py-4  hover:bg-secondary hover:font-bold hover:text-white"
+              className="px-4 cursor-pointer  py-4  hover:bg-secondary rounded-b-xl hover:font-bold hover:text-white"
               onClick={() => setStatusFilter('Expired')}
             >
               <div className="flex justify-between font-[600]">
