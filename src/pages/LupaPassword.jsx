@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux'
 import { forgotPassword } from '../redux/actions/authAction'
 import Toast from '../components/common/Toast'
 import { isEmailValid } from '../utils/emailRegex'
-import { Bounce } from 'react-toastify'
 
 const LupaPassword = () => {
   const [email, setEmail] = useState('')
@@ -76,7 +75,7 @@ const LupaPassword = () => {
               </p>
             </div>
             <div>
-              <ButtonPrimary onClick={handleSubmit} isDisabled={isLoading} text="Kirim" />
+              <ButtonPrimary onClick={handleSubmit} text="Kirim" />
             </div>
           </form>
         </div>

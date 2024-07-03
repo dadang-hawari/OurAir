@@ -4,20 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowLeft,
   faArrowRightArrowLeft,
-  faArrowsDownToPeople,
-  faArrowsLeftRight,
-  faBox,
   faChevronDown,
   faChevronLeft,
   faChevronRight,
-  faChevronUp,
-  faClock,
-  faDollar,
   faIcons,
-  faLeftRight,
   faSuitcase,
-  faSuitcaseRolling,
-  faTimeline,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'

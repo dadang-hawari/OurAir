@@ -26,7 +26,7 @@ import BackToTop from '../../components/common/BackToTop'
 import { setPage } from '../../redux/reducers/otpReducers'
 import { customStylesDestination } from '../../styles/customStyles'
 import SkeletonDetailPesanan from '../../components/RiwayatPesanan/SkeletonDetailPesanan'
-import IsiDataPenumpang from './IsiDataPenumpang'
+import IsiDataPenumpang from '../../components/Checkout/IsiDataPenumpang'
 import { setPrevPage } from '../../redux/reducers/notifReducer'
 import ScrollToTop from '../../components/common/ScrollToTop'
 

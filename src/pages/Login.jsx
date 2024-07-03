@@ -23,6 +23,7 @@ const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
+  const isLoggedin = useSelector((state) => state?.auth?.isLoggedin)
 
   const checkEmptyFields = () => {
     if (email?.length > 0) {
@@ -33,13 +34,23 @@ const Login = () => {
     }
   }
 
+  const isLoggedIn = () => {
+    if (isLoggedin)
+      navigate('/', {
+        state: {
+          info: 'Anda sudah login',
+        },
+      })
+  }
+
   useEffect(() => {
     isSubmitted && checkEmptyFields()
   }, [email, password])
 
   useEffect(() => {
+    isLoggedIn()
     checkLocationState(location, navigate)
-  })
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()

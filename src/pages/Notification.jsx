@@ -10,7 +10,7 @@ import {
 } from '../redux/actions/notificationAction'
 import { useDispatch, useSelector } from 'react-redux'
 import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
-import { customStyles, customStylesFilter } from '../styles/customStyles'
+import { customStylesFilter } from '../styles/customStyles'
 import ReactModal from 'react-modal'
 import SkeletonNotification from '../components/Notification/SkeletonNotification'
 
@@ -46,8 +46,18 @@ const Notification = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const notification = useSelector((state) => state?.notification?.notification?.notifications)
+  const isLoggedin = useSelector((state) => state?.auth?.isLoggedin)
+
   useEffect(() => {
     setIsLoading(true)
+    if (!isLoggedin) {
+      navigate('/login', {
+        state: {
+          error: 'Mohon login terlebih dahulu',
+        },
+      })
+      return
+    }
     dispatch(getNotification())
       .then(() => {
         dispatch(readAllNotification(navigate))

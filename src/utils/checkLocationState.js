@@ -4,7 +4,7 @@ export const checkLocationState = (location, navigate, tranisiton = Flip) => {
   window.scrollTo(0, 0)
   if (location.state) {
     if (location.state.info) {
-      toast.info(location.state.info, {
+      toast(location.state.info, {
         toastId: 'toastInfo',
         className: 'toast-info',
         tranisiton: tranisiton,

@@ -13,7 +13,7 @@ import { setIsLoggedIn, setToken, setUserData } from '../reducers/authReducer'
 export const getNotification = (navigate) => async (dispatch, getState) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/notification/notifications?page=2&limit=10`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/notification/notifications?page=2&limit=10`,
       {
         headers: {
           Authorization: `Bearer ${getState()?.auth?.token}`,
@@ -41,7 +41,7 @@ export const getNotification = (navigate) => async (dispatch, getState) => {
 export const getNotificationById = (id, navigate) => async (dispatch, getState) => {
   try {
     const response = await axios.patch(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/notification/notifications/${id}/read`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/notification/notifications/${id}/read`,
       {},
       {
         headers: {
@@ -57,7 +57,7 @@ export const getNotificationById = (id, navigate) => async (dispatch, getState) 
 export const readAllNotification = (navigate) => async (dispatch, getState) => {
   try {
     const response = await axios.patch(
-      `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/notification/notifications/read`,
+      `${import.meta.env.VITE_DOMAIN_API}/api/v1/notification/notifications/read`,
       {},
       {
         headers: {
