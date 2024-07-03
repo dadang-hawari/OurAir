@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Logo from '/assets/images/ourair_logo.svg'
 import Image from '/assets/images/cloud_ourair.webp'
-import ButtonPrimary from '../components/ButtonPrimary'
+import ButtonPrimary from '../components/Login/ButtonPrimary'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { loginUser } from '../redux/actions/authAction'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from '../components/common/Toast'
 import { checkLocationState } from '../utils/checkLocationState'
-import LoginGoogle from '../components/LoginGoogle'
+import LoginGoogle from '../components/Login/LoginGoogle'
 import { Flip } from 'react-toastify'
 
 const Login = () => {
@@ -160,7 +160,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Toast autoClose={5000} transition={Flip} />
+      <Toast autoClose={4000} transition={Flip} />
     </div>
   )
 }

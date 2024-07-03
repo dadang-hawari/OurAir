@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getFlightRecomendation } from '../../redux/actions/flightsAction'
 import { useEffect, useState } from 'react'
 
-export default function DestinasiFavorit() {
+export default function RecommendDestination() {
   const airports = useSelector((state) => state?.flightLists?.flightRecomendation)
   const [chosenCountry, setChosenCountry] = useState('Indonesia')
   const dispatch = useDispatch()
@@ -39,7 +39,7 @@ export default function DestinasiFavorit() {
   }
 
   return (
-    <div className="mt-[660px] mini:mt-[659px] minixl:mt-[620px] sm:mt-[325px]  md:mt-[340px] xl:mt-[350px] max-w-[1040px] mx-auto  md:px-0 px-4">
+    <div className="mt-[660px] mini:mt-[659px] minixl:mt-[620px] sm:mt-[340px]  md:mt-[340px] xl:mt-[350px] max-w-[1040px] mx-auto  md:px-0 px-4">
       <h2 className="font-bold px-5 text-xl">
         Rekomendasi <span className="text-accent">Destinasi</span>{' '}
       </h2>
@@ -89,7 +89,7 @@ export default function DestinasiFavorit() {
             <img
               src={airport?.toAirport?.thumbnail}
               alt={airport?.toAirport?.cityName}
-              className="w-full  mb-2 min-h-40 max-h-40 object-cover rounded-t-md"
+              className="w-full  h-auto mb-2 min-h-40 max-h-40 object-cover rounded-t-md"
             />
             <div className=" p-1 flex flex-col gap-y-1 pb-2 px-2">
               <div className="font-[600] text-sm flex items-center gap-2">

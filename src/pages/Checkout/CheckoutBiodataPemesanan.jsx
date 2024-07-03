@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/common/Navbar'
 import ReactModal from 'react-modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
-import SeatPicker from '../../components/SeatPicker'
+import SeatPicker from '../../components/Checkout/SeatPicker'
 import {
   assignSeatsToPassengers,
   resetSelectedSeats,
@@ -301,7 +301,7 @@ export default function CheckoutBiodataPemesan() {
                 <h2 className="bg-gray-700 text-white rounded-t-md p-2 text-[600]">
                   Data Diri Pemesan
                 </h2>
-                <div className="w-full p-3 flex flex-col gap-y-4">
+                <div className="w-full py-3 px-0 sm:p-3 flex flex-col gap-y-4">
                   <div>
                     <label className="font-bold" htmlFor="fullname">
                       Nama Lengkap

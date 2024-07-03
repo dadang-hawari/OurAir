@@ -32,12 +32,10 @@ export const registUser = (phone_number, name, email, password, navigate) => asy
         state: { success: `Kode OTP dikirimkan ke email ${email}` },
       })
     }
-    console.log('response :>> ', response)
   } catch (error) {
     toast.dismiss(toastIdWait)
-    console.log(error)
     if (error?.response?.status === 409)
-      toast.info('Akun ini sudah terdatar', { toastId: 'toastInfo' })
+      toast('Akun ini sudah terdatar', { toastId: 'toastInfo', className: 'toast-info' })
     else if (error?.response?.data?.errors[0])
       error?.response?.data?.errors[0]?.msg ===
       'Phone number must be between 10 and 15 characters long'
@@ -70,7 +68,6 @@ export const verifyOTP = (email, otp, navigate) => async (dispatch) => {
       }
     )
 
-    console.log('response :>> ', response)
     if (response?.status === 201) {
       toast.dismiss(toastIdWait)
       navigate('/login', { state: { success: 'Akun berhasil diverifikasi' } })
@@ -84,7 +81,6 @@ export const verifyOTP = (email, otp, navigate) => async (dispatch) => {
       })
     }
   } catch (error) {
-    console.log(error)
     toast.dismiss(toastIdWait)
     if (error?.response?.status === 401) {
       error?.response?.data?.message === 'Invalid or expired OTP'
@@ -108,7 +104,6 @@ export const sendVerifyOtp = (email) => async () => {
     toast.loading(loadingMessage, {
       toastId: toastIdWait,
     })
-    console.log('email :>> ', email)
     const response = await axios.post(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/auth/try-send-email`,
       {
@@ -116,7 +111,6 @@ export const sendVerifyOtp = (email) => async () => {
       }
     )
 
-    console.log('response :>> ', response)
     if (response?.status === 201) {
       toast.dismiss(toastIdWait)
       toast('Kode OTP baru berhasil dikirim', {
@@ -169,7 +163,6 @@ export const resetPassword = (token, password, navigate) => async () => {
           className: 'toast-error',
           toastId: 'toastError',
         })
-    console.error('Error:', error)
   }
 }
 
@@ -183,8 +176,7 @@ export const authGoogleUser = (token, navigate) => async (dispatch) => {
         },
       }
     )
-    console.log('import.meta.env.VITE_DOMAIN_API_DEV :>> ', import.meta.env.VITE_DOMAIN_API_DEV)
-    console.log('response :>> ', response)
+
     const data = response?.data.data
     if (response?.status === 200) {
       dispatch(setUserData(data))
@@ -197,7 +189,6 @@ export const authGoogleUser = (token, navigate) => async (dispatch) => {
       })
     }
   } catch (error) {
-    console.log(error)
     error?.response?.data?.errors[0]?.msg
       ? toast(error?.response?.data.errors[0].msg, {
           className: 'toast-error',
@@ -207,7 +198,6 @@ export const authGoogleUser = (token, navigate) => async (dispatch) => {
           className: 'toast-error',
           toastId: 'toastError',
         })
-    console.error('Error:', error)
   }
 }
 
@@ -235,7 +225,7 @@ export const forgotPassword = (email, navigate) => async () => {
   } catch (error) {
     toast.dismiss(toastIdWait)
     if (error?.response?.status === 404)
-      toast.info('Akun ini belum terdatar', { toastId: 'toastInfo' })
+      toast('Akun ini belum terdatar', { toastId: 'toastInfo', className: 'toast-info' })
     else
       error?.response?.data?.errors[0]?.msg
         ? toast(error?.response?.data.errors[0].msg, {
@@ -259,7 +249,6 @@ export const loginUser = (email, password, navigate, prevPage) => async (dispatc
       password,
     })
     const data = response?.data.data
-    console.log('response login :>> ', response)
     if (response?.data.message === 'success') {
       if (data?.isVerified) {
         toast.dismiss(toastIdWait)
@@ -283,7 +272,6 @@ export const loginUser = (email, password, navigate, prevPage) => async (dispatc
     }
   } catch (error) {
     toast.dismiss(toastIdWait)
-    console.log(error)
 
     if (error?.response?.status === 409)
       toast('Email atau Password yang Anda masukkan Salah', {
@@ -291,8 +279,9 @@ export const loginUser = (email, password, navigate, prevPage) => async (dispatc
         toastId: 'toastError',
       })
     else if (error?.response?.status === 404)
-      toast.info('Akun belum terdaftar', {
+      toast('Akun belum terdaftar', {
         toastId: 'toastInfo',
+        className: 'toast-info',
       })
     else if (error?.response?.data?.message === 'your account is registered by google !') {
       toast('Silahkan login mengggunakan akun Google Anda', {
@@ -336,7 +325,6 @@ export const updateUser = (name, email, phone_number, token) => async (dispatch)
       }
     )
     const data = response.data.data
-    console.log('response :>> update user', response)
     if (response?.status === 200 || response?.status === 201) {
       toast.dismiss('toastWait')
 
@@ -358,7 +346,6 @@ export const updateUser = (name, email, phone_number, token) => async (dispatch)
           className: 'toast-error',
           toastId: 'toastError',
         })
-    console.log(error)
   }
 }
 
@@ -401,8 +388,6 @@ export const getUsersProfile = (navigate) => async (dispatch, state) => {
         },
       }
     )
-    console.log('import.meta.env.VITE_DOMAIN_API_DEV :>> ', import.meta.env.VITE_DOMAIN_API_DEV)
-    console.log('response :>> ', response)
     const data = response?.data.data
     if (response?.status === 200) {
       dispatch(setUserData(data))
@@ -410,13 +395,11 @@ export const getUsersProfile = (navigate) => async (dispatch, state) => {
       dispatch(setIsLoggedIn(true))
     }
   } catch (error) {
-    console.log(error)
     error?.response?.data?.errors[0]?.msg
       ? toast(error?.response?.data.errors[0].msg, { className: 'toast-error' })
       : toast('Coba lagi nanti, saat ini ada kesalahan di sistem kami', {
           className: 'toast-error',
         })
-    console.error('Error:', error)
   }
 }
 
@@ -427,7 +410,6 @@ export const updateProfile = (imageFile, token) => async (dispatch) => {
   try {
     const formData = new FormData()
     formData.append('avatar', imageFile)
-
     const response = await axios.put(
       `${import.meta.env.VITE_DOMAIN_API_DEV}/api/v1/users/avatar-profile`,
       formData,

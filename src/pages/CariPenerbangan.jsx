@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/common/Navbar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowLeft,
@@ -20,7 +20,6 @@ import {
   faTimeline,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
-import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart'
 import { useEffect, useState } from 'react'
 import ReactModal from 'react-modal'
 import { customStylesFilter } from '../styles/customStyles'
@@ -193,13 +192,8 @@ export default function CariPenerbangan() {
     })
   }
 
-  const checkDepartureAndArrival = () => {
-    console.log('jadwalPenerbangan', jadwalPenerbangan)
-  }
-
   useEffect(() => {
     checkLocationState(location, navigate)
-    checkDepartureAndArrival()
   }, [])
 
   useEffect(() => {

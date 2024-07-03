@@ -18,7 +18,7 @@ export default function IsiDataPenumpang({
             <h2 className="bg-gray-700 text-white rounded-t-md p-2 text-[600]">
               Data Diri {penumpangData?.id}
             </h2>
-            <div className="w-full p-3 flex flex-col gap-y-4">
+            <div className="w-full py-3 px-0 sm:p-3 flex flex-col gap-y-4">
               <div>
                 <label className="font-bold" htmlFor={`title-${penumpangData?.id}`}>
                   Title

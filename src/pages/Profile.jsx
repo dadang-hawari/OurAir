@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import Footer from './Footer'
+import Footer from '../components/common/Footer'
 import Toast from '../components/common/Toast'
 import { updateUser, updateProfile } from '../redux/actions/authAction'
 import ScrollToTop from '../components/common/ScrollToTop'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/common/Navbar'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
@@ -63,8 +63,9 @@ export default function Profile() {
       })
       return
     }
-    handleUpload()
-    dispatch(updateUser(name, email, phone, token))
+    if (imageFile) {
+      handleUpload()
+    } else dispatch(updateUser(name, email, phone, token))
     setIsEditing(false)
   }
 

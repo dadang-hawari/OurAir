@@ -17,14 +17,14 @@ import {
   faCircleInfo,
   faHouse,
 } from '@fortawesome/free-solid-svg-icons'
-import { logout } from '../redux/actions/authAction'
+import { logout } from '../../redux/actions/authAction'
 import iconFaBell from '/assets/images/fi_bell.svg'
 import {
   getNotification,
   getNotificationById,
   readAllNotification,
-} from '../redux/actions/notificationAction'
-import { formatTimeToHM, formatTimeToIndonesia } from '../utils/timeFormatter'
+} from '../../redux/actions/notificationAction'
+import { formatTimeToHM, formatTimeToIndonesia } from '../../utils/timeFormatter'
 import { io } from 'socket.io-client'
 
 const Navbar = () => {
@@ -109,17 +109,6 @@ const Navbar = () => {
   const windowListener = () => {
     window.addEventListener('resize', handleResize)
   }
-
-  useEffect(() => {
-    const socket = io(`${import.meta.env.VITE_DOMAIN_API_DEV}`, { withCredentials: true })
-    socket.on(`notification-all`, (notifications) => {
-      if (notifications) getNotificationList()
-      alert('ex')
-    })
-    return () => {
-      socket.disconnect()
-    }
-  }, [])
 
   useEffect(() => {
     windowListener()
@@ -323,7 +312,7 @@ const Navbar = () => {
               </Link>
               <hr />
               <Link
-                to="/about"
+                to="/tentang"
                 className={`hover:text-blue-500 ${
                   path === '/tentang' ? 'cursor-default text-blue-500' : 'text-gray-700'
                 }`}

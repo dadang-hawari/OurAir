@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { authGoogleUser } from '../redux/actions/authAction'
-import Toast from './common/Toast'
+import { authGoogleUser } from '../../redux/actions/authAction'
+import Toast from '../common/Toast'
 
 export default function LoadingGoogle() {
   const dispatch = useDispatch()

@@ -16,11 +16,7 @@ export const getTransaction = () => async (dispatch, state) => {
     if (response.status === 200 || response.status === 201) {
       dispatch(setPaymentHistory(data))
     }
-    console.log('response', response)
-    console.log('data', data)
-    console.log('state', state()?.payment?.paymentHistory)
   } catch (error) {
-    console.log('error?.response?.data?.message', error?.response?.status)
     if (error?.response?.status === 401) {
       toast('Token expired, silahkan login kembali', {
         className: 'toast-error',
@@ -46,11 +42,7 @@ export const getTransactionById = (idnya) => async (dispatch, state) => {
     if (response.status === 200 || response.status === 201) {
       dispatch(setWaitingTransaction(data))
     }
-    console.log('response transaksi ', response)
-    console.log('data', data)
-    console.log('state', state()?.payment?.paymentHistory)
   } catch (error) {
-    console.log('error?.response?.data?.message', error?.response?.status)
     if (error?.response?.status === 401) {
       toast('Token expired, silahkan login kembali', {
         className: 'toast-error',

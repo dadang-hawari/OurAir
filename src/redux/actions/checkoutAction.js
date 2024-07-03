@@ -19,7 +19,10 @@ export const getFlightById = () => async (dispatch, state) => {
       dispatch(setFlightSeats(response.data.result[0]))
     }
   } catch (error) {
-    console.log(error)
+    toast(error?.response?.data?.errors[0]?.msg, {
+      toastId: 'toastError',
+      className: 'toast-error',
+    })
   }
 }
 export const postBooking = (navigate, isUserDonate, checkout) => async (dispatch, getState) => {
@@ -30,7 +33,7 @@ export const postBooking = (navigate, isUserDonate, checkout) => async (dispatch
   const baby = checkout?.jumlahPenumpang?.penumpangBayi
   const booker = checkout?.pemesan?.data
   const donation = isUserDonate ? parseInt(checkout?.donation) : 0
-  console.log('donation', donation)
+
   try {
     toast.loading('Mohon tunggu sebentar', {
       toastId: 'toastInfo',
@@ -67,21 +70,13 @@ export const postBooking = (navigate, isUserDonate, checkout) => async (dispatch
         toastId: 'toast-info',
       })
     }
-
-    console.log('response booking :>> ', data)
-    console.log('response', response)
-
-    // Navigate if needed
-    // navigate('/desired-path');
   } catch (error) {
     toast.dismiss('toastInfo')
-    console.log('error.response.data.message', error.response.data.message)
     if (error?.response?.data?.message === 'Failed to authenticate token')
       toast('Token expired, silahkan untuk melakukan login ulang', {
         className: 'toast-info',
         toastId: 'toast-info',
       })
-    console.log(error)
     toast(error?.response?.data?.errors[0]?.msg, {
       toastId: 'toastError',
       className: 'toast-error',

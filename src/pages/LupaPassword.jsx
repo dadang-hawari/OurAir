@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Logo from '/assets/images/ourair_logo.svg'
-import ButtonPrimary from '../components/ButtonPrimary'
+import ButtonPrimary from '../components/Login/ButtonPrimary'
 import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { forgotPassword } from '../redux/actions/authAction'
 import Toast from '../components/common/Toast'
 import { isEmailValid } from '../utils/emailRegex'
+import { Bounce } from 'react-toastify'
 
 const LupaPassword = () => {
   const [email, setEmail] = useState('')

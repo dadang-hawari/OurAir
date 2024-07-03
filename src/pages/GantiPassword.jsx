@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Logo from '/assets/images/ourair_logo.svg'
-import ButtonPrimary from '../components/ButtonPrimary'
+import ButtonPrimary from '../components/Login/ButtonPrimary'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faEye, faEyeSlash, faXmark } from '@fortawesome/free-solid-svg-icons'
 import {
