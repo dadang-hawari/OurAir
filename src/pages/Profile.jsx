@@ -8,7 +8,7 @@ import ScrollToTop from '../components/common/ScrollToTop'
 import Navbar from '../components/common/Navbar'
 import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from 'react'
 
 function useInput(defaultValue = '') {
@@ -99,11 +99,20 @@ export default function Profile() {
               <div className="w-max flex flex-col gap-0.5">
                 <span className="text-primary font-semibold w-28 text-center">Foto Profil</span>
                 <div className="flex justify-center flex-col items-center gap-4">
-                  <img
-                    src={preview ? preview : userData?.avatar_link}
-                    alt="Profile Picture"
-                    className="w-12 h-12 rounded-full mx-auto border border-gray-300 object-cover object-center"
-                  />
+                  {preview || userData?.avatar_link ? (
+                    <img
+                      src={preview ? preview : userData?.avatar_link}
+                      alt="Profile Picture"
+                      className="w-12 h-12 rounded-full mx-auto border border-gray-300 object-cover object-center"
+                    />
+                  ) : (
+                    <span className="bg-gray-300 block w-12 h-12 relative rounded-full">
+                      <FontAwesomeIcon
+                        icon={faUser}
+                        className="text-white absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2"
+                      />
+                    </span>
+                  )}
                   <label
                     htmlFor="foto-profil"
                     className={`bg-primary px-3 py-2 w-28 text-center  rounded-lg text-white cursor-pointer ${
