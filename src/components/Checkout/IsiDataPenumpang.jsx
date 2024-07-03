@@ -123,9 +123,10 @@ export default function IsiDataPenumpang({
                   </span>
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="w-full border outline-none focus:border-secondary rounded-md h-10 ps-3 mt-1 py-4"
                   placeholder="Masukkan KTP/Paspor"
+                  min={0}
                   id={`document-${penumpangData?.id}`}
                   name="document"
                   value={penumpangData?.document}
