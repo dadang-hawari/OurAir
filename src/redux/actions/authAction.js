@@ -167,7 +167,7 @@ export const resetPassword = (token, password, navigate) => async () => {
 }
 
 export const authGoogleUser = (token, navigate) => async (dispatch, state) => {
-  console.log('state', state)
+  const prevPage = state()?.notification?.prevPage
   try {
     const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/who-am-i`, {
       headers: {
@@ -180,7 +180,7 @@ export const authGoogleUser = (token, navigate) => async (dispatch, state) => {
       dispatch(setUserData(data))
       dispatch(setToken(token))
       dispatch(setIsLoggedIn(true))
-      navigate('/', {
+      navigate(prevPage ? prevPage : '/', {
         state: {
           success: 'Berhasil masuk',
         },
@@ -307,6 +307,7 @@ export const updateUser = (name, email, phone_number, token) => async (dispatch)
   toast.loading('Mohon tunggu sebentar...', {
     toastId: 'toastWait',
   })
+
   try {
     const response = await axios.patch(
       `${import.meta.env.VITE_DOMAIN_API}/api/v1/users/profile`,
@@ -374,6 +375,7 @@ export const validateUser = (token, navigate) => async () => {
 
 export const getUsersProfile = (navigate) => async (dispatch, state) => {
   const token = state()?.auth?.token
+
   try {
     const response = await axios.get(`${import.meta.env.VITE_DOMAIN_API}/api/v1/auth/who-am-i`, {
       headers: {
