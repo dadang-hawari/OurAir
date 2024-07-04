@@ -19,7 +19,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [passwordError, setPasswordError] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const prevPage = useSelector((state) => state?.notification?.prevPage)
+  const prevPage = useSelector((state) => state?.auth?.prevPage)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
