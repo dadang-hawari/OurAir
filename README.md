@@ -24,4 +24,9 @@ Tech Stack Front End
 - redux-persist
 - react-to-print
 
+Halaman ADMIN : 
 
+OurAir juga memiliki website admin yang didesain khusus untuk memudahkan para admin terutama dari segi front-end dalam mengelola data user dll. Melalui website ini, admin dapat mengelola, menghapus, update serta menambahkan data user, transaksi serta mengirim pesan kesemua user melalui send notification. Dengan dukungan penuh dari tim kami, admin dapat memastikan bahwa operasi sehari-hari berjalan lancar dan pelanggan mendapatkan pengalaman terbaik saat menggunakan layanan OurAir. 
+
+Berikut link Github dari Halaman Admin!
+repository ADMIN : https://github.com/Andrysm06/OURAIR-KM6-ADMIN
