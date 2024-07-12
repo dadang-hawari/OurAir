@@ -185,6 +185,8 @@ export const authGoogleUser = (token, navigate) => async (dispatch, state) => {
           success: 'Berhasil masuk',
         },
       })
+       dispatch(setPrevPage(null))
+      
     }
   } catch (error) {
     error?.response?.data?.errors[0]?.msg
