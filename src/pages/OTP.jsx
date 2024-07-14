@@ -32,14 +32,14 @@ export default function OTP() {
     setIsTimerActive(true)
     const now = new Date().toISOString()
     dispatch(setOtpSentTime(now))
-    dispatch(resetTimerOtp(60))
+    dispatch(resetTimerOtp(150))
   }
 
   // Memperbarui timer pengiriman ulang OTP
   const updateTimer = () => {
     if (timer <= 1) {
       setIsTimerActive(false)
-      dispatch(resetTimerOtp(60))
+      dispatch(resetTimerOtp(150))
     } else {
       dispatch(decrementTimerOtp())
     }
@@ -50,8 +50,8 @@ export default function OTP() {
     const currentTime = new Date()
     const timeDiff = Math.floor((currentTime - sentTime) / 1000)
 
-    if (timeDiff < 60) {
-      dispatch(resetTimerOtp(60 - timeDiff))
+    if (timeDiff < 150) {
+      dispatch(resetTimerOtp(150 - timeDiff))
       setIsTimerActive(true)
     } else {
       dispatch(resetTimerOtp(0))
